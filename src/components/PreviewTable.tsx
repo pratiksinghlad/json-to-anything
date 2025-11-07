@@ -43,6 +43,10 @@ export default function PreviewTable({ data, maxRows = 50 }: PreviewTableProps) 
                       fontWeight: 'bold',
                       backgroundColor: '#f5f5f5',
                       whiteSpace: 'nowrap',
+                      borderRight: '2px solid rgba(224, 224, 224, 1)',
+                      '&:last-child': {
+                        borderRight: 'none',
+                      },
                     }}
                   >
                     {column}
@@ -69,6 +73,10 @@ export default function PreviewTable({ data, maxRows = 50 }: PreviewTableProps) 
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap',
+                            borderRight: '2px solid rgba(224, 224, 224, 1)',
+                            '&:last-child': {
+                              borderRight: 'none',
+                            },
                           }}
                         >
                           {displayValue}

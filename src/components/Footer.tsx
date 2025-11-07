@@ -4,6 +4,8 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 export default function Footer() {
+  const userName = "pratiksinghlad";
+
   return (
     <Box
       component="footer"
@@ -17,41 +19,11 @@ export default function Footer() {
     >
       <Container maxWidth="lg">
         <Stack spacing={2} alignItems="center">
-          <Stack direction="row" spacing={1}>
-            <IconButton
-              href="https://github.com/pratiksinghlad/json-to-anything"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="View source on GitHub"
-              size="small"
-            >
-              <GitHubIcon />
-            </IconButton>
-            <IconButton
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Follow on Twitter"
-              size="small"
-            >
-              <TwitterIcon />
-            </IconButton>
-            <IconButton
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Connect on LinkedIn"
-              size="small"
-            >
-              <LinkedInIcon />
-            </IconButton>
-          </Stack>
-
           <Typography variant="body2" color="text.secondary" align="center">
             <strong>Privacy & open source.</strong> All conversion happens in your browser —
             nothing is uploaded or stored on a server. The full source code is available on{' '}
             <Link
-              href="https://github.com/pratiksinghlad/json-to-anything"
+              href={`https://github.com/${userName}/json-to-anything`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -60,8 +32,38 @@ export default function Footer() {
             .
           </Typography>
 
+          <Stack direction="row" spacing={1}>
+            <IconButton
+              href={`https://github.com/${userName}/json-to-anything`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="View source on GitHub"
+              size="small"
+            >
+              <GitHubIcon />
+            </IconButton>
+            <IconButton
+              href="https://x.com/pratiksinghlad"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Follow on Twitter"
+              size="small"
+            >
+              <TwitterIcon />
+            </IconButton>
+            <IconButton
+              href={`https://www.linkedin.com/in/${userName}/`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Connect on LinkedIn"
+              size="small"
+            >
+              <LinkedInIcon />
+            </IconButton>
+          </Stack>
+          
           <Typography variant="body2" color="text.secondary" align="center">
-            © {new Date().getFullYear()} JSON to Anything. Made with ❤️ for developers.
+            © {new Date().getFullYear()} JSON to Anything. Made with ❤️ for all.
           </Typography>
         </Stack>
       </Container>

@@ -1,14 +1,17 @@
 {
   "name": "json-to-anything",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "start": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build:cf": "vite build --base=/",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0 --fix"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
