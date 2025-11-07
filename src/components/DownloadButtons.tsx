@@ -71,7 +71,10 @@ export default function DownloadButtons({
     const blob = new Blob([csvData], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     window.open(url, '_blank');
-    // Note: URL will be automatically revoked when the tab is closed
+    // Clean up the object URL after a delay to allow the window to open
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+    }, 100);
   };
 
   return (
