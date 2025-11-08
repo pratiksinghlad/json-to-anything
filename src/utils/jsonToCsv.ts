@@ -1,9 +1,22 @@
-import { flattenObject, getAllKeys } from './flattenObject';
+import { flattenObject, getAllKeys } from "./flattenObject";
 
 export interface CsvOptions {
-  separator: ',' | ';' | '\t';
+  separator: "," | ";" | "\t";
   includeHeader: boolean;
   trimEmptyColumns?: boolean;
+  pascalCaseHeaders?: boolean;
+}
+
+/**
+ * Converts a string to Pascal case
+ * Examples: "first_name" -> "FirstName", "user.email" -> "UserEmail"
+ */
+export function toPascalCase(str: string): string {
+  return str
+    .split(/[._-\s]+/)
+    .filter((word) => word.length > 0)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join("");
 }
 
 /**
@@ -13,17 +26,17 @@ export interface CsvOptions {
  */
 export function escapeCsvCell(value: unknown, separator: string): string {
   if (value === null || value === undefined) {
-    return '';
+    return "";
   }
 
   const stringValue = String(value);
-  
+
   // Check if we need to quote the value
-  const needsQuoting = 
+  const needsQuoting =
     stringValue.includes(separator) ||
     stringValue.includes('"') ||
-    stringValue.includes('\n') ||
-    stringValue.includes('\r');
+    stringValue.includes("\n") ||
+    stringValue.includes("\r");
 
   if (needsQuoting) {
     // Double all quotes and wrap in quotes
@@ -33,26 +46,23 @@ export function escapeCsvCell(value: unknown, separator: string): string {
   return stringValue;
 }
 
-export function jsonToCsv(
-  data: Record<string, unknown>[],
-  options: CsvOptions
-): string {
+export function jsonToCsv(data: Record<string, unknown>[], options: CsvOptions): string {
   if (data.length === 0) {
-    return '';
+    return "";
   }
 
-  const { separator, includeHeader, trimEmptyColumns } = options;
-  
+  const { separator, includeHeader, trimEmptyColumns, pascalCaseHeaders } = options;
+
   // Get all unique keys from all objects
   let columns = getAllKeys(data);
 
   // If trimEmptyColumns is true, remove columns that are empty in all rows
   if (trimEmptyColumns) {
-    columns = columns.filter(col => {
-      return data.some(row => {
+    columns = columns.filter((col) => {
+      return data.some((row) => {
         const flattened = flattenObject(row);
         const value = flattened[col];
-        return value !== null && value !== undefined && value !== '';
+        return value !== null && value !== undefined && value !== "";
       });
     });
   }
@@ -62,7 +72,10 @@ export function jsonToCsv(
   // Add header row if requested
   if (includeHeader) {
     const headerRow = columns
-      .map(col => escapeCsvCell(col, separator))
+      .map((col) => {
+        const headerValue = pascalCaseHeaders ? toPascalCase(col) : col;
+        return escapeCsvCell(headerValue, separator);
+      })
       .join(separator);
     lines.push(headerRow);
   }
@@ -70,11 +83,9 @@ export function jsonToCsv(
   // Add data rows
   for (const obj of data) {
     const flattened = flattenObject(obj);
-    const row = columns
-      .map(col => escapeCsvCell(flattened[col], separator))
-      .join(separator);
+    const row = columns.map((col) => escapeCsvCell(flattened[col], separator)).join(separator);
     lines.push(row);
   }
 
-  return lines.join('\n');
+  return lines.join("\n");
 }
