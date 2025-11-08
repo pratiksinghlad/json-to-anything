@@ -9,15 +9,21 @@ import {
   TableHead,
   TableRow,
   Fade,
-} from '@mui/material';
-import { getAllKeys, flattenObject } from '../utils/flattenObject';
+} from "@mui/material";
+import { getAllKeys, flattenObject } from "../utils/flattenObject";
+import { toPascalCase } from "../utils/jsonToCsv";
 
 interface PreviewTableProps {
   data: Record<string, unknown>[];
   maxRows?: number;
+  pascalCaseHeaders?: boolean;
 }
 
-export default function PreviewTable({ data, maxRows = 50 }: PreviewTableProps) {
+export default function PreviewTable({
+  data,
+  maxRows = 50,
+  pascalCaseHeaders = false,
+}: PreviewTableProps) {
   if (data.length === 0) {
     return null;
   }
@@ -36,22 +42,25 @@ export default function PreviewTable({ data, maxRows = 50 }: PreviewTableProps) 
           <Table stickyHeader size="small" aria-label="CSV preview table">
             <TableHead>
               <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column}
-                    sx={{
-                      fontWeight: 'bold',
-                      backgroundColor: '#f5f5f5',
-                      whiteSpace: 'nowrap',
-                      borderRight: '2px solid rgba(224, 224, 224, 1)',
-                      '&:last-child': {
-                        borderRight: 'none',
-                      },
-                    }}
-                  >
-                    {column}
-                  </TableCell>
-                ))}
+                {columns.map((column) => {
+                  const displayHeader = pascalCaseHeaders ? toPascalCase(column) : column;
+                  return (
+                    <TableCell
+                      key={column}
+                      sx={{
+                        fontWeight: "bold",
+                        backgroundColor: "#f5f5f5",
+                        whiteSpace: "nowrap",
+                        borderRight: "2px solid rgba(224, 224, 224, 1)",
+                        "&:last-child": {
+                          borderRight: "none",
+                        },
+                      }}
+                    >
+                      {displayHeader}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -62,20 +71,18 @@ export default function PreviewTable({ data, maxRows = 50 }: PreviewTableProps) 
                     {columns.map((column) => {
                       const value = flattened[column];
                       const displayValue =
-                        value === null || value === undefined
-                          ? ''
-                          : String(value);
+                        value === null || value === undefined ? "" : String(value);
                       return (
                         <TableCell
                           key={column}
                           sx={{
                             maxWidth: 300,
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            borderRight: '2px solid rgba(224, 224, 224, 1)',
-                            '&:last-child': {
-                              borderRight: 'none',
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            borderRight: "2px solid rgba(224, 224, 224, 1)",
+                            "&:last-child": {
+                              borderRight: "none",
                             },
                           }}
                         >

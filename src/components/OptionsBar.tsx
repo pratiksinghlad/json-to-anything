@@ -7,38 +7,42 @@ import {
   Switch,
   Paper,
   Stack,
-} from '@mui/material';
-import type { SelectChangeEvent } from '@mui/material';
+} from "@mui/material";
+import type { SelectChangeEvent } from "@mui/material";
 
 interface OptionsBarProps {
-  separator: ',' | ';' | '\t';
+  separator: "," | ";" | "\t";
   includeHeader: boolean;
   trimEmptyColumns: boolean;
-  onSeparatorChange: (separator: ',' | ';' | '\t') => void;
+  pascalCaseHeaders: boolean;
+  onSeparatorChange: (separator: "," | ";" | "\t") => void;
   onIncludeHeaderChange: (include: boolean) => void;
   onTrimEmptyColumnsChange: (trim: boolean) => void;
+  onPascalCaseHeadersChange: (pascalCase: boolean) => void;
 }
 
 export default function OptionsBar({
   separator,
   includeHeader,
   trimEmptyColumns,
+  pascalCaseHeaders,
   onSeparatorChange,
   onIncludeHeaderChange,
   onTrimEmptyColumnsChange,
+  onPascalCaseHeadersChange,
 }: OptionsBarProps) {
   const handleSeparatorChange = (event: SelectChangeEvent) => {
-    onSeparatorChange(event.target.value as ',' | ';' | '\t');
+    onSeparatorChange(event.target.value as "," | ";" | "\t");
   };
 
   const getSeparatorLabel = (sep: string) => {
     switch (sep) {
-      case ',':
-        return 'Comma (,)';
-      case ';':
-        return 'Semicolon (;)';
-      case '\t':
-        return 'Tab';
+      case ",":
+        return "Comma (,)";
+      case ";":
+        return "Semicolon (;)";
+      case "\t":
+        return "Tab";
       default:
         return sep;
     }
@@ -46,7 +50,7 @@ export default function OptionsBar({
 
   return (
     <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center">
         <FormControl size="small" sx={{ minWidth: 150 }}>
           <InputLabel id="separator-label">Separator</InputLabel>
           <Select
@@ -57,9 +61,9 @@ export default function OptionsBar({
             onChange={handleSeparatorChange}
             aria-label="CSV separator"
           >
-            <MenuItem value=",">{getSeparatorLabel(',')}</MenuItem>
-            <MenuItem value=";">{getSeparatorLabel(';')}</MenuItem>
-            <MenuItem value="\t">{getSeparatorLabel('\t')}</MenuItem>
+            <MenuItem value=",">{getSeparatorLabel(",")}</MenuItem>
+            <MenuItem value=";">{getSeparatorLabel(";")}</MenuItem>
+            <MenuItem value="\t">{getSeparatorLabel("\t")}</MenuItem>
           </Select>
         </FormControl>
 
@@ -83,6 +87,17 @@ export default function OptionsBar({
             />
           }
           label="Trim empty columns"
+        />
+
+        <FormControlLabel
+          control={
+            <Switch
+              checked={pascalCaseHeaders}
+              onChange={(e) => onPascalCaseHeadersChange(e.target.checked)}
+              aria-label="Convert headers to Pascal case"
+            />
+          }
+          label="Pascal case headers"
         />
       </Stack>
     </Paper>

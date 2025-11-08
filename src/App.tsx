@@ -1,29 +1,22 @@
-import { useState, useEffect } from 'react';
-import {
-  Container,
-  Box,
-  Typography,
-  CssBaseline,
-  ThemeProvider,
-  createTheme,
-} from '@mui/material';
-import JsonEditor from './components/Editor';
-import OptionsBar from './components/OptionsBar';
-import PreviewTable from './components/PreviewTable';
-import DownloadButtons from './components/DownloadButtons';
-import Footer from './components/Footer';
-import { parseJson } from './utils/parseJson';
-import { normalizeData } from './utils/normalizeData';
-import { jsonToCsv } from './utils/jsonToCsv';
-import type { CsvOptions } from './utils/jsonToCsv';
+import { useState, useEffect } from "react";
+import { Container, Box, Typography, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import JsonEditor from "./components/Editor";
+import OptionsBar from "./components/OptionsBar";
+import PreviewTable from "./components/PreviewTable";
+import DownloadButtons from "./components/DownloadButtons";
+import Footer from "./components/Footer";
+import { parseJson } from "./utils/parseJson";
+import { normalizeData } from "./utils/normalizeData";
+import { jsonToCsv } from "./utils/jsonToCsv";
+import type { CsvOptions } from "./utils/jsonToCsv";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
+      main: "#1976d2",
     },
     secondary: {
-      main: '#dc004e',
+      main: "#dc004e",
     },
   },
   typography: {
@@ -57,10 +50,11 @@ function App() {
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
   const [error, setError] = useState<string | undefined>();
   const [normalizedData, setNormalizedData] = useState<Record<string, unknown>[]>([]);
-  const [csvData, setCsvData] = useState('');
-  const [separator, setSeparator] = useState<',' | ';' | '\t'>(',');
+  const [csvData, setCsvData] = useState("");
+  const [separator, setSeparator] = useState<"," | ";" | "\t">(",");
   const [includeHeader, setIncludeHeader] = useState(true);
   const [trimEmptyColumns, setTrimEmptyColumns] = useState(false);
+  const [pascalCaseHeaders, setPascalCaseHeaders] = useState(false);
 
   useEffect(() => {
     // Parse and validate JSON
@@ -68,7 +62,7 @@ function App() {
     if (!parseResult.success) {
       setError(parseResult.error);
       setNormalizedData([]);
-      setCsvData('');
+      setCsvData("");
       return;
     }
 
@@ -77,7 +71,7 @@ function App() {
     if (!normalizeResult.success) {
       setError(normalizeResult.error);
       setNormalizedData([]);
-      setCsvData('');
+      setCsvData("");
       return;
     }
 
@@ -90,26 +84,33 @@ function App() {
       separator,
       includeHeader,
       trimEmptyColumns,
+      pascalCaseHeaders,
     };
     const csv = jsonToCsv(normalizeResult.data || [], options);
     setCsvData(csv);
-  }, [jsonInput, separator, includeHeader, trimEmptyColumns]);
+  }, [jsonInput, separator, includeHeader, trimEmptyColumns, pascalCaseHeaders]);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: '100vh',
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "100vh",
         }}
       >
         <Container maxWidth="lg" sx={{ py: 4, flex: 1 }}>
           <Typography variant="h3" component="h1" gutterBottom align="center">
             JSON to CSV Converter
           </Typography>
-          <Typography variant="subtitle1" gutterBottom align="center" color="text.secondary" sx={{ mb: 4 }}>
+          <Typography
+            variant="subtitle1"
+            gutterBottom
+            align="center"
+            color="text.secondary"
+            sx={{ mb: 4 }}
+          >
             Convert JSON data to CSV format instantly in your browser
           </Typography>
 
@@ -121,9 +122,11 @@ function App() {
             separator={separator}
             includeHeader={includeHeader}
             trimEmptyColumns={trimEmptyColumns}
+            pascalCaseHeaders={pascalCaseHeaders}
             onSeparatorChange={setSeparator}
             onIncludeHeaderChange={setIncludeHeader}
             onTrimEmptyColumnsChange={setTrimEmptyColumns}
+            onPascalCaseHeadersChange={setPascalCaseHeaders}
           />
 
           {normalizedData.length > 0 && (
@@ -134,7 +137,7 @@ function App() {
                 disabled={normalizedData.length === 0}
               />
 
-              <PreviewTable data={normalizedData} />
+              <PreviewTable data={normalizedData} pascalCaseHeaders={pascalCaseHeaders} />
             </>
           )}
         </Container>
@@ -146,4 +149,3 @@ function App() {
 }
 
 export default App;
-
