@@ -20,6 +20,8 @@ A simple, robust, and user-friendly web application for converting JSON data to 
   - View raw CSV data in new tab
 - **🔒 Privacy First** - All processing happens in your browser, no data is uploaded
 - **🎨 Modern UI** - Built with Material-UI for a polished experience
+- **🌍 Multi-language Support** - Available in English, Spanish, and Hindi
+- **📱 Responsive Navigation** - Adapts seamlessly between desktop and mobile
 - **♿ Accessible** - ARIA labels and keyboard navigation support
 
 ## 🚀 Quick Start
@@ -177,10 +179,17 @@ npm run test:coverage
 - **TypeScript** - Type safety
 - **Vite** - Build tool and dev server
 - **Material-UI** - Component library
+- **React Router** - Client-side routing
+- **react-i18next** - Internationalization
+- **Sass/SCSS** - Styling
 - **react-simple-code-editor** - Code editor
 - **Prism** - Syntax highlighting
 - **Vitest** - Testing framework
 - **React Testing Library** - Component testing
+
+## 📚 Documentation
+
+- [Navigation Menu Customization Guide](./NAVIGATION_DOCS.md) - How to customize colors, add menu items, manage translations
 
 ## 📝 License
 

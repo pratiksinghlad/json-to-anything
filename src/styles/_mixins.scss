@@ -1,0 +1,91 @@
+@use './variables' as *;
+
+// Breakpoint Mixin - Mobile-first approach
+@mixin breakpoint($size) {
+  @if map-has-key($breakpoints, $size) {
+    $breakpoint: map-get($breakpoints, $size);
+    @if $breakpoint > 0 {
+      @media (min-width: #{$breakpoint}) {
+        @content;
+      }
+    } @else {
+      @content;
+    }
+  } @else {
+    @warn "Unknown breakpoint: #{$size}";
+  }
+}
+
+// Flexbox utilities
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@mixin flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+// Focus styles for accessibility
+@mixin focus-visible {
+  &:focus-visible {
+    outline: 2px solid $focus-outline;
+    outline-offset: 2px;
+  }
+}
+
+// Hover state
+@mixin hover-state {
+  &:hover {
+    background-color: $hover-bg;
+  }
+}
+
+// Active state
+@mixin active-state {
+  background-color: $active-bg;
+  color: $primary-color;
+  font-weight: 600;
+}
+
+// Transition utility
+@mixin transition($properties...) {
+  transition-property: $properties;
+  transition-duration: $transition-normal;
+  transition-timing-function: ease-in-out;
+}
+
+// Typography truncation
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Screen reader only (for accessibility)
+@mixin sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

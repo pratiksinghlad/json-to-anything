@@ -1,0 +1,82 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.desktopMenu {
+  @include flex-between;
+  padding: $spacing-md $spacing-lg;
+  background-color: $surface-bg;
+  box-shadow: $elevation-2;
+  position: sticky;
+  top: 0;
+  z-index: $z-appbar;
+
+  &__nav {
+    @include flex-start;
+    gap: $spacing-sm;
+  }
+
+  &__link {
+    padding: $spacing-sm $spacing-lg;
+    color: $text-primary;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: $radius-pill;
+    @include transition(background-color, color);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    @include focus-visible;
+
+    &:hover {
+      background-color: $hover-bg;
+    }
+
+    &--active {
+      @include active-state;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  &__languageWrapper {
+    margin-left: auto;
+  }
+}
+
+// Vertical layout option
+.desktopMenu--vertical {
+  flex-direction: column;
+  align-items: flex-start;
+  width: 250px;
+  min-height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  .desktopMenu__nav {
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+  }
+
+  .desktopMenu__link {
+    width: 100%;
+    border-radius: 0;
+    text-align: left;
+    padding: $spacing-md $spacing-lg;
+
+    &--active {
+      border-radius: 0;
+      border-left: 4px solid $primary-color;
+      padding-left: calc(#{$spacing-lg} - 4px);
+    }
+  }
+
+  .desktopMenu__languageWrapper {
+    width: 100%;
+    padding: $spacing-md;
+    margin-left: 0;
+    border-top: 1px solid $surface-lighter;
+  }
+}

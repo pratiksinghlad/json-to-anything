@@ -1,0 +1,63 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.languageMenu {
+  position: relative;
+
+  &__button {
+    @include flex-center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
+    background: transparent;
+    border: 1px solid $surface-lighter;
+    border-radius: $radius-md;
+    color: $text-primary;
+    cursor: pointer;
+    @include transition(background-color, border-color, color);
+    @include focus-visible;
+
+    &:hover {
+      background-color: $hover-bg;
+      border-color: $primary-color;
+    }
+
+    &[aria-expanded="true"] {
+      background-color: $active-bg;
+      border-color: $primary-color;
+    }
+  }
+
+  &__flag {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  &__label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  &__icon {
+    font-size: 18px;
+    @include transition(transform);
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.languageMenu__button--mobile {
+  padding: $spacing-sm;
+  border: none;
+
+  .languageMenu__label {
+    @include sr-only;
+  }
+
+  &:hover {
+    background-color: $hover-bg;
+  }
+}
