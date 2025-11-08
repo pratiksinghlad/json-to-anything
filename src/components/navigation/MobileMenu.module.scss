@@ -1,0 +1,78 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.mobileMenu {
+  &__header {
+    @include flex-between;
+    padding: $spacing-md;
+    background-color: $surface-bg;
+    box-shadow: $elevation-2;
+    position: sticky;
+    top: 0;
+    z-index: $z-appbar;
+  }
+
+  &__left {
+    @include flex-start;
+    gap: $spacing-md;
+  }
+
+  &__hamburger {
+    @include focus-visible;
+    color: $text-primary;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0;
+  }
+
+  &__languageWrapper {
+    margin-left: auto;
+  }
+}
+
+.drawer {
+  &__paper {
+    background-color: $surface-bg;
+    color: $text-primary;
+    width: 280px;
+  }
+
+  &__list {
+    padding: $spacing-md 0;
+  }
+
+  &__item {
+    padding: $spacing-md $spacing-lg;
+    color: $text-primary;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    @include transition(background-color, color);
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 16px;
+    font-family: inherit;
+    background: transparent;
+    @include focus-visible;
+
+    &:hover {
+      background-color: $hover-bg;
+    }
+
+    &--active {
+      @include active-state;
+      border-left: 4px solid $primary-color;
+      padding-left: calc(#{$spacing-lg} - 4px);
+    }
+  }
+
+  &__itemText {
+    font-weight: inherit;
+  }
+}
