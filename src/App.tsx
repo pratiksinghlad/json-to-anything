@@ -34,11 +34,14 @@ const theme = createTheme({
   },
 });
 
+// Detect base path from Vite config
+const basename = import.meta.env.BASE_URL || "/";
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
+      <Router basename={basename}>
         <Box
           sx={{
             display: "flex",
