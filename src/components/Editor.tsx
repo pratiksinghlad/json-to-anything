@@ -24,6 +24,7 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
   const lineCount = value.split("\n").length;
   const lineNumbers = Array.from({ length: lineCount }, (_, i) => i + 1).join("\n");
   const lineNumbersRef = useRef<HTMLDivElement>(null);
+  const lineNumbersScrollableRef = useRef<HTMLDivElement>(null);
   const editorContainerRef = useRef<HTMLDivElement>(null);
 
   // Calculate the height needed for line numbers based on line count
@@ -33,14 +34,12 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
 
   useEffect(() => {
     const editorContainer = editorContainerRef.current;
-    const lineNumbersEl = lineNumbersRef.current;
+    const lineNumbersScrollable = lineNumbersScrollableRef.current;
 
-    if (!editorContainer || !lineNumbersEl) return;
+    if (!editorContainer || !lineNumbersScrollable) return;
 
     const handleScroll = () => {
-      if (lineNumbersEl.parentElement) {
-        lineNumbersEl.parentElement.scrollTop = editorContainer.scrollTop;
-      }
+      lineNumbersScrollable.scrollTop = editorContainer.scrollTop;
     };
 
     editorContainer.addEventListener("scroll", handleScroll);
@@ -66,6 +65,7 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
         }}
       >
         <Box
+          ref={lineNumbersScrollableRef}
           sx={{
             width: "50px",
             backgroundColor: "#f0f0f0",
