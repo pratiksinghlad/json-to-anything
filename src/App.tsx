@@ -1,149 +1,87 @@
-import { useState, useEffect } from "react";
-import { Container, Box, Typography, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import JsonEditor from "./components/Editor";
-import OptionsBar from "./components/OptionsBar";
-import PreviewTable from "./components/PreviewTable";
-import DownloadButtons from "./components/DownloadButtons";
-import Footer from "./components/Footer";
-import { parseJson } from "./utils/parseJson";
-import { normalizeData } from "./utils/normalizeData";
-import { jsonToCsv } from "./utils/jsonToCsv";
-import type { CsvOptions } from "./utils/jsonToCsv";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { CssBaseline, ThemeProvider, createTheme, Box } from "@mui/material";
+import { themeConfig } from "./themeConfig";
+import NavBar from "./components/navigation/NavBar";
+import JsonToCsvPage from "./pages/JsonToCsvPage";
+import JsonToXmlPage from "./pages/JsonToXmlPage";
+import BeautifyJsonPage from "./pages/BeautifyJsonPage";
+import ComparePage from "./pages/ComparePage";
+import AboutPage from "./pages/AboutPage";
 
 const theme = createTheme({
   palette: {
+    mode: "light",
     primary: {
-      main: "#1976d2",
+      main: themeConfig.PRIMARY_COLOR,
+      dark: themeConfig.PRIMARY_DARK,
+      light: themeConfig.PRIMARY_LIGHT,
     },
-    secondary: {
-      main: "#dc004e",
+    background: {
+      default: "#ffffff",
+      paper: "#ffffff",
+    },
+    text: {
+      primary: "#000000",
+      secondary: "rgba(0, 0, 0, 0.6)",
+      disabled: "rgba(0, 0, 0, 0.38)",
     },
   },
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
   },
+  breakpoints: {
+    values: themeConfig.BREAKPOINTS,
+  },
+  components: {
+    MuiSwitch: {
+      styleOverrides: {
+        root: {
+          "& .MuiSwitch-switchBase": {
+            color: "#bdbdbd",
+            "&.Mui-checked": {
+              color: themeConfig.PRIMARY_COLOR,
+              "& + .MuiSwitch-track": {
+                backgroundColor: themeConfig.PRIMARY_COLOR,
+                opacity: 0.5,
+              },
+            },
+          },
+          "& .MuiSwitch-track": {
+            backgroundColor: "#9e9e9e",
+            opacity: 0.38,
+          },
+        },
+      },
+    },
+  },
 });
 
-const DEFAULT_JSON = `[
-  {
-    "id": 1,
-    "name": "Alice",
-    "email": "alice@example.com",
-    "profile": {
-      "role": "engineer",
-      "joined": "2023-04-12T08:00:00Z"
-    },
-    "tags": ["frontend", "react"]
-  },
-  {
-    "id": 2,
-    "name": "Bob",
-    "email": "bob@example.com",
-    "profile": {
-      "role": "designer"
-    },
-    "tags": []
-  }
-]`;
+// Detect base path from Vite config
+const basename = import.meta.env.BASE_URL || "/";
 
 function App() {
-  const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
-  const [error, setError] = useState<string | undefined>();
-  const [normalizedData, setNormalizedData] = useState<Record<string, unknown>[]>([]);
-  const [csvData, setCsvData] = useState("");
-  const [separator, setSeparator] = useState<"," | ";" | "\t">(",");
-  const [includeHeader, setIncludeHeader] = useState(true);
-  const [trimEmptyColumns, setTrimEmptyColumns] = useState(false);
-  const [pascalCaseHeaders, setPascalCaseHeaders] = useState(false);
-
-  useEffect(() => {
-    // Parse and validate JSON
-    const parseResult = parseJson(jsonInput);
-    if (!parseResult.success) {
-      setError(parseResult.error);
-      setNormalizedData([]);
-      setCsvData("");
-      return;
-    }
-
-    // Normalize data to array of objects
-    const normalizeResult = normalizeData(parseResult.data);
-    if (!normalizeResult.success) {
-      setError(normalizeResult.error);
-      setNormalizedData([]);
-      setCsvData("");
-      return;
-    }
-
-    // Clear error and update normalized data
-    setError(undefined);
-    setNormalizedData(normalizeResult.data || []);
-
-    // Convert to CSV
-    const options: CsvOptions = {
-      separator,
-      includeHeader,
-      trimEmptyColumns,
-      pascalCaseHeaders,
-    };
-    const csv = jsonToCsv(normalizeResult.data || [], options);
-    setCsvData(csv);
-  }, [jsonInput, separator, includeHeader, trimEmptyColumns, pascalCaseHeaders]);
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          minHeight: "100vh",
-        }}
-      >
-        <Container maxWidth="lg" sx={{ py: 4, flex: 1 }}>
-          <Typography variant="h3" component="h1" gutterBottom align="center">
-            JSON to CSV Converter
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            gutterBottom
-            align="center"
-            color="text.secondary"
-            sx={{ mb: 4 }}
-          >
-            Convert JSON data to CSV format instantly in your browser
-          </Typography>
-
-          <Box sx={{ mb: 4 }}>
-            <JsonEditor value={jsonInput} onChange={setJsonInput} error={error} />
-          </Box>
-
-          <OptionsBar
-            separator={separator}
-            includeHeader={includeHeader}
-            trimEmptyColumns={trimEmptyColumns}
-            pascalCaseHeaders={pascalCaseHeaders}
-            onSeparatorChange={setSeparator}
-            onIncludeHeaderChange={setIncludeHeader}
-            onTrimEmptyColumnsChange={setTrimEmptyColumns}
-            onPascalCaseHeadersChange={setPascalCaseHeaders}
-          />
-
-          {normalizedData.length > 0 && (
-            <>
-              <DownloadButtons
-                csvData={csvData}
-                jsonData={jsonInput}
-                disabled={normalizedData.length === 0}
-              />
-
-              <PreviewTable data={normalizedData} pascalCaseHeaders={pascalCaseHeaders} />
-            </>
-          )}
-        </Container>
-
-        <Footer />
-      </Box>
+      <Router basename={basename}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+            backgroundColor: "#ffffff",
+          }}
+        >
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<JsonToCsvPage />} />
+            <Route path="/json-to-xml" element={<JsonToXmlPage />} />
+            <Route path="/beautify" element={<BeautifyJsonPage />} />
+            <Route path="/compare" element={<ComparePage />} />
+            <Route path="/about" element={<AboutPage />} />
+          </Routes>
+        </Box>
+      </Router>
     </ThemeProvider>
   );
 }

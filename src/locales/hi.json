@@ -1,0 +1,22 @@
+{
+  "menu": {
+    "jsonToCsv": "JSON से CSV",
+    "jsonToXml": "JSON से XML",
+    "beautifyJson": "JSON सुंदर बनाएं",
+    "compare": "तुलना करें",
+    "about": "के बारे में"
+  },
+  "language": {
+    "english": "अंग्रेज़ी",
+    "spanish": "स्पेनिश",
+    "hindi": "हिन्दी",
+    "selectLanguage": "भाषा चुनें"
+  },
+  "aria": {
+    "openMenu": "नेविगेशन मेनू खोलें",
+    "closeMenu": "नेविगेशन मेनू बंद करें",
+    "mainNavigation": "मुख्य नेविगेशन",
+    "languageSelector": "भाषा चयनकर्ता",
+    "currentPage": "वर्तमान पृष्ठ"
+  }
+}

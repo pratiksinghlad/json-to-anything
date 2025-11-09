@@ -1,0 +1,22 @@
+{
+  "menu": {
+    "jsonToCsv": "JSON to CSV",
+    "jsonToXml": "JSON to XML",
+    "beautifyJson": "Beautify JSON",
+    "compare": "Compare",
+    "about": "About"
+  },
+  "language": {
+    "english": "English",
+    "spanish": "Spanish",
+    "hindi": "Hindi",
+    "selectLanguage": "Select Language"
+  },
+  "aria": {
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "mainNavigation": "Main navigation",
+    "languageSelector": "Language selector",
+    "currentPage": "Current page"
+  }
+}

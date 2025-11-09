@@ -1,4 +1,5 @@
 import { Box, Container, Typography, Link, Stack, IconButton } from '@mui/material';
+import { interactiveHoverSx } from '../theme/uiSx';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -14,7 +15,7 @@ export default function Footer() {
         py: 3,
         px: 2,
         backgroundColor: '#f5f5f5',
-        borderTop: '1px solid #e0e0e0',
+        borderTop: '3px solid #e0e0e0',
       }}
     >
       <Container maxWidth="lg">
@@ -34,22 +35,24 @@ export default function Footer() {
 
           <Stack direction="row" spacing={1}>
             <IconButton
-              href={`https://github.com/${userName}/json-to-anything`}
+              href={`https://github.com/${userName}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="View source on GitHub"
               size="small"
+              sx={interactiveHoverSx}
             >
-              <GitHubIcon />
+              <GitHubIcon sx={{ color: 'inherit' }} />
             </IconButton>
             <IconButton
-              href="https://x.com/pratiksinghlad"
+              href={`https://x.com/${userName}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Follow on Twitter"
               size="small"
+              sx={interactiveHoverSx}
             >
-              <TwitterIcon />
+              <TwitterIcon sx={{ color: 'inherit' }} />
             </IconButton>
             <IconButton
               href={`https://www.linkedin.com/in/${userName}/`}
@@ -57,8 +60,9 @@ export default function Footer() {
               rel="noopener noreferrer"
               aria-label="Connect on LinkedIn"
               size="small"
+              sx={interactiveHoverSx}
             >
-              <LinkedInIcon />
+              <LinkedInIcon sx={{ color: 'inherit' }} />
             </IconButton>
           </Stack>
           
