@@ -110,7 +110,7 @@ describe("MobileMenu", () => {
 
   it("marks active menu item with aria-current", () => {
     render(
-      <MemoryRouter initialEntries={["/validate"]}>
+      <MemoryRouter initialEntries={["/"]}>
         <MobileMenu />
       </MemoryRouter>
     );
