@@ -27,6 +27,10 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
   const lineNumbersScrollableRef = useRef<HTMLDivElement>(null);
   const editorContainerRef = useRef<HTMLDivElement>(null);
 
+  // Standard multiplier for readable line spacing when deriving line-height from font-size.
+  // This follows CSS defaults for most browsers (font-size * 1.2 to 1.5 is typical).
+  const LINE_HEIGHT_MULTIPLIER = 1.4;
+
   // Measure line height and vertical padding from the rendered textarea to avoid magic numbers.
   // We fall back to reasonable defaults while the measurement runs in the browser.
   const [lineHeightPx, setLineHeightPx] = useState<number>(21);
@@ -44,12 +48,12 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
       const textarea = document.getElementById("json-editor");
       if (!textarea) return;
       const cs = getComputedStyle(textarea as Element);
-      // Parse line-height; if not available, derive from font-size using a reasonable multiplier
+      // Parse line-height; if not available, derive from font-size using a standard multiplier
       const parsedLineHeight = parseFloat(cs.lineHeight || "");
       let measuredLineHeight = Number.isFinite(parsedLineHeight) && parsedLineHeight > 0 ? parsedLineHeight : NaN;
       if (Number.isNaN(measuredLineHeight)) {
         const parsedFontSize = parseFloat(cs.fontSize || "");
-        measuredLineHeight = Number.isFinite(parsedFontSize) && parsedFontSize > 0 ? parsedFontSize * 1.4 : 21;
+        measuredLineHeight = Number.isFinite(parsedFontSize) && parsedFontSize > 0 ? parsedFontSize * LINE_HEIGHT_MULTIPLIER : 21;
       }
 
       const paddingTop = parseFloat(cs.paddingTop || "") || 16;

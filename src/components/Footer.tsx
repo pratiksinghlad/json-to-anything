@@ -35,7 +35,7 @@ export default function Footer() {
 
           <Stack direction="row" spacing={1}>
             <IconButton
-              href={`https://github.com/${userName}/json-to-anything`}
+              href={`https://github.com/${userName}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="View source on GitHub"
@@ -45,7 +45,7 @@ export default function Footer() {
               <GitHubIcon sx={{ color: 'inherit' }} />
             </IconButton>
             <IconButton
-              href="https://x.com/pratiksinghlad"
+              href={`https://x.com/${userName}`}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Follow on Twitter"
