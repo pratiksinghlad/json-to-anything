@@ -62,7 +62,7 @@ const MobileMenu = () => {
           >
             <MenuIcon />
           </IconButton>
-          <h1 className={styles.mobileMenu__title}>{pageTitle}</h1>
+          <h2 className={styles.mobileMenu__title}>{pageTitle}</h2>
         </div>
         <div className={styles.mobileMenu__languageWrapper}>
           <LanguageMenu mobile />
