@@ -78,16 +78,31 @@ const JsonToCsvPage = () => {
 
   return (
     <>
-      <Container maxWidth="lg" sx={{ py: 4, flex: 1 }}>
-        <Typography variant="h3" component="h1" gutterBottom align="center">
+      <Container
+        maxWidth="lg"
+        sx={{
+          py: 4,
+          flex: 1,
+          backgroundColor: "#ffffff",
+        }}
+      >
+        <Typography
+          variant="h3"
+          component="h1"
+          gutterBottom
+          align="center"
+          sx={{ color: "#000000", fontWeight: 600 }}
+        >
           JSON to CSV Converter
         </Typography>
         <Typography
           variant="subtitle1"
           gutterBottom
           align="center"
-          color="text.secondary"
-          sx={{ mb: 4 }}
+          sx={{
+            mb: 4,
+            color: "rgba(0, 0, 0, 0.6)",
+          }}
         >
           Convert JSON data to CSV format instantly in your browser
         </Typography>

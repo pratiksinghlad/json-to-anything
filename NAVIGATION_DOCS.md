@@ -164,7 +164,7 @@ All translations are in `/src/locales/`:
 {
   "menu": {
     "jsonToCsv": "JSON to CSV",
-    "validateJson": "Validate JSON",
+    "jsonToXML": "JSON to XML",
     // ... menu items
   },
   "language": {
@@ -255,9 +255,9 @@ $primary-dark: #115293;
 $primary-light: #4791db;
 
 // Surface colors
-$surface-bg: #1e1e1e;
-$surface-light: #2a2a2a;
-$surface-lighter: #333333;
+$surface-bg: #ffffff;
+$surface-light: #ffffff;
+$surface-lighter: #ffffff;
 
 // Text colors
 $text-primary: #ffffff;

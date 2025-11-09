@@ -1,7 +1,7 @@
 {
   "menu": {
     "jsonToCsv": "JSON to CSV",
-    "validateJson": "Validate JSON",
+    "jsonToXml": "JSON to XML",
     "beautifyJson": "Beautify JSON",
     "compare": "Compare",
     "about": "About"

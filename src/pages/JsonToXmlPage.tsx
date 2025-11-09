@@ -1,18 +1,18 @@
 import { Container, Box, Typography } from "@mui/material";
 
-const ValidateJsonPage = () => {
+const JsonToXmlPage = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box>
         <Typography variant="h3" component="h1" gutterBottom>
-          Validate JSON
+          JSON To XML
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          JSON validation feature coming soon...
+          JSON to XML feature coming soon...
         </Typography>
       </Box>
     </Container>
   );
 };
 
-export default ValidateJsonPage;
+export default JsonToXmlPage;

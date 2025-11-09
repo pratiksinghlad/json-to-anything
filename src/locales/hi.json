@@ -1,7 +1,7 @@
 {
   "menu": {
     "jsonToCsv": "JSON से CSV",
-    "validateJson": "JSON सत्यापित करें",
+    "jsonToXml": "JSON से XML",
     "beautifyJson": "JSON सुंदर बनाएं",
     "compare": "तुलना करें",
     "about": "के बारे में"

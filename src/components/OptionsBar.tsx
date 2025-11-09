@@ -49,9 +49,35 @@ export default function OptionsBar({
   };
 
   return (
-    <Paper elevation={1} sx={{ p: 2, mb: 2 }}>
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center">
-        <FormControl size="small" sx={{ minWidth: 150 }}>
+    <Paper
+      elevation={0}
+      sx={{
+        p: 2.5,
+        mb: 2,
+        border: "2px solid #e0e0e0",
+        borderRadius: "8px",
+        backgroundColor: "#ffffff",
+      }}
+    >
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={3} alignItems="center">
+        <FormControl
+          size="small"
+          sx={{
+            minWidth: 150,
+            "& .MuiOutlinedInput-root": {
+              backgroundColor: "#ffffff",
+              "& fieldset": {
+                borderColor: "#d0d0d0",
+              },
+              "&:hover fieldset": {
+                borderColor: "#1976d2",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#1976d2",
+              },
+            },
+          }}
+        >
           <InputLabel id="separator-label">Separator</InputLabel>
           <Select
             labelId="separator-label"
@@ -76,6 +102,12 @@ export default function OptionsBar({
             />
           }
           label="Include header"
+          sx={{
+            "& .MuiFormControlLabel-label": {
+              color: "#000000",
+              fontSize: "0.875rem",
+            },
+          }}
         />
 
         <FormControlLabel
@@ -87,6 +119,12 @@ export default function OptionsBar({
             />
           }
           label="Trim empty columns"
+          sx={{
+            "& .MuiFormControlLabel-label": {
+              color: "#000000",
+              fontSize: "0.875rem",
+            },
+          }}
         />
 
         <FormControlLabel
@@ -98,6 +136,12 @@ export default function OptionsBar({
             />
           }
           label="Pascal case headers"
+          sx={{
+            "& .MuiFormControlLabel-label": {
+              color: "#000000",
+              fontSize: "0.875rem",
+            },
+          }}
         />
       </Stack>
     </Paper>

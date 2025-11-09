@@ -35,10 +35,19 @@ export default function PreviewTable({
   return (
     <Fade in={true} timeout={500}>
       <Box>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" gutterBottom sx={{ color: "#000000", fontWeight: 500 }}>
           Preview {hasMore && `(showing ${maxRows} of ${data.length} rows)`}
         </Typography>
-        <TableContainer component={Paper} elevation={2} sx={{ maxHeight: 500 }}>
+        <TableContainer
+          component={Paper}
+          elevation={0}
+          sx={{
+            maxHeight: 500,
+            border: "1px solid #d0d0d0",
+            borderRadius: "8px",
+            backgroundColor: "#ffffff",
+          }}
+        >
           <Table stickyHeader size="small" aria-label="CSV preview table">
             <TableHead>
               <TableRow>
@@ -48,10 +57,13 @@ export default function PreviewTable({
                     <TableCell
                       key={column}
                       sx={{
-                        fontWeight: "bold",
+                        fontWeight: 600,
                         backgroundColor: "#f5f5f5",
                         whiteSpace: "nowrap",
-                        borderRight: "2px solid rgba(224, 224, 224, 1)",
+                        borderRight: "1px solid #e0e0e0",
+                        borderBottom: "2px solid #d0d0d0",
+                        color: "#000000",
+                        fontSize: "0.875rem",
                         "&:last-child": {
                           borderRight: "none",
                         },
@@ -67,7 +79,15 @@ export default function PreviewTable({
               {displayData.map((row, index) => {
                 const flattened = flattenObject(row);
                 return (
-                  <TableRow key={index} hover>
+                  <TableRow
+                    key={index}
+                    hover
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "#f9f9f9",
+                      },
+                    }}
+                  >
                     {columns.map((column) => {
                       const value = flattened[column];
                       const displayValue =
@@ -80,7 +100,10 @@ export default function PreviewTable({
                             overflow: "hidden",
                             textOverflow: "ellipsis",
                             whiteSpace: "nowrap",
-                            borderRight: "2px solid rgba(224, 224, 224, 1)",
+                            borderRight: "1px solid #e0e0e0",
+                            borderBottom: "1px solid #e0e0e0",
+                            color: "#000000",
+                            fontSize: "0.8125rem",
                             "&:last-child": {
                               borderRight: "none",
                             },

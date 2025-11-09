@@ -11,7 +11,7 @@ const AboutPage = () => {
           A simple, robust, and user-friendly web application for converting JSON data to various formats entirely in your browser.
         </Typography>
         <Typography variant="body1" paragraph>
-          All processing happens in your browser — nothing is uploaded or stored on a server.
+          All processing occurs directly in your browser—nothing is uploaded or stored on a server. The app is fully private and hosted on GitHub Pages, with no API calls made.
         </Typography>
         <Typography variant="body1" paragraph>
           Made with ❤️ by{" "}

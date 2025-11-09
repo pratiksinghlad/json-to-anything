@@ -13,7 +13,7 @@ vi.mock("react-i18next", async () => {
       t: (key: string) => {
         const translations: Record<string, string> = {
           "menu.jsonToCsv": "JSON to CSV",
-          "menu.validateJson": "Validate JSON",
+          "menu.jsonToXml": "JSON to XML",
           "menu.beautifyJson": "Beautify JSON",
           "menu.compare": "Compare",
           "menu.about": "About",
@@ -87,7 +87,7 @@ describe("MobileMenu", () => {
     // Find items within the navigation
     const nav = screen.getByRole("navigation");
     expect(nav).toHaveTextContent("JSON to CSV");
-    expect(nav).toHaveTextContent("Validate JSON");
+    expect(nav).toHaveTextContent("JSON to XML");
     expect(nav).toHaveTextContent("Beautify JSON");
     expect(nav).toHaveTextContent("Compare");
     expect(nav).toHaveTextContent("About");

@@ -1,5 +1,10 @@
 import { useState } from 'react';
 import { Button, Stack, Snackbar, Alert } from '@mui/material';
+import {
+  primaryContainedButtonSx,
+  primaryOutlinedButtonSx,
+  textAccentButtonSx,
+} from '../theme/uiSx';
 import DownloadIcon from '@mui/icons-material/Download';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
@@ -86,6 +91,7 @@ export default function DownloadButtons({
           onClick={handleDownloadCsv}
           disabled={disabled}
           aria-label="Download CSV file"
+          sx={primaryContainedButtonSx}
         >
           Download CSV
         </Button>
@@ -96,6 +102,7 @@ export default function DownloadButtons({
           onClick={handleDownloadJson}
           disabled={disabled}
           aria-label="Download JSON file"
+          sx={primaryOutlinedButtonSx}
         >
           Download JSON
         </Button>
@@ -106,6 +113,7 @@ export default function DownloadButtons({
           onClick={handleCopyCsv}
           disabled={disabled}
           aria-label="Copy CSV to clipboard"
+          sx={primaryOutlinedButtonSx}
         >
           Copy CSV
         </Button>
@@ -116,6 +124,7 @@ export default function DownloadButtons({
           onClick={handleShowRawData}
           disabled={disabled}
           aria-label="Show raw CSV data in new tab"
+          sx={textAccentButtonSx}
         >
           Show raw data
         </Button>

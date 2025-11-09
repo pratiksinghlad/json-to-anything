@@ -12,9 +12,9 @@ export const menuItems: MenuItem[] = [
     path: "/",
   },
   {
-    key: "validate-json",
-    labelKey: "menu.validateJson",
-    path: "/validate",
+    key: "json-to-xml",
+    labelKey: "menu.jsonToXml",
+    path: "/json-to-xml",
   },
   {
     key: "beautify-json",

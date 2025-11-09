@@ -11,13 +11,13 @@ export const themeConfig = {
   PRIMARY_LIGHT: "#4791db",
 
   // Surface colors
-  SURFACE_BG: "#1e1e1e",
-  SURFACE_LIGHT: "#2a2a2a",
-  SURFACE_LIGHTER: "#333333",
+  SURFACE_BG: "#ffffff",
+  SURFACE_LIGHT: "#f5f5f5",
+  SURFACE_LIGHTER: "#eeeeee",
 
   // Text colors
-  TEXT_PRIMARY: "#ffffff",
-  TEXT_SECONDARY: "#b0b0b0",
+  TEXT_PRIMARY: "#000000",
+  TEXT_SECONDARY: "#000000",
   TEXT_DISABLED: "#666666",
 
   // States
