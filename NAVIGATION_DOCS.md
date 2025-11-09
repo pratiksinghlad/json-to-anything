@@ -255,9 +255,9 @@ $primary-dark: #115293;
 $primary-light: #4791db;
 
 // Surface colors
-$surface-bg: #ffffff;
-$surface-light: #ffffff;
-$surface-lighter: #ffffff;
+$surface-bg: #1e1e1e;
+$surface-light: #2a2a2a;
+$surface-lighter: #333333;
 
 // Text colors
 $text-primary: #ffffff;
