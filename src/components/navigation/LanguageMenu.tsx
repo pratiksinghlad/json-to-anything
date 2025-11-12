@@ -38,7 +38,6 @@ const LanguageMenu = ({ mobile = false }: LanguageMenuProps) => {
           aria-expanded={open}
           aria-haspopup="true"
           className={styles.languageMenu__button + " " + styles["languageMenu__button--mobile"]}
-          sx={{ color: "white" }}
         >
           <LanguageIcon />
         </IconButton>
@@ -53,6 +52,30 @@ const LanguageMenu = ({ mobile = false }: LanguageMenuProps) => {
           transformOrigin={{
             vertical: "top",
             horizontal: "right",
+          }}
+          sx={{
+            "& .MuiPaper-root": {
+              backgroundColor: "#ffffff",
+              border: "2px solid #d0d0d0",
+              borderRadius: "8px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+            },
+            "& .MuiMenuItem-root": {
+              color: "#000000",
+              fontSize: "0.9375rem",
+              padding: "12px 20px",
+              "&:hover": {
+                backgroundColor: "#f5f5f5",
+              },
+              "&.Mui-selected": {
+                backgroundColor: "rgba(25, 118, 210, 0.12)",
+                color: "#1976d2",
+                fontWeight: 600,
+                "&:hover": {
+                  backgroundColor: "rgba(25, 118, 210, 0.18)",
+                },
+              },
+            },
           }}
         >
           {languageOptions.map((lang) => (
@@ -93,6 +116,32 @@ const LanguageMenu = ({ mobile = false }: LanguageMenuProps) => {
         transformOrigin={{
           vertical: "top",
           horizontal: "center",
+        }}
+        sx={{
+          "& .MuiPaper-root": {
+            backgroundColor: "#ffffff",
+            border: "2px solid #d0d0d0",
+            borderRadius: "8px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+            marginTop: "8px",
+          },
+          "& .MuiMenuItem-root": {
+            color: "#000000",
+            fontSize: "0.9375rem",
+            padding: "12px 20px",
+            minWidth: "160px",
+            "&:hover": {
+              backgroundColor: "#f5f5f5",
+            },
+            "&.Mui-selected": {
+              backgroundColor: "rgba(25, 118, 210, 0.12)",
+              color: "#1976d2",
+              fontWeight: 600,
+              "&:hover": {
+                backgroundColor: "rgba(25, 118, 210, 0.18)",
+              },
+            },
+          },
         }}
       >
         {languageOptions.map((lang) => (
