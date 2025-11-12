@@ -1,9 +1,8 @@
 import { Box, Paper, Typography, Alert } from "@mui/material";
 import { useRef, useEffect, useState } from "react";
 import Editor from "react-simple-code-editor";
-import Prism from "prismjs";
-import "prismjs/components/prism-json";
 import "prismjs/themes/prism.css";
+import Prism from "prismjs";
 
 interface JsonEditorProps {
   value: string;
@@ -12,6 +11,10 @@ interface JsonEditorProps {
 }
 
 const highlight = (code: string) => {
+  // Ensure JSON language is loaded
+  if (!Prism.languages.json) {
+    return code;
+  }
   return Prism.highlight(code, Prism.languages.json, "json");
 };
 
@@ -26,6 +29,28 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
   const lineNumbersRef = useRef<HTMLDivElement>(null);
   const lineNumbersScrollableRef = useRef<HTMLDivElement>(null);
   const editorContainerRef = useRef<HTMLDivElement>(null);
+
+  // Load Prism JSON language dynamically to avoid global Prism reference issues
+  useEffect(() => {
+    const loadLanguage = async () => {
+      if (!Prism.languages.json) {
+        try {
+          // Dynamically import the JSON language and ensure it's registered
+          // @ts-expect-error: No type definitions for 'prismjs/components/prism-json'
+          await import("prismjs/components/prism-json");
+          if (!Prism.languages.json) {
+            // Some bundlers may require explicit registration
+            // eslint-disable-next-line no-console
+            console.error("Prism JSON language was imported, but not registered.");
+          }
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error("Failed to load Prism JSON language:", err);
+        }
+      }
+    };
+    loadLanguage();
+  }, []);
 
   // Standard multiplier for readable line spacing when deriving line-height from font-size.
   // This follows CSS defaults for most browsers (font-size * 1.2 to 1.5 is typical).
