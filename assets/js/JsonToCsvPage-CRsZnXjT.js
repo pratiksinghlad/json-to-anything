@@ -1,12 +1,13 @@
 import { n as __toESM } from "./rolldown-runtime-BM52pwkw.js";
 import { D as FormControlLabel_default, E as InputLabel_default, F as Typography_default, G as require_react, I as Alert_default, L as IconButton_default, M as Button_default, N as Box_default, O as FormControl_default, P as Fade_default, S as MenuItem_default, T as Link_default, U as require_jsx_runtime, _ as Table_default, b as Snackbar_default, c as Download_default, f as TableRow_default, g as TableBody_default, h as TableCell_default, i as LinkedIn_default, j as Container_default, l as ContentCopy_default, m as TableContainer_default, n as OpenInNew_default, o as GitHub_default, p as TableHead_default, t as Twitter_default, v as Switch_default, x as Select_default, y as Stack_default, z as Paper_default } from "./mui-vendor-CE9s5qa2.js";
-import { t as require_lib } from "./react-vendor-D6TQlta-.js";
-import { t as require_prism } from "./prism-vendor-hkdziHBB.js";
+import { s as __vitePreload, t as require_lib } from "./react-vendor-D6TQlta-.js";
+import { t as require_prism } from "./prism-vendor-B_Yx2Q4X.js";
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
 var import_prism = /* @__PURE__ */ __toESM(require_prism());
 var import_jsx_runtime = /* @__PURE__ */ __toESM(require_jsx_runtime());
 var highlight = (code) => {
+	if (!import_prism.default.languages.json) return code;
 	return import_prism.default.highlight(code, import_prism.default.languages.json, "json");
 };
 function JsonEditor({ value, onChange, error }) {
@@ -15,6 +16,16 @@ function JsonEditor({ value, onChange, error }) {
 	const lineNumbersRef = (0, import_react.useRef)(null);
 	const lineNumbersScrollableRef = (0, import_react.useRef)(null);
 	const editorContainerRef = (0, import_react.useRef)(null);
+	(0, import_react.useEffect)(() => {
+		const loadLanguage = async () => {
+			if (!import_prism.default.languages.json) try {
+				await __vitePreload(() => import("./prism-json-C7LrprNE.js"), []);
+			} catch (err) {
+				console.error("Failed to load Prism JSON language:", err);
+			}
+		};
+		loadLanguage();
+	}, []);
 	const LINE_HEIGHT_MULTIPLIER = 1.4;
 	const [lineHeightPx, setLineHeightPx] = (0, import_react.useState)(21);
 	const [verticalPaddingPx, setVerticalPaddingPx] = (0, import_react.useState)(32);

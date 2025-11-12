@@ -8,7 +8,7 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	* @namespace
 	* @public
 	*/
-	var Prism$1 = function(_self) {
+	var Prism = function(_self) {
 		var lang = /(?:^|\s)lang(?:uage)?-([\w-]+)(?=\s|$)/i;
 		var uniqueId = 0;
 		var plainTextGrammar = {};
@@ -422,9 +422,9 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		return _;
 	}(typeof window !== "undefined" ? window : typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope ? self : {});
-	if (typeof module !== "undefined" && module.exports) module.exports = Prism$1;
-	if (typeof global !== "undefined") global.Prism = Prism$1;
-	Prism$1.languages.markup = {
+	if (typeof module !== "undefined" && module.exports) module.exports = Prism;
+	if (typeof global !== "undefined") global.Prism = Prism;
+	Prism.languages.markup = {
 		"comment": {
 			pattern: /<!--(?:(?!<!--)[\s\S])*?-->/,
 			greedy: true
@@ -490,17 +490,17 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			alias: "named-entity"
 		}, /&#x?[\da-f]{1,8};/i]
 	};
-	Prism$1.languages.markup["tag"].inside["attr-value"].inside["entity"] = Prism$1.languages.markup["entity"];
-	Prism$1.languages.markup["doctype"].inside["internal-subset"].inside = Prism$1.languages.markup;
-	Prism$1.hooks.add("wrap", function(env) {
+	Prism.languages.markup["tag"].inside["attr-value"].inside["entity"] = Prism.languages.markup["entity"];
+	Prism.languages.markup["doctype"].inside["internal-subset"].inside = Prism.languages.markup;
+	Prism.hooks.add("wrap", function(env) {
 		if (env.type === "entity") env.attributes["title"] = env.content.replace(/&amp;/, "&");
 	});
-	Object.defineProperty(Prism$1.languages.markup.tag, "addInlined", { value: function addInlined(tagName, lang) {
+	Object.defineProperty(Prism.languages.markup.tag, "addInlined", { value: function addInlined(tagName, lang) {
 		var includedCdataInside = {};
 		includedCdataInside["language-" + lang] = {
 			pattern: /(^<!\[CDATA\[)[\s\S]+?(?=\]\]>$)/i,
 			lookbehind: true,
-			inside: Prism$1.languages[lang]
+			inside: Prism.languages[lang]
 		};
 		includedCdataInside["cdata"] = /^<!\[CDATA\[|\]\]>$/i;
 		var inside = { "included-cdata": {
@@ -509,7 +509,7 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		} };
 		inside["language-" + lang] = {
 			pattern: /[\s\S]+/,
-			inside: Prism$1.languages[lang]
+			inside: Prism.languages[lang]
 		};
 		var def = {};
 		def[tagName] = {
@@ -520,10 +520,10 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			greedy: true,
 			inside
 		};
-		Prism$1.languages.insertBefore("markup", "cdata", def);
+		Prism.languages.insertBefore("markup", "cdata", def);
 	} });
-	Object.defineProperty(Prism$1.languages.markup.tag, "addAttribute", { value: function(attrName, lang) {
-		Prism$1.languages.markup.tag.inside["special-attr"].push({
+	Object.defineProperty(Prism.languages.markup.tag, "addAttribute", { value: function(attrName, lang) {
+		Prism.languages.markup.tag.inside["special-attr"].push({
 			pattern: RegExp(/(^|["'\s])/.source + "(?:" + attrName + ")" + /\s*=\s*(?:"[^"]*"|'[^']*'|[^\s'">=]+(?=[\s>]))/.source, "i"),
 			lookbehind: true,
 			inside: {
@@ -535,7 +535,7 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 							pattern: /(^=\s*(["']|(?!["'])))\S[\s\S]*(?=\2$)/,
 							lookbehind: true,
 							alias: [lang, "language-" + lang],
-							inside: Prism$1.languages[lang]
+							inside: Prism.languages[lang]
 						},
 						"punctuation": [{
 							pattern: /^=/,
@@ -546,16 +546,16 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			}
 		});
 	} });
-	Prism$1.languages.html = Prism$1.languages.markup;
-	Prism$1.languages.mathml = Prism$1.languages.markup;
-	Prism$1.languages.svg = Prism$1.languages.markup;
-	Prism$1.languages.xml = Prism$1.languages.extend("markup", {});
-	Prism$1.languages.ssml = Prism$1.languages.xml;
-	Prism$1.languages.atom = Prism$1.languages.xml;
-	Prism$1.languages.rss = Prism$1.languages.xml;
-	(function(Prism$2) {
+	Prism.languages.html = Prism.languages.markup;
+	Prism.languages.mathml = Prism.languages.markup;
+	Prism.languages.svg = Prism.languages.markup;
+	Prism.languages.xml = Prism.languages.extend("markup", {});
+	Prism.languages.ssml = Prism.languages.xml;
+	Prism.languages.atom = Prism.languages.xml;
+	Prism.languages.rss = Prism.languages.xml;
+	(function(Prism$1) {
 		var string = /(?:"(?:\\(?:\r\n|[\s\S])|[^"\\\r\n])*"|'(?:\\(?:\r\n|[\s\S])|[^'\\\r\n])*')/;
-		Prism$2.languages.css = {
+		Prism$1.languages.css = {
 			"comment": /\/\*[\s\S]*?\*\//,
 			"atrule": {
 				pattern: RegExp("@[\\w-](?:" + /[^;{\s"']|\s+(?!\s)/.source + "|" + string.source + ")*?" + /(?:;|(?=\s*\{))/.source),
@@ -603,14 +603,14 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			},
 			"punctuation": /[(){};:,]/
 		};
-		Prism$2.languages.css["atrule"].inside.rest = Prism$2.languages.css;
-		var markup = Prism$2.languages.markup;
+		Prism$1.languages.css["atrule"].inside.rest = Prism$1.languages.css;
+		var markup = Prism$1.languages.markup;
 		if (markup) {
 			markup.tag.addInlined("style", "css");
 			markup.tag.addAttribute("style", "css");
 		}
-	})(Prism$1);
-	Prism$1.languages.clike = {
+	})(Prism);
+	Prism.languages.clike = {
 		"comment": [{
 			pattern: /(^|[^\\])\/\*[\s\S]*?(?:\*\/|$)/,
 			lookbehind: true,
@@ -636,8 +636,8 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		"operator": /[<>]=?|[!=]=?=?|--?|\+\+?|&&?|\|\|?|[?*/~^%]/,
 		"punctuation": /[{}[\];(),.:]/
 	};
-	Prism$1.languages.javascript = Prism$1.languages.extend("clike", {
-		"class-name": [Prism$1.languages.clike["class-name"], {
+	Prism.languages.javascript = Prism.languages.extend("clike", {
+		"class-name": [Prism.languages.clike["class-name"], {
 			pattern: /(^|[^$\w\xA0-\uFFFF])(?!\s)[_$A-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*(?=\.(?:constructor|prototype))/,
 			lookbehind: true
 		}],
@@ -655,8 +655,8 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		},
 		"operator": /--|\+\+|\*\*=?|=>|&&=?|\|\|=?|[!=]==|<<=?|>>>?=?|[-+*/%&|^!=<>]=?|\.{3}|\?\?=?|\?\.?|[~:]/
 	});
-	Prism$1.languages.javascript["class-name"][0].pattern = /(\b(?:class|extends|implements|instanceof|interface|new)\s+)[\w.\\]+/;
-	Prism$1.languages.insertBefore("javascript", "keyword", {
+	Prism.languages.javascript["class-name"][0].pattern = /(\b(?:class|extends|implements|instanceof|interface|new)\s+)[\w.\\]+/;
+	Prism.languages.insertBefore("javascript", "keyword", {
 		"regex": {
 			pattern: RegExp(/((?:^|[^$\w\xA0-\uFFFF."'\])\s]|\b(?:return|yield))\s*)/.source + /\//.source + "(?:" + /(?:\[(?:[^\]\\\r\n]|\\.)*\]|\\.|[^/\\\[\r\n])+\/[dgimyus]{0,7}/.source + "|" + /(?:\[(?:[^[\]\\\r\n]|\\.|\[(?:[^[\]\\\r\n]|\\.|\[(?:[^[\]\\\r\n]|\\.)*\])*\])*\]|\\.|[^/\\\[\r\n])+\/[dgimyus]{0,7}v[dgimyus]{0,7}/.source + ")" + /(?=(?:\s|\/\*(?:[^*]|\*(?!\/))*\*\/)*(?:$|[\r\n,.;:})\]]|\/\/))/.source),
 			lookbehind: true,
@@ -666,7 +666,7 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					pattern: /^(\/)[\s\S]+(?=\/[a-z]*$)/,
 					lookbehind: true,
 					alias: "language-regex",
-					inside: Prism$1.languages.regex
+					inside: Prism.languages.regex
 				},
 				"regex-delimiter": /^\/|\/$/,
 				"regex-flags": /^[a-z]+$/
@@ -680,27 +680,27 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			{
 				pattern: /(function(?:\s+(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*)?\s*\(\s*)(?!\s)(?:[^()\s]|\s+(?![\s)])|\([^()]*\))+(?=\s*\))/,
 				lookbehind: true,
-				inside: Prism$1.languages.javascript
+				inside: Prism.languages.javascript
 			},
 			{
 				pattern: /(^|[^$\w\xA0-\uFFFF])(?!\s)[_$a-z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*(?=\s*=>)/i,
 				lookbehind: true,
-				inside: Prism$1.languages.javascript
+				inside: Prism.languages.javascript
 			},
 			{
 				pattern: /(\(\s*)(?!\s)(?:[^()\s]|\s+(?![\s)])|\([^()]*\))+(?=\s*\)\s*=>)/,
 				lookbehind: true,
-				inside: Prism$1.languages.javascript
+				inside: Prism.languages.javascript
 			},
 			{
 				pattern: /((?:\b|\s|^)(?!(?:as|async|await|break|case|catch|class|const|continue|debugger|default|delete|do|else|enum|export|extends|finally|for|from|function|get|if|implements|import|in|instanceof|interface|let|new|null|of|package|private|protected|public|return|set|static|super|switch|this|throw|try|typeof|undefined|var|void|while|with|yield)(?![$\w\xA0-\uFFFF]))(?:(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*\s*)\(\s*|\]\s*\(\s*)(?!\s)(?:[^()\s]|\s+(?![\s)])|\([^()]*\))+(?=\s*\)\s*\{)/,
 				lookbehind: true,
-				inside: Prism$1.languages.javascript
+				inside: Prism.languages.javascript
 			}
 		],
 		"constant": /\b[A-Z](?:[A-Z_]|\dx?)*\b/
 	});
-	Prism$1.languages.insertBefore("javascript", "string", {
+	Prism.languages.insertBefore("javascript", "string", {
 		"hashbang": {
 			pattern: /^#!.*/,
 			greedy: true,
@@ -722,7 +722,7 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 							pattern: /^\$\{|\}$/,
 							alias: "punctuation"
 						},
-						rest: Prism$1.languages.javascript
+						rest: Prism.languages.javascript
 					}
 				},
 				"string": /[\s\S]+/
@@ -735,18 +735,18 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			alias: "property"
 		}
 	});
-	Prism$1.languages.insertBefore("javascript", "operator", { "literal-property": {
+	Prism.languages.insertBefore("javascript", "operator", { "literal-property": {
 		pattern: /((?:^|[,{])[ \t]*)(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*(?=\s*:)/m,
 		lookbehind: true,
 		alias: "property"
 	} });
-	if (Prism$1.languages.markup) {
-		Prism$1.languages.markup.tag.addInlined("script", "javascript");
-		Prism$1.languages.markup.tag.addAttribute(/on(?:abort|blur|change|click|composition(?:end|start|update)|dblclick|error|focus(?:in|out)?|key(?:down|up)|load|mouse(?:down|enter|leave|move|out|over|up)|reset|resize|scroll|select|slotchange|submit|unload|wheel)/.source, "javascript");
+	if (Prism.languages.markup) {
+		Prism.languages.markup.tag.addInlined("script", "javascript");
+		Prism.languages.markup.tag.addAttribute(/on(?:abort|blur|change|click|composition(?:end|start|update)|dblclick|error|focus(?:in|out)?|key(?:down|up)|load|mouse(?:down|enter|leave|move|out|over|up)|reset|resize|scroll|select|slotchange|submit|unload|wheel)/.source, "javascript");
 	}
-	Prism$1.languages.js = Prism$1.languages.javascript;
+	Prism.languages.js = Prism.languages.javascript;
 	(function() {
-		if (typeof Prism$1 === "undefined" || typeof document === "undefined") return;
+		if (typeof Prism === "undefined" || typeof document === "undefined") return;
 		if (!Element.prototype.matches) Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
 		var LOADING_MESSAGE = "Loading…";
 		var FAILURE_MESSAGE = function(status, message) {
@@ -790,10 +790,10 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				return [start, Number(end)];
 			}
 		}
-		Prism$1.hooks.add("before-highlightall", function(env) {
+		Prism.hooks.add("before-highlightall", function(env) {
 			env.selector += ", " + SELECTOR;
 		});
-		Prism$1.hooks.add("before-sanity-check", function(env) {
+		Prism.hooks.add("before-sanity-check", function(env) {
 			var pre = env.element;
 			if (pre.matches(SELECTOR)) {
 				env.code = "";
@@ -806,9 +806,9 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					var extension = (/\.(\w+)$/.exec(src) || [, "none"])[1];
 					language = EXTENSIONS[extension] || extension;
 				}
-				Prism$1.util.setLanguage(code, language);
-				Prism$1.util.setLanguage(pre, language);
-				var autoloader = Prism$1.plugins.autoloader;
+				Prism.util.setLanguage(code, language);
+				Prism.util.setLanguage(pre, language);
+				var autoloader = Prism.plugins.autoloader;
 				if (autoloader) autoloader.loadLanguages(language);
 				loadFile(src, function(text) {
 					pre.setAttribute(STATUS_ATTR, STATUS_LOADED);
@@ -825,50 +825,25 @@ var require_prism = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 						if (!pre.hasAttribute("data-start")) pre.setAttribute("data-start", String(start + 1));
 					}
 					code.textContent = text;
-					Prism$1.highlightElement(code);
+					Prism.highlightElement(code);
 				}, function(error) {
 					pre.setAttribute(STATUS_ATTR, STATUS_FAILED);
 					code.textContent = error;
 				});
 			}
 		});
-		Prism$1.plugins.fileHighlight = { highlight: function highlight(container) {
+		Prism.plugins.fileHighlight = { highlight: function highlight(container) {
 			var elements = (container || document).querySelectorAll(SELECTOR);
-			for (var i = 0, element; element = elements[i++];) Prism$1.highlightElement(element);
+			for (var i = 0, element; element = elements[i++];) Prism.highlightElement(element);
 		} };
 		var logged = false;
-		Prism$1.fileHighlight = function() {
+		Prism.fileHighlight = function() {
 			if (!logged) {
 				console.warn("Prism.fileHighlight is deprecated. Use `Prism.plugins.fileHighlight.highlight` instead.");
 				logged = true;
 			}
-			Prism$1.plugins.fileHighlight.highlight.apply(this, arguments);
+			Prism.plugins.fileHighlight.highlight.apply(this, arguments);
 		};
 	})();
 }));
-Prism.languages.json = {
-	"property": {
-		pattern: /(^|[^\\])"(?:\\.|[^\\"\r\n])*"(?=\s*:)/,
-		lookbehind: true,
-		greedy: true
-	},
-	"string": {
-		pattern: /(^|[^\\])"(?:\\.|[^\\"\r\n])*"(?!\s*:)/,
-		lookbehind: true,
-		greedy: true
-	},
-	"comment": {
-		pattern: /\/\/.*|\/\*[\s\S]*?(?:\*\/|$)/,
-		greedy: true
-	},
-	"number": /-?\b\d+(?:\.\d+)?(?:e[+-]?\d+)?\b/i,
-	"punctuation": /[{}[\],]/,
-	"operator": /:/,
-	"boolean": /\b(?:false|true)\b/,
-	"null": {
-		pattern: /\bnull\b/,
-		alias: "keyword"
-	}
-};
-Prism.languages.webmanifest = Prism.languages.json;
 export { require_prism as t };
