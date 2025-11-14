@@ -58,7 +58,6 @@ const MobileMenu = () => {
             onClick={toggleDrawer(true)}
             aria-label={t("aria.openMenu")}
             className={styles.mobileMenu__hamburger}
-            sx={{ color: "white" }}
           >
             <MenuIcon />
           </IconButton>
@@ -86,7 +85,6 @@ const MobileMenu = () => {
               onClick={toggleDrawer(false)}
               aria-label={t("aria.closeMenu")}
               className={styles.mobileMenu__hamburger}
-              sx={{ color: "white" }}
             >
               <CloseIcon />
             </IconButton>
