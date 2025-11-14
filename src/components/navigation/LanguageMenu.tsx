@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Menu, MenuItem, IconButton } from "@mui/material";
 import { Language as LanguageIcon, ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 import { languageOptions } from "../../menuData";
+import { themeConfig } from "../../themeConfig";
 import styles from "./LanguageMenu.module.scss";
 
 interface LanguageMenuProps {
@@ -55,24 +56,24 @@ const LanguageMenu = ({ mobile = false }: LanguageMenuProps) => {
           }}
           sx={{
             "& .MuiPaper-root": {
-              backgroundColor: "#ffffff",
-              border: "2px solid #d0d0d0",
+              backgroundColor: themeConfig.SURFACE_BG,
+              border: `2px solid ${themeConfig.BORDER_COLOR}`,
               borderRadius: "8px",
               boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
             },
             "& .MuiMenuItem-root": {
-              color: "#000000",
+              color: themeConfig.TEXT_PRIMARY,
               fontSize: "0.9375rem",
               padding: "12px 20px",
               "&:hover": {
-                backgroundColor: "#f5f5f5",
+                backgroundColor: themeConfig.SURFACE_LIGHT,
               },
               "&.Mui-selected": {
-                backgroundColor: "rgba(25, 118, 210, 0.12)",
-                color: "#1976d2",
+                backgroundColor: themeConfig.ACTIVE_BG,
+                color: themeConfig.PRIMARY_COLOR,
                 fontWeight: 600,
                 "&:hover": {
-                  backgroundColor: "rgba(25, 118, 210, 0.18)",
+                  backgroundColor: themeConfig.ACTIVE_BG_HOVER,
                 },
               },
             },
@@ -119,26 +120,26 @@ const LanguageMenu = ({ mobile = false }: LanguageMenuProps) => {
         }}
         sx={{
           "& .MuiPaper-root": {
-            backgroundColor: "#ffffff",
-            border: "2px solid #d0d0d0",
+            backgroundColor: themeConfig.SURFACE_BG,
+            border: `2px solid ${themeConfig.BORDER_COLOR}`,
             borderRadius: "8px",
             boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
             marginTop: "8px",
           },
           "& .MuiMenuItem-root": {
-            color: "#000000",
+            color: themeConfig.TEXT_PRIMARY,
             fontSize: "0.9375rem",
             padding: "12px 20px",
             minWidth: "160px",
             "&:hover": {
-              backgroundColor: "#f5f5f5",
+              backgroundColor: themeConfig.SURFACE_LIGHT,
             },
             "&.Mui-selected": {
-              backgroundColor: "rgba(25, 118, 210, 0.12)",
-              color: "#1976d2",
+              backgroundColor: themeConfig.ACTIVE_BG,
+              color: themeConfig.PRIMARY_COLOR,
               fontWeight: 600,
               "&:hover": {
-                backgroundColor: "rgba(25, 118, 210, 0.18)",
+                backgroundColor: themeConfig.ACTIVE_BG_HOVER,
               },
             },
           },
