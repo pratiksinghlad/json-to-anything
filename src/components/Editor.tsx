@@ -40,11 +40,11 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
           await import("prismjs/components/prism-json");
           if (!Prism.languages.json) {
             // Some bundlers may require explicit registration
-            // eslint-disable-next-line no-console
+             
             console.error("Prism JSON language was imported, but not registered.");
           }
         } catch (err) {
-          // eslint-disable-next-line no-console
+           
           console.error("Failed to load Prism JSON language:", err);
         }
       }

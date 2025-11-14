@@ -15,6 +15,9 @@ export const themeConfig = {
   SURFACE_LIGHT: "#f5f5f5",
   SURFACE_LIGHTER: "#eeeeee",
 
+  // Border colors
+  BORDER_COLOR: "#d0d0d0",
+
   // Text colors
   TEXT_PRIMARY: "#000000",
   TEXT_SECONDARY: "#000000",
@@ -23,6 +26,7 @@ export const themeConfig = {
   // States
   HOVER_BG: "rgba(255, 255, 255, 0.08)",
   ACTIVE_BG: "rgba(25, 118, 210, 0.12)",
+  ACTIVE_BG_HOVER: "rgba(25, 118, 210, 0.18)",
   FOCUS_OUTLINE: "#4791db",
 
   // Breakpoints (matches SCSS)
