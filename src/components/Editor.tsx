@@ -3,6 +3,7 @@ import { useRef, useEffect, useState } from "react";
 import Editor from "react-simple-code-editor";
 import "prismjs/themes/prism.css";
 import Prism from "prismjs";
+import { useTranslation } from "react-i18next";
 
 interface JsonEditorProps {
   value: string;
@@ -24,6 +25,7 @@ const highlight = (code: string) => {
  * @param {JsonEditorProps} props
  */
 export default function JsonEditor({ value, onChange, error }: JsonEditorProps) {
+  const { t } = useTranslation();
   const lineCount = value.split("\n").length;
   const lineNumbers = Array.from({ length: lineCount }, (_, i) => i + 1).join("\n");
   const lineNumbersRef = useRef<HTMLDivElement>(null);
@@ -111,7 +113,7 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
   return (
     <Box>
       <Typography variant="h6" gutterBottom sx={{ color: "#000000", fontWeight: 500 }}>
-        JSON Input
+        {t("editor.title")}
       </Typography>
       <Paper
         elevation={0}
@@ -181,7 +183,7 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
               width: "100%",
             }}
             textareaId="json-editor"
-            aria-label="JSON editor"
+            aria-label={t("aria.jsonEditor")}
           />
         </Box>
       </Paper>

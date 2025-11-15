@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { getAllKeys, flattenObject } from "../utils/flattenObject";
 import { toPascalCase } from "../utils/jsonToCsv";
+import { useTranslation } from "react-i18next";
 
 interface PreviewTableProps {
   data: Record<string, unknown>[];
@@ -24,6 +25,7 @@ export default function PreviewTable({
   maxRows = 50,
   pascalCaseHeaders = false,
 }: PreviewTableProps) {
+  const { t } = useTranslation();
   if (data.length === 0) {
     return null;
   }
@@ -36,7 +38,7 @@ export default function PreviewTable({
     <Fade in={true} timeout={500}>
       <Box>
         <Typography variant="h6" gutterBottom sx={{ color: "#000000", fontWeight: 500 }}>
-          Preview {hasMore && `(showing ${maxRows} of ${data.length} rows)`}
+          {t("preview.title")} {hasMore && t("preview.showing", { shown: maxRows, total: data.length })}
         </Typography>
         <TableContainer
           component={Paper}
@@ -48,7 +50,7 @@ export default function PreviewTable({
             backgroundColor: "#ffffff",
           }}
         >
-          <Table stickyHeader size="small" aria-label="CSV preview table">
+          <Table stickyHeader size="small" aria-label={t("preview.title") + " table"}>
             <TableHead>
               <TableRow>
                 {columns.map((column) => {

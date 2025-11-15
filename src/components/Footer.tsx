@@ -1,11 +1,13 @@
 import { Box, Container, Typography, Link, Stack, IconButton } from '@mui/material';
 import { interactiveHoverSx } from '../theme/uiSx';
+import { useTranslation } from 'react-i18next';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 export default function Footer() {
   const userName = "pratiksinghlad";
+  const { t } = useTranslation();
 
   return (
     <Box
@@ -21,14 +23,13 @@ export default function Footer() {
       <Container maxWidth="lg">
         <Stack spacing={2} alignItems="center">
           <Typography variant="body2" color="text.secondary" align="center">
-            <strong>Privacy & open source.</strong> All conversion happens in your browser —
-            nothing is uploaded or stored on a server. The full source code is available on{' '}
+            <strong>{t('footer.privacyTitle')}</strong> {t('footer.privacyText')}{' '}
             <Link
               href={`https://github.com/${userName}/json-to-anything`}
               target="_blank"
               rel="noopener noreferrer"
             >
-              GitHub
+              {t('footer.github')}
             </Link>
             .
           </Typography>
@@ -38,7 +39,7 @@ export default function Footer() {
               href={`https://github.com/${userName}`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="View source on GitHub"
+              aria-label={t('footer.viewSource')}
               size="small"
               sx={interactiveHoverSx}
             >
@@ -48,7 +49,7 @@ export default function Footer() {
               href={`https://x.com/${userName}`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Follow on Twitter"
+              aria-label={t('footer.followTwitter')}
               size="small"
               sx={interactiveHoverSx}
             >
@@ -58,7 +59,7 @@ export default function Footer() {
               href={`https://www.linkedin.com/in/${userName}/`}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Connect on LinkedIn"
+              aria-label={t('footer.connectLinkedIn')}
               size="small"
               sx={interactiveHoverSx}
             >
@@ -67,7 +68,7 @@ export default function Footer() {
           </Stack>
           
           <Typography variant="body2" color="text.secondary" align="center">
-            © {new Date().getFullYear()} JSON to Anything. Made with ❤️ for all.
+            {t('footer.copyright', { year: new Date().getFullYear() })}
           </Typography>
         </Stack>
       </Container>

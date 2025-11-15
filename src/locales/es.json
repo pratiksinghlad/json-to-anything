@@ -17,6 +17,78 @@
     "closeMenu": "Cerrar menú de navegación",
     "mainNavigation": "Navegación principal",
     "languageSelector": "Selector de idioma",
-    "currentPage": "Página actual"
+    "currentPage": "Página actual",
+    "jsonEditor": "Editor de JSON",
+    "downloadCsv": "Descargar archivo CSV",
+    "downloadJson": "Descargar archivo JSON",
+    "copyCsv": "Copiar CSV al portapapeles",
+    "showRawData": "Mostrar datos CSV en una nueva pestaña",
+    "separator": "Separador de CSV"
+  },
+  "pages": {
+    "jsonToCsv": {
+      "title": "Convertidor de JSON a CSV",
+      "subtitle": "Convierte datos JSON a formato CSV al instante en tu navegador"
+    },
+    "beautify": {
+      "title": "Embellecer JSON",
+      "comingSoon": "La función de embellecimiento de JSON llegará pronto..."
+    },
+    "compare": {
+      "title": "Comparar JSON",
+      "comingSoon": "La función de comparación de JSON llegará pronto..."
+    },
+    "about": {
+      "title": "Acerca de JSON to Anything",
+      "p1": "Una aplicación web simple, robusta y fácil de usar para convertir datos JSON a varios formatos directamente en tu navegador.",
+      "p2": "Todo el procesamiento ocurre directamente en tu navegador; nada se sube ni se almacena en un servidor. La aplicación es totalmente privada y está alojada en GitHub Pages, sin llamadas a API.",
+      "by": "Hecho con ❤️ por"
+    }
+  },
+  "options": {
+    "separator": "Separador",
+    "separatorComma": "Coma (,)",
+    "separatorSemicolon": "Punto y coma (;)",
+    "separatorTab": "Tabulación",
+    "includeHeader": "Incluir encabezado",
+    "trimEmptyColumns": "Recortar columnas vacías",
+    "pascalCaseHeaders": "Encabezados en Pascal case"
+  },
+  "buttons": {
+    "downloadCsv": "Descargar CSV",
+    "downloadJson": "Descargar JSON",
+    "copyCsv": "Copiar CSV",
+    "showRawData": "Mostrar datos"
+  },
+  "preview": {
+    "title": "Vista previa",
+    "showing": "(mostrando {{shown}} de {{total}} filas)"
+  },
+  "snackbar": {
+    "csvDownloaded": "CSV descargado correctamente",
+    "jsonDownloaded": "JSON descargado correctamente",
+    "csvCopied": "CSV copiado al portapapeles",
+    "copyFailed": "Error al copiar al portapapeles"
+  },
+  "editor": {
+    "title": "Entrada JSON"
+  },
+  "errors": {
+    "emptyInput": "La entrada está vacía",
+    "invalidJson": "JSON no válido",
+    "arrayEmpty": "La matriz está vacía",
+    "arrayOnlyObjects": "La matriz debe contener solo objetos",
+    "dataArrayEmpty": "La matriz de datos está vacía",
+    "dataArrayOnlyObjects": "La matriz de datos debe contener solo objetos",
+    "invalidInputType": "La entrada debe ser una matriz de objetos, un único objeto o un objeto con una propiedad de matriz \"data\""
+  },
+  "footer": {
+    "privacyTitle": "Privacidad y código abierto.",
+    "privacyText": "Toda la conversión ocurre en tu navegador; nada se sube ni se almacena en un servidor. El código fuente completo está disponible en",
+    "github": "GitHub",
+    "viewSource": "Ver código en GitHub",
+    "followTwitter": "Seguir en Twitter",
+    "connectLinkedIn": "Conectar en LinkedIn",
+    "copyright": "© {{year}} JSON to Anything. Hecho con ❤️ para todos."
   }
 }
