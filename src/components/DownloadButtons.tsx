@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button, Stack, Snackbar, Alert } from '@mui/material';
 import {
   primaryContainedButtonSx,
@@ -20,6 +21,7 @@ export default function DownloadButtons({
   jsonData,
   disabled = false,
 }: DownloadButtonsProps) {
+  const { t } = useTranslation();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
@@ -54,21 +56,21 @@ export default function DownloadButtons({
   const handleDownloadCsv = () => {
     const filename = `data-${getTimestamp()}.csv`;
     downloadFile(csvData, filename, 'text/csv;charset=utf-8;');
-    showSnackbar('CSV downloaded successfully');
+    showSnackbar(t('snackbar.csvDownloaded'));
   };
 
   const handleDownloadJson = () => {
     const filename = `data-${getTimestamp()}.json`;
     downloadFile(jsonData, filename, 'application/json');
-    showSnackbar('JSON downloaded successfully');
+    showSnackbar(t('snackbar.jsonDownloaded'));
   };
 
   const handleCopyCsv = async () => {
     try {
       await navigator.clipboard.writeText(csvData);
-      showSnackbar('CSV copied to clipboard');
+      showSnackbar(t('snackbar.csvCopied'));
     } catch {
-      showSnackbar('Failed to copy to clipboard');
+      showSnackbar(t('snackbar.copyFailed'));
     }
   };
 
@@ -90,10 +92,10 @@ export default function DownloadButtons({
           startIcon={<DownloadIcon />}
           onClick={handleDownloadCsv}
           disabled={disabled}
-          aria-label="Download CSV file"
+          aria-label={t('aria.downloadCsv')}
           sx={primaryContainedButtonSx}
         >
-          Download CSV
+          {t('buttons.downloadCsv')}
         </Button>
 
         <Button
@@ -101,10 +103,10 @@ export default function DownloadButtons({
           startIcon={<DownloadIcon />}
           onClick={handleDownloadJson}
           disabled={disabled}
-          aria-label="Download JSON file"
+          aria-label={t('aria.downloadJson')}
           sx={primaryOutlinedButtonSx}
         >
-          Download JSON
+          {t('buttons.downloadJson')}
         </Button>
 
         <Button
@@ -112,10 +114,10 @@ export default function DownloadButtons({
           startIcon={<ContentCopyIcon />}
           onClick={handleCopyCsv}
           disabled={disabled}
-          aria-label="Copy CSV to clipboard"
+          aria-label={t('aria.copyCsv')}
           sx={primaryOutlinedButtonSx}
         >
-          Copy CSV
+          {t('buttons.copyCsv')}
         </Button>
 
         <Button
@@ -123,10 +125,10 @@ export default function DownloadButtons({
           startIcon={<OpenInNewIcon />}
           onClick={handleShowRawData}
           disabled={disabled}
-          aria-label="Show raw CSV data in new tab"
+          aria-label={t('aria.showRawData')}
           sx={textAccentButtonSx}
         >
-          Show raw data
+          {t('buttons.showRawData')}
         </Button>
       </Stack>
 

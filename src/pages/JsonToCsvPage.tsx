@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Container, Box, Typography } from "@mui/material";
 import JsonEditor from "../components/Editor";
 import OptionsBar from "../components/OptionsBar";
@@ -33,6 +34,7 @@ const DEFAULT_JSON = `[
 ]`;
 
 const JsonToCsvPage = () => {
+  const { t } = useTranslation();
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
   const [error, setError] = useState<string | undefined>();
   const [normalizedData, setNormalizedData] = useState<Record<string, unknown>[]>([]);
@@ -46,7 +48,12 @@ const JsonToCsvPage = () => {
     // Parse and validate JSON
     const parseResult = parseJson(jsonInput);
     if (!parseResult.success) {
-      setError(parseResult.error);
+      // Map parse errors to i18n keys
+      if (parseResult.error === "Input is empty") {
+        setError(t("errors.emptyInput"));
+      } else {
+        setError(t("errors.invalidJson"));
+      }
       setNormalizedData([]);
       setCsvData("");
       return;
@@ -55,7 +62,14 @@ const JsonToCsvPage = () => {
     // Normalize data to array of objects
     const normalizeResult = normalizeData(parseResult.data);
     if (!normalizeResult.success) {
-      setError(normalizeResult.error);
+      // Map normalization errors to i18n keys, fallback to raw error
+      const map: Record<string, string> = {
+        "Array is empty": t("errors.arrayEmpty"),
+        "Array must contain only objects": t("errors.arrayOnlyObjects"),
+        "Data array is empty": t("errors.dataArrayEmpty"),
+        "Data array must contain only objects": t("errors.dataArrayOnlyObjects"),
+      };
+      setError(map[normalizeResult.error || ""] || normalizeResult.error || t("errors.invalidInputType"));
       setNormalizedData([]);
       setCsvData("");
       return;
@@ -93,7 +107,7 @@ const JsonToCsvPage = () => {
           align="center"
           sx={{ color: "#000000", fontWeight: 600 }}
         >
-          JSON to CSV Converter
+          {t("pages.jsonToCsv.title")}
         </Typography>
         <Typography
           variant="subtitle1"
@@ -104,7 +118,7 @@ const JsonToCsvPage = () => {
             color: "rgba(0, 0, 0, 0.6)",
           }}
         >
-          Convert JSON data to CSV format instantly in your browser
+          {t("pages.jsonToCsv.subtitle")}
         </Typography>
 
         <Box sx={{ mb: 4 }}>

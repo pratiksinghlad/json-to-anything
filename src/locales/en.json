@@ -17,6 +17,78 @@
     "closeMenu": "Close navigation menu",
     "mainNavigation": "Main navigation",
     "languageSelector": "Language selector",
-    "currentPage": "Current page"
+    "currentPage": "Current page",
+    "jsonEditor": "JSON editor",
+    "downloadCsv": "Download CSV file",
+    "downloadJson": "Download JSON file",
+    "copyCsv": "Copy CSV to clipboard",
+    "showRawData": "Show raw CSV data in new tab",
+    "separator": "CSV separator"
+  },
+  "pages": {
+    "jsonToCsv": {
+      "title": "JSON to CSV Converter",
+      "subtitle": "Convert JSON data to CSV format instantly in your browser"
+    },
+    "beautify": {
+      "title": "Beautify JSON",
+      "comingSoon": "JSON beautification feature coming soon..."
+    },
+    "compare": {
+      "title": "Compare JSON",
+      "comingSoon": "JSON comparison feature coming soon..."
+    },
+    "about": {
+      "title": "About JSON to Anything",
+      "p1": "A simple, robust, and user-friendly web application for converting JSON data to various formats entirely in your browser.",
+      "p2": "All processing occurs directly in your browser—nothing is uploaded or stored on a server. The app is fully private and hosted on GitHub Pages, with no API calls made.",
+      "by": "Made with ❤️ by"
+    }
+  },
+  "options": {
+    "separator": "Separator",
+    "separatorComma": "Comma (,)",
+    "separatorSemicolon": "Semicolon (;)",
+    "separatorTab": "Tab",
+    "includeHeader": "Include header",
+    "trimEmptyColumns": "Trim empty columns",
+    "pascalCaseHeaders": "Pascal case headers"
+  },
+  "buttons": {
+    "downloadCsv": "Download CSV",
+    "downloadJson": "Download JSON",
+    "copyCsv": "Copy CSV",
+    "showRawData": "Show raw data"
+  },
+  "preview": {
+    "title": "Preview",
+    "showing": "(showing {{shown}} of {{total}} rows)"
+  },
+  "snackbar": {
+    "csvDownloaded": "CSV downloaded successfully",
+    "jsonDownloaded": "JSON downloaded successfully",
+    "csvCopied": "CSV copied to clipboard",
+    "copyFailed": "Failed to copy to clipboard"
+  },
+  "editor": {
+    "title": "JSON Input"
+  },
+  "errors": {
+    "emptyInput": "Input is empty",
+    "invalidJson": "Invalid JSON",
+    "arrayEmpty": "Array is empty",
+    "arrayOnlyObjects": "Array must contain only objects",
+    "dataArrayEmpty": "Data array is empty",
+    "dataArrayOnlyObjects": "Data array must contain only objects",
+    "invalidInputType": "Input must be an array of objects, a single object, or an object with a \"data\" array property"
+  },
+  "footer": {
+    "privacyTitle": "Privacy & open source.",
+    "privacyText": "All conversion happens in your browser — nothing is uploaded or stored on a server. The full source code is available on",
+    "github": "GitHub",
+    "viewSource": "View source on GitHub",
+    "followTwitter": "Follow on Twitter",
+    "connectLinkedIn": "Connect on LinkedIn",
+    "copyright": "© {{year}} JSON to Anything. Made with ❤️ for all."
   }
 }

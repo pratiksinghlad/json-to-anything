@@ -9,6 +9,7 @@ import {
   Stack,
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 interface OptionsBarProps {
   separator: "," | ";" | "\t";
@@ -31,6 +32,7 @@ export default function OptionsBar({
   onTrimEmptyColumnsChange,
   onPascalCaseHeadersChange,
 }: OptionsBarProps) {
+  const { t } = useTranslation();
   const handleSeparatorChange = (event: SelectChangeEvent) => {
     onSeparatorChange(event.target.value as "," | ";" | "\t");
   };
@@ -38,11 +40,11 @@ export default function OptionsBar({
   const getSeparatorLabel = (sep: string) => {
     switch (sep) {
       case ",":
-        return "Comma (,)";
+        return t("options.separatorComma");
       case ";":
-        return "Semicolon (;)";
+        return t("options.separatorSemicolon");
       case "\t":
-        return "Tab";
+        return t("options.separatorTab");
       default:
         return sep;
     }
@@ -78,14 +80,14 @@ export default function OptionsBar({
             },
           }}
         >
-          <InputLabel id="separator-label">Separator</InputLabel>
+          <InputLabel id="separator-label">{t("options.separator")}</InputLabel>
           <Select
             labelId="separator-label"
             id="separator-select"
             value={separator}
-            label="Separator"
+            label={t("options.separator")}
             onChange={handleSeparatorChange}
-            aria-label="CSV separator"
+            aria-label={t("aria.separator")}
           >
             <MenuItem value=",">{getSeparatorLabel(",")}</MenuItem>
             <MenuItem value=";">{getSeparatorLabel(";")}</MenuItem>
@@ -98,10 +100,10 @@ export default function OptionsBar({
             <Switch
               checked={includeHeader}
               onChange={(e) => onIncludeHeaderChange(e.target.checked)}
-              aria-label="Include header row"
+              aria-label={t("options.includeHeader")}
             />
           }
-          label="Include header"
+          label={t("options.includeHeader")}
           sx={{
             "& .MuiFormControlLabel-label": {
               color: "#000000",
@@ -115,10 +117,10 @@ export default function OptionsBar({
             <Switch
               checked={trimEmptyColumns}
               onChange={(e) => onTrimEmptyColumnsChange(e.target.checked)}
-              aria-label="Trim empty columns"
+              aria-label={t("options.trimEmptyColumns")}
             />
           }
-          label="Trim empty columns"
+          label={t("options.trimEmptyColumns")}
           sx={{
             "& .MuiFormControlLabel-label": {
               color: "#000000",
@@ -132,10 +134,10 @@ export default function OptionsBar({
             <Switch
               checked={pascalCaseHeaders}
               onChange={(e) => onPascalCaseHeadersChange(e.target.checked)}
-              aria-label="Convert headers to Pascal case"
+              aria-label={t("options.pascalCaseHeaders")}
             />
           }
-          label="Pascal case headers"
+          label={t("options.pascalCaseHeaders")}
           sx={{
             "& .MuiFormControlLabel-label": {
               color: "#000000",

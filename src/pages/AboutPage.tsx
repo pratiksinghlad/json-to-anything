@@ -1,20 +1,22 @@
 import { Container, Box, Typography, Link } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const AboutPage = () => {
+  const { t } = useTranslation();
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box>
         <Typography variant="h3" component="h1" gutterBottom>
-          About JSON to Anything
+          {t("pages.about.title")}
         </Typography>
         <Typography variant="body1" paragraph>
-          A simple, robust, and user-friendly web application for converting JSON data to various formats entirely in your browser.
+          {t("pages.about.p1")}
         </Typography>
         <Typography variant="body1" paragraph>
-          All processing occurs directly in your browser—nothing is uploaded or stored on a server. The app is fully private and hosted on GitHub Pages, with no API calls made.
+          {t("pages.about.p2")}
         </Typography>
         <Typography variant="body1" paragraph>
-          Made with ❤️ by{" "}
+          {t("pages.about.by")}
           <Link href="https://github.com/pratiksinghlad" target="_blank" rel="noopener noreferrer">
             Pratik Singh Lad
           </Link>

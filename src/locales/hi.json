@@ -17,6 +17,78 @@
     "closeMenu": "नेविगेशन मेनू बंद करें",
     "mainNavigation": "मुख्य नेविगेशन",
     "languageSelector": "भाषा चयनकर्ता",
-    "currentPage": "वर्तमान पृष्ठ"
+    "currentPage": "वर्तमान पृष्ठ",
+    "jsonEditor": "JSON संपादक",
+    "downloadCsv": "CSV फ़ाइल डाउनलोड करें",
+    "downloadJson": "JSON फ़ाइल डाउनलोड करें",
+    "copyCsv": "CSV को क्लिपबोर्ड पर कॉपी करें",
+    "showRawData": "नई टैब में CSV डेटा दिखाएँ",
+    "separator": "CSV विभाजक"
+  },
+  "pages": {
+    "jsonToCsv": {
+      "title": "JSON से CSV कन्वर्टर",
+      "subtitle": "अपने ब्राउज़र में तुरंत JSON डेटा को CSV फ़ॉर्मेट में बदलें"
+    },
+    "beautify": {
+      "title": "JSON सुंदर बनाएं",
+      "comingSoon": "JSON सुंदर बनाने की सुविधा जल्द आ रही है..."
+    },
+    "compare": {
+      "title": "JSON तुलना",
+      "comingSoon": "JSON तुलना सुविधा जल्द आ रही है..."
+    },
+    "about": {
+      "title": "JSON to Anything के बारे में",
+      "p1": "आपके ब्राउज़र में पूरी तरह से JSON डेटा को विभिन्न फ़ॉर्मेट में बदलने के लिए एक सरल, मजबूत और उपयोगकर्ता-मित्रवत वेब अनुप्रयोग।",
+      "p2": "सारा प्रोसेसिंग सीधे आपके ब्राउज़र में होता है — सर्वर पर कुछ भी अपलोड या संग्रहीत नहीं किया जाता। यह ऐप पूरी तरह निजी है और GitHub Pages पर होस्ट किया गया है, बिना किसी API कॉल के।",
+      "by": "❤️ के साथ बनाया गया"
+    }
+  },
+  "options": {
+    "separator": "विभाजक",
+    "separatorComma": "अल्पविराम (,)",
+    "separatorSemicolon": "अर्धविराम (;)",
+    "separatorTab": "टैब",
+    "includeHeader": "हेडर शामिल करें",
+    "trimEmptyColumns": "खाली कॉलम हटाएँ",
+    "pascalCaseHeaders": "पास्कल केस हेडर"
+  },
+  "buttons": {
+    "downloadCsv": "CSV डाउनलोड करें",
+    "downloadJson": "JSON डाउनलोड करें",
+    "copyCsv": "CSV कॉपी करें",
+    "showRawData": "कच्चा डेटा दिखाएँ"
+  },
+  "preview": {
+    "title": "पूर्वावलोकन",
+    "showing": "({{total}} में से {{shown}} पंक्तियाँ दिखा रहा है)"
+  },
+  "snackbar": {
+    "csvDownloaded": "CSV सफलतापूर्वक डाउनलोड हुआ",
+    "jsonDownloaded": "JSON सफलतापूर्वक डाउनलोड हुआ",
+    "csvCopied": "CSV क्लिपबोर्ड पर कॉपी हुआ",
+    "copyFailed": "क्लिपबोर्ड पर कॉपी करने में विफल"
+  },
+  "editor": {
+    "title": "JSON इनपुट"
+  },
+  "errors": {
+    "emptyInput": "इनपुट खाली है",
+    "invalidJson": "अमान्य JSON",
+    "arrayEmpty": "एरे खाली है",
+    "arrayOnlyObjects": "एरे में केवल ऑब्जेक्ट होने चाहिए",
+    "dataArrayEmpty": "डेटा एरे खाली है",
+    "dataArrayOnlyObjects": "डेटा एरे में केवल ऑब्जेक्ट होने चाहिए",
+    "invalidInputType": "इनपुट एक ऑब्जेक्ट्स की एरे, एक सिंगल ऑब्जेक्ट या एक ऐसा ऑब्जेक्ट होना चाहिए जिसमें \"data\" नामक एरे प्रॉपर्टी हो"
+  },
+  "footer": {
+    "privacyTitle": "गोपनीयता और ओपन सोर्स।",
+    "privacyText": "सारा परिवर्तन आपके ब्राउज़र में होता है — सर्वर पर कुछ भी अपलोड या संग्रहीत नहीं होता। पूरा सोर्स कोड उपलब्ध है",
+    "github": "GitHub",
+    "viewSource": "GitHub पर स्रोत देखें",
+    "followTwitter": "Twitter पर फ़ॉलो करें",
+    "connectLinkedIn": "LinkedIn पर कनेक्ट करें",
+    "copyright": "© {{year}} JSON to Anything. सभी के लिए ❤️ के साथ बनाया गया।"
   }
 }
