@@ -14,13 +14,13 @@ import type { CsvOptions } from "../utils/jsonToCsv";
 const DEFAULT_JSON = `[
   {
     "id": 1,
-    "name": "Alice",
-    "email": "alice@example.com",
+    "name": "Pratik",
+    "email": "pratik@example.com",
     "profile": {
       "role": "engineer",
-      "joined": "2023-04-12T08:00:00Z"
+      "joined": "2017-04-12T08:00:00Z"
     },
-    "tags": ["frontend", "react"]
+    "tags": ["fullstack", "react", "dotnet", "azure", "devops", "ci/cd", "cloud"]
   },
   {
     "id": 2,
@@ -88,7 +88,7 @@ const JsonToCsvPage = () => {
     };
     const csv = jsonToCsv(normalizeResult.data || [], options);
     setCsvData(csv);
-  }, [jsonInput, separator, includeHeader, trimEmptyColumns, pascalCaseHeaders]);
+  }, [jsonInput, separator, includeHeader, trimEmptyColumns, pascalCaseHeaders, t]);
 
   return (
     <>
