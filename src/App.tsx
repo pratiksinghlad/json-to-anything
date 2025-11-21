@@ -71,6 +71,8 @@ const PageLoader = () => (
       alignItems: "center",
       minHeight: "60vh",
     }}
+    role="status"
+    aria-label="Loading page content"
   >
     <CircularProgress size={48} />
   </Box>
