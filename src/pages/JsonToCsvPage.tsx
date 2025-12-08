@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Container, Box, Typography } from "@mui/material";
-import JsonEditor from "../components/Editor";
+import { Box, Typography } from "@mui/material";
+// components
 import OptionsBar from "../components/OptionsBar";
 import PreviewTable from "../components/PreviewTable";
 import DownloadButtons from "../components/DownloadButtons";
-import Footer from "../components/Footer";
+import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
+import EditorPanel from "../components/JsonEditor/EditorPanel";
+import CenterPanel from "../components/JsonEditor/CenterPanel";
 import { parseJson } from "../utils/parseJson";
 import { normalizeData } from "../utils/normalizeData";
 import { jsonToCsv } from "../utils/jsonToCsv";
@@ -53,6 +55,7 @@ const JsonToCsvPage = () => {
         setError(t("errors.emptyInput"));
       } else {
         setError(t("errors.invalidJson"));
+        console.log(error);
       }
       setNormalizedData([]);
       setCsvData("");
@@ -69,7 +72,9 @@ const JsonToCsvPage = () => {
         "Data array is empty": t("errors.dataArrayEmpty"),
         "Data array must contain only objects": t("errors.dataArrayOnlyObjects"),
       };
-      setError(map[normalizeResult.error || ""] || normalizeResult.error || t("errors.invalidInputType"));
+      setError(
+        map[normalizeResult.error || ""] || normalizeResult.error || t("errors.invalidInputType"),
+      );
       setNormalizedData([]);
       setCsvData("");
       return;
@@ -90,67 +95,49 @@ const JsonToCsvPage = () => {
     setCsvData(csv);
   }, [jsonInput, separator, includeHeader, trimEmptyColumns, pascalCaseHeaders, t]);
 
+  // We no longer wrap in Container, as JsonEditorLayout handles the full screen structure
   return (
-    <>
-      <Container
-        maxWidth="lg"
-        sx={{
-          py: 4,
-          flex: 1,
-          backgroundColor: "#ffffff",
-        }}
-      >
-        <Typography
-          variant="h3"
-          component="h1"
-          gutterBottom
-          align="center"
-          sx={{ color: "#000000", fontWeight: 600 }}
-        >
-          {t("pages.jsonToCsv.title")}
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          gutterBottom
-          align="center"
-          sx={{
-            mb: 4,
-            color: "rgba(0, 0, 0, 0.6)",
-          }}
-        >
-          {t("pages.jsonToCsv.subtitle")}
-        </Typography>
-
-        <Box sx={{ mb: 4 }}>
-          <JsonEditor value={jsonInput} onChange={setJsonInput} error={error} />
-        </Box>
-
-        <OptionsBar
-          separator={separator}
-          includeHeader={includeHeader}
-          trimEmptyColumns={trimEmptyColumns}
-          pascalCaseHeaders={pascalCaseHeaders}
-          onSeparatorChange={setSeparator}
-          onIncludeHeaderChange={setIncludeHeader}
-          onTrimEmptyColumnsChange={setTrimEmptyColumns}
-          onPascalCaseHeadersChange={setPascalCaseHeaders}
+    <JsonEditorLayout
+      leftPanel={
+        <EditorPanel title="JSON" value={jsonInput} onChange={setJsonInput} language="json" />
+      }
+      centerPanel={<CenterPanel />} // We can pass transform handlers here later if we want buttons to do it
+      rightPanel={
+        <EditorPanel
+          title="CSV"
+          value={csvData}
+          language="csv" // We might need to ensure 'csv' is loaded in EditorPanel or fall back to plain text
+          readOnly={true}
         />
-
-        {normalizedData.length > 0 && (
-          <>
-            <DownloadButtons
-              csvData={csvData}
-              jsonData={jsonInput}
-              disabled={normalizedData.length === 0}
+      }
+      bottomPanel={
+        normalizedData.length > 0 ? (
+          <Box sx={{ p: 2 }}>
+            <Box sx={{ mb: 2, display: "flex", gap: 2, alignItems: "center" }}>
+              <Typography variant="h6">Table Preview</Typography>
+              <DownloadButtons
+                csvData={csvData}
+                jsonData={jsonInput}
+                disabled={normalizedData.length === 0}
+              />
+            </Box>
+            <OptionsBar
+              separator={separator}
+              includeHeader={includeHeader}
+              trimEmptyColumns={trimEmptyColumns}
+              pascalCaseHeaders={pascalCaseHeaders}
+              onSeparatorChange={setSeparator}
+              onIncludeHeaderChange={setIncludeHeader}
+              onTrimEmptyColumnsChange={setTrimEmptyColumns}
+              onPascalCaseHeadersChange={setPascalCaseHeaders}
             />
-
-            <PreviewTable data={normalizedData} pascalCaseHeaders={pascalCaseHeaders} />
-          </>
-        )}
-      </Container>
-
-      <Footer />
-    </>
+            <Box sx={{ mt: 2 }}>
+              <PreviewTable data={normalizedData} pascalCaseHeaders={pascalCaseHeaders} />
+            </Box>
+          </Box>
+        ) : null
+      }
+    />
   );
 };
 
