@@ -1,5 +1,17 @@
-import { useState } from "react";
-import { Box, Button, IconButton } from "@mui/material";
+import { useState, useRef } from "react";
+import {
+  Box,
+  Button,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Alert,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 import SaveIcon from "@mui/icons-material/Save";
@@ -9,22 +21,17 @@ import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 import Editor from "react-simple-code-editor";
-// We need to import the prismjs core and languages if not globally available,
-// but usually loading the theme in global CSS is enough if `prismjs` is present.
 // @ts-ignore
 import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-json";
-import "prismjs/themes/prism.css"; // Basic theme, we might override
+import "prismjs/themes/prism.css";
 
 export interface EditorPanelProps {
   initialValue?: string;
   value?: string;
   onChange?: (value: string) => void;
-  // title prop removed as it was unused in logic, though passed by parent.
-  // Wait, parent passes it. We should keep it optionally in interface but remove lint warning if unused.
-  // Actually, let's keep it in interface but not destructure it if unused, or use it!
   title?: string;
   language?: string; // e.g., "json", "csv", "xml"
   readOnly?: boolean;
@@ -39,10 +46,12 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
   readOnly = false,
 }) => {
   const [internalCode, setInternalCode] = useState(initialValue);
+  const [viewMode, setViewMode] = useState<"text" | "tree" | "table">("text");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const currentCode = value !== undefined ? value : internalCode;
 
-  const handleChange = (newCode: string) => {
+  const updateCode = (newCode: string) => {
     if (value === undefined) {
       setInternalCode(newCode);
     }
@@ -51,20 +60,153 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
     }
   };
 
+  const handleNew = () => {
+    // Clear content. If JSON, maybe reset to "{}".
+    const emptyVal = language === "json" ? "{}" : "";
+    updateCode(emptyVal);
+  };
+
+  const handleOpen = () => {
+    fileInputRef.current?.click();
+  };
+
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target?.result;
+      if (typeof text === "string") {
+        updateCode(text);
+      }
+    };
+    reader.readAsText(file);
+    // Reset value so same file can be selected again
+    event.target.value = "";
+  };
+
+  const handleSave = () => {
+    const blob = new Blob([currentCode], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `download.${language}`; // simple extenson logic
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(currentCode);
+    // Could add toast notification here
+  };
+
+  // Helper to parse JSON safely for Tree/Table views
+  const getParsedJson = () => {
+    try {
+      return JSON.parse(currentCode);
+    } catch {
+      return null;
+    }
+  };
+
+  const parsedJson = viewMode !== "text" ? getParsedJson() : null;
+
+  const renderContent = () => {
+    if (viewMode === "tree") {
+      if (parsedJson) {
+        return (
+          <Box sx={{ p: 2 }}>
+            <pre style={{ overflow: "auto", maxHeight: "500px" }}>
+              {JSON.stringify(parsedJson, null, 2)}
+            </pre>
+          </Box>
+        );
+      }
+      return <Alert severity="warning">Invalid JSON content for Tree View</Alert>;
+    }
+
+    if (viewMode === "table") {
+      if (Array.isArray(parsedJson) && parsedJson.length > 0 && typeof parsedJson[0] === "object") {
+        const headers = Object.keys(parsedJson[0]);
+        return (
+          <TableContainer component={Paper} elevation={0}>
+            <Table size="small" stickyHeader>
+              <TableHead>
+                <TableRow>
+                  {headers.map((header) => (
+                    <TableCell key={header} sx={{ fontWeight: "bold" }}>
+                      {header}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {parsedJson.slice(0, 100).map((row: Record<string, unknown>, i: number) => (
+                  <TableRow key={i}>
+                    {headers.map((header) => (
+                      <TableCell key={header}>
+                        {typeof row[header] === "object"
+                          ? JSON.stringify(row[header])
+                          : String(row[header])}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            {parsedJson.length > 100 && (
+              <Box sx={{ p: 1, textAlign: "center", fontStyle: "italic", color: "gray" }}>
+                Showing first 100 rows
+              </Box>
+            )}
+          </TableContainer>
+        );
+      }
+      return <Alert severity="warning">Table View requires a JSON Array of Objects.</Alert>;
+    }
+
+    // Default Text View
+    return (
+      <Editor
+        value={currentCode}
+        onValueChange={updateCode}
+        highlight={(code) => highlight(code, languages[language] || languages.json, language)}
+        disabled={readOnly}
+        padding={10}
+        style={{
+          fontFamily: '"Fira Code", "Fira Mono", monospace',
+          fontSize: 14,
+          minHeight: "100%",
+        }}
+        textareaClassName="editor-textarea"
+      />
+    );
+  };
+
   return (
     <Box
       sx={{
-        disply: "flex",
+        display: "flex",
         flexDirection: "column",
         flexGrow: 1,
         height: "100%",
         overflow: "hidden",
       }}
     >
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={onFileChange}
+        accept={language === "json" ? ".json" : ".csv,.xml,.txt"}
+      />
+
       {/* Top Green Toolbar */}
       <Box
         sx={{
-          backgroundColor: "#81b953", // Green from screenshot
+          backgroundColor: "#81b953",
           color: "#fff",
           display: "flex",
           alignItems: "center",
@@ -75,24 +217,42 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
       >
         <Button
           startIcon={<AddIcon />}
-          sx={{ color: "#fff", textTransform: "none", minWidth: "auto", fontSize: "0.875rem" }}
+          onClick={handleNew}
+          disabled={readOnly}
+          sx={{
+            color: "#fff",
+            textTransform: "none",
+            minWidth: "auto",
+            fontSize: "0.875rem",
+            opacity: readOnly ? 0.5 : 1,
+          }}
         >
           New {title ? `(${title})` : ""}
         </Button>
         <Button
           startIcon={<FolderOpenIcon />}
-          sx={{ color: "#fff", textTransform: "none", minWidth: "auto", fontSize: "0.875rem" }}
+          onClick={handleOpen}
+          disabled={readOnly}
+          sx={{
+            color: "#fff",
+            textTransform: "none",
+            minWidth: "auto",
+            fontSize: "0.875rem",
+            opacity: readOnly ? 0.5 : 1,
+          }}
         >
           Open
         </Button>
         <Button
           startIcon={<SaveIcon />}
+          onClick={handleSave}
           sx={{ color: "#fff", textTransform: "none", minWidth: "auto", fontSize: "0.875rem" }}
         >
           Save
         </Button>
         <Button
           startIcon={<ContentCopyIcon />}
+          onClick={handleCopy}
           sx={{ color: "#fff", textTransform: "none", minWidth: "auto", fontSize: "0.875rem" }}
         >
           Copy
@@ -106,10 +266,9 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
         </Button>
       </Box>
 
-      {/* Secondary Light Green/White Toolbar for View Modes */}
+      {/* View Mode Switcher */}
       <Box
         sx={{
-          backgroundColor: "#a5d07e", // Lighter green gradient approximation
           background: "linear-gradient(180deg, #a5d07e 0%, #8ac05d 100%)",
           display: "flex",
           alignItems: "center",
@@ -119,27 +278,31 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
           borderBottom: "1px solid #81b953",
         }}
       >
-        {/* View Mode Switcher */}
         <Box sx={{ display: "flex", backgroundColor: "#e8f5e9", borderRadius: 1, padding: 0.2 }}>
-          <Button
-            size="small"
-            sx={{
-              minWidth: "auto",
-              p: "2px 8px",
-              color: "#1b5e20",
-              fontWeight: "bold",
-              backgroundColor: "#fff",
-              boxShadow: 1,
-            }}
-          >
-            Text
-          </Button>
-          <Button size="small" sx={{ minWidth: "auto", p: "2px 8px", color: "#1b5e20" }}>
-            Tree
-          </Button>
-          <Button size="small" sx={{ minWidth: "auto", p: "2px 8px", color: "#1b5e20" }}>
-            Table
-          </Button>
+          {["Text", "Tree", "Table"].map((mode) => {
+            const m = mode.toLowerCase() as "text" | "tree" | "table";
+            const isActive = viewMode === m;
+            return (
+              <Button
+                key={mode}
+                size="small"
+                onClick={() => setViewMode(m)}
+                sx={{
+                  minWidth: "auto",
+                  p: "2px 8px",
+                  color: isActive ? "#1b5e20" : "#1b5e20",
+                  fontWeight: isActive ? "bold" : "normal",
+                  backgroundColor: isActive ? "#fff" : "transparent",
+                  boxShadow: isActive ? 1 : 0,
+                  "&:hover": {
+                    backgroundColor: isActive ? "#fff" : "rgba(255,255,255,0.3)",
+                  },
+                }}
+              >
+                {mode}
+              </Button>
+            );
+          })}
         </Box>
 
         <Box
@@ -159,27 +322,12 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
         sx={{
           flexGrow: 1,
           position: "relative",
-          height: "calc(100% - 75px)", // Subtracting header heights approx
+          height: "calc(100% - 75px)",
           backgroundColor: "#fff",
           overflow: "auto",
-          fontFamily: '"Fira Code", "Fira Mono", monospace',
-          fontSize: 14,
-          "& pre": { margin: 0 },
         }}
       >
-        <Editor
-          value={currentCode}
-          onValueChange={handleChange}
-          highlight={(code) => highlight(code, languages[language] || languages.json, language)}
-          disabled={readOnly}
-          padding={10}
-          style={{
-            fontFamily: '"Fira Code", "Fira Mono", monospace',
-            fontSize: 14,
-            minHeight: "100%",
-          }}
-          textareaClassName="editor-textarea"
-        />
+        {renderContent()}
       </Box>
     </Box>
   );

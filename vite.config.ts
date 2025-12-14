@@ -3,8 +3,6 @@ import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 import viteCompression from "vite-plugin-compression";
 import checker from "vite-plugin-checker";
-import { VitePWA } from "vite-plugin-pwa";
-import Sitemap from "vite-plugin-sitemap";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -31,31 +29,6 @@ export default defineConfig({
       algorithm: "gzip",
       ext: ".gz",
       threshold: 1024,
-    }),
-    VitePWA({
-      registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
-      manifest: {
-        name: "JSON to Anything",
-        short_name: "JsonToAnything",
-        description: "Convert JSON to CSV, XML, and more instantly in your browser.",
-        theme_color: "#ffffff",
-        icons: [
-          {
-            src: "pwa-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-          {
-            src: "pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-          },
-        ],
-      },
-    }),
-    Sitemap({
-      hostname: "https://pratiksinghlad.github.io/json-to-anything/",
     }),
   ],
   server: {

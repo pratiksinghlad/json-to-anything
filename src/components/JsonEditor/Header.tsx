@@ -11,7 +11,7 @@ const Header = () => {
       sx={{
         bgcolor: "primary.main",
         color: "#ffffff",
-        height: "48px", // Compact height
+        height: "48px",
         justifyContent: "center",
       }}
     >
@@ -23,9 +23,9 @@ const Header = () => {
         >
           <Box
             component="img"
-            src="/json-icon.svg" // Placeholder or we can use an icon
+            src="/json-icon.svg"
             alt=""
-            sx={{ width: 24, height: 24, mr: 1, display: "none" }} // Hidden if no asset
+            sx={{ width: 24, height: 24, mr: 1, display: "none" }}
           />
           <Typography variant="h6" component="div" sx={{ fontWeight: "bold", fontSize: "1.1rem" }}>
             JSON Editor
@@ -40,11 +40,23 @@ const Header = () => {
         </Box>
 
         {/* Navigation Items */}
-        <Box sx={{ flexGrow: 1 }} />
+        <Box sx={{ display: "flex", gap: 1 }}>
+          <Button color="inherit" onClick={() => navigate("/")} sx={{ textTransform: "none" }}>
+            JSON to CSV
+          </Button>
+          <Button
+            color="inherit"
+            onClick={() => navigate("/json-to-xml")}
+            sx={{ textTransform: "none" }}
+          >
+            JSON to XML
+          </Button>
+          <Button color="inherit" onClick={() => navigate("/about")} sx={{ textTransform: "none" }}>
+            About
+          </Button>
+        </Box>
 
-        <Button color="inherit" onClick={() => navigate("/about")} sx={{ textTransform: "none" }}>
-          About
-        </Button>
+        <Box sx={{ flexGrow: 1 }} />
       </Toolbar>
     </AppBar>
   );
