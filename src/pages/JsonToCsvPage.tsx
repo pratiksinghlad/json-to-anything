@@ -93,6 +93,7 @@ const JsonToCsvPage = () => {
     };
     const csv = jsonToCsv(normalizeResult.data || [], options);
     setCsvData(csv);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jsonInput, separator, includeHeader, trimEmptyColumns, pascalCaseHeaders, t]);
 
   // We no longer wrap in Container, as JsonEditorLayout handles the full screen structure
