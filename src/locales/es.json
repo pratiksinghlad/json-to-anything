@@ -2,7 +2,10 @@
   "menu": {
     "jsonToCsv": "JSON a CSV",
     "jsonToXml": "JSON a XML",
+    "csvToJson": "CSV a JSON",
+    "xmlToJson": "XML a JSON",
     "beautifyJson": "Embellecer JSON",
+    "validateJson": "Validar JSON",
     "compare": "Comparar",
     "about": "Acerca de"
   },
@@ -32,7 +35,11 @@
     },
     "beautify": {
       "title": "Embellecer JSON",
-      "comingSoon": "La función de embellecimiento de JSON llegará pronto..."
+      "comingSoon": "La función de embellecimiento de JSON llegará pronto...",
+      "indent": "Sangría",
+      "spaces": "espacios",
+      "tabOption": "Tabulación",
+      "copyFormatted": "Copiar Formateado"
     },
     "compare": {
       "title": "Comparar JSON",
@@ -43,6 +50,38 @@
       "p1": "Una aplicación web simple, robusta y fácil de usar para convertir datos JSON a varios formatos directamente en tu navegador.",
       "p2": "Todo el procesamiento ocurre directamente en tu navegador; nada se sube ni se almacena en un servidor. La aplicación es totalmente privada y está alojada en GitHub Pages, sin llamadas a API.",
       "by": "Hecho con ❤️ por"
+    },
+    "jsonToXml": {
+      "title": "Convertidor de JSON a XML",
+      "rootName": "Nombre Raíz",
+      "attributePrefix": "Prefijo de Atributo",
+      "includeDeclaration": "Incluir Declaración XML",
+      "prettyPrint": "Formato Legible"
+    },
+    "csvToJson": {
+      "title": "Convertidor de CSV a JSON",
+      "delimiter": "Delimitador",
+      "hasHeader": "Tiene Fila de Encabezado",
+      "outputType": "Tipo de Salida",
+      "arrayOutput": "Array JSON",
+      "linesOutput": "Líneas JSON"
+    },
+    "xmlToJson": {
+      "title": "Convertidor de XML a JSON",
+      "parseAttributes": "Parsear Atributos",
+      "explicitArray": "Array Explícito",
+      "coerceTypes": "Convertir Tipos"
+    },
+    "validate": {
+      "title": "Validar JSON",
+      "jsonData": "Datos JSON",
+      "jsonSchema": "Esquema JSON",
+      "results": "Resultados de Validación",
+      "valid": "Válido",
+      "invalid": "Inválido",
+      "invalidJson": "Datos JSON inválidos",
+      "invalidSchema": "Esquema JSON inválido",
+      "errorsFound": "{{count}} error(es) encontrado(s)"
     }
   },
   "options": {
@@ -68,6 +107,7 @@
     "csvDownloaded": "CSV descargado correctamente",
     "jsonDownloaded": "JSON descargado correctamente",
     "csvCopied": "CSV copiado al portapapeles",
+    "jsonCopied": "JSON copiado al portapapeles",
     "copyFailed": "Error al copiar al portapapeles"
   },
   "editor": {

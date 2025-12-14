@@ -51,6 +51,34 @@ const Header = () => {
           >
             JSON to XML
           </Button>
+          <Button
+            color="inherit"
+            onClick={() => navigate("/csv-to-json")}
+            sx={{ textTransform: "none" }}
+          >
+            CSV to JSON
+          </Button>
+          <Button
+            color="inherit"
+            onClick={() => navigate("/xml-to-json")}
+            sx={{ textTransform: "none" }}
+          >
+            XML to JSON
+          </Button>
+          <Button
+            color="inherit"
+            onClick={() => navigate("/beautify")}
+            sx={{ textTransform: "none" }}
+          >
+            Beautify
+          </Button>
+          <Button
+            color="inherit"
+            onClick={() => navigate("/validate")}
+            sx={{ textTransform: "none" }}
+          >
+            Validate
+          </Button>
           <Button color="inherit" onClick={() => navigate("/about")} sx={{ textTransform: "none" }}>
             About
           </Button>
