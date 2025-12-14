@@ -40,15 +40,10 @@ export function jsonToXml(inputJson: unknown, options?: JsonToXmlOptions): JsonT
 
     const builder = new XMLBuilder(builderOptions);
 
-    // Wrap data in root element if it's an array or primitive
-    let dataToConvert: unknown;
-    if (Array.isArray(inputJson)) {
-      dataToConvert = { [rootName]: { item: inputJson } };
-    } else if (typeof inputJson === "object") {
-      dataToConvert = { [rootName]: inputJson };
-    } else {
-      dataToConvert = { [rootName]: inputJson };
-    }
+    // Wrap data in root element - arrays get wrapped with 'item' key to preserve structure
+    const dataToConvert = {
+      [rootName]: Array.isArray(inputJson) ? { item: inputJson } : inputJson,
+    };
 
     let xmlOutput = builder.build(dataToConvert);
 

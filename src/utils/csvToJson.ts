@@ -53,10 +53,11 @@ export function csvToJson(input: string, options?: CsvToJsonOptions): CsvToJsonR
       transform: parseDates
         ? (value: string) => {
             // Only transform string values that look like dates
+            // Return Date object when parseDates is enabled so downstream code can use it
             if (typeof value === "string" && isIsoDateString(value)) {
               const date = new Date(value);
               if (!isNaN(date.getTime())) {
-                return date.toISOString();
+                return date;
               }
             }
             return value;

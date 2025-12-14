@@ -74,7 +74,7 @@ export function validateJson(
     }
 
     const errors: ValidationError[] = (validate.errors || []).map((err: ErrorObject) => ({
-      path: err.instancePath || "/",
+      path: err.instancePath || "",
       message: err.message || "Unknown validation error",
     }));
 

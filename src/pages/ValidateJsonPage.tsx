@@ -10,9 +10,9 @@ import { validateJson } from "../utils/validateJson";
 import { parseJson } from "../utils/parseJson";
 
 const DEFAULT_JSON = `{
-  "name": "John Doe",
+  "name": "Alice Example",
   "age": 30,
-  "email": "john@example.com",
+  "email": "alice@example.com",
   "isActive": true
 }`;
 

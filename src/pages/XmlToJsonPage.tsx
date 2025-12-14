@@ -9,12 +9,12 @@ import { xmlToJson } from "../utils/xmlToJson";
 const DEFAULT_XML = `<?xml version="1.0" encoding="UTF-8"?>
 <root>
   <person id="1">
-    <name>John Doe</name>
+    <name>Alice Example</name>
     <age>30</age>
     <address>
-      <street>123 Main St</street>
-      <city>New York</city>
-      <zip>10001</zip>
+      <street>123 Demo Street</street>
+      <city>Sample City</city>
+      <zip>00000</zip>
     </address>
     <hobbies>
       <hobby>reading</hobby>
