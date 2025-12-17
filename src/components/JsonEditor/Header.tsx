@@ -28,7 +28,7 @@ const Header = () => {
             sx={{ width: 24, height: 24, mr: 1, display: "none" }}
           />
           <Typography variant="h6" component="div" sx={{ fontWeight: "bold", fontSize: "1.1rem" }}>
-            JSON Editor
+            JSON to anything
           </Typography>
           <Typography
             variant="body2"

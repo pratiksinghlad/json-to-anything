@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -12,11 +12,7 @@ import {
   Paper,
   Alert,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import SaveIcon from "@mui/icons-material/Save";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import FullscreenIcon from "@mui/icons-material/Fullscreen";
+
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
@@ -41,13 +37,11 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
   initialValue = "{}",
   value,
   onChange,
-  title,
   language = "json",
   readOnly = false,
 }) => {
   const [internalCode, setInternalCode] = useState(initialValue);
   const [viewMode, setViewMode] = useState<"text" | "tree" | "table">("text");
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const currentCode = value !== undefined ? value : internalCode;
 
@@ -58,48 +52,6 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
     if (onChange) {
       onChange(newCode);
     }
-  };
-
-  const handleNew = () => {
-    // Clear content. If JSON, maybe reset to "{}".
-    const emptyVal = language === "json" ? "{}" : "";
-    updateCode(emptyVal);
-  };
-
-  const handleOpen = () => {
-    fileInputRef.current?.click();
-  };
-
-  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const text = e.target?.result;
-      if (typeof text === "string") {
-        updateCode(text);
-      }
-    };
-    reader.readAsText(file);
-    // Reset value so same file can be selected again
-    event.target.value = "";
-  };
-
-  const handleSave = () => {
-    const blob = new Blob([currentCode], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `download.${language}`; // simple extenson logic
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(currentCode);
-    // Could add toast notification here
   };
 
   // Helper to parse JSON safely for Tree/Table views
@@ -195,77 +147,6 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
         overflow: "hidden",
       }}
     >
-      <input
-        type="file"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-        onChange={onFileChange}
-        accept={language === "json" ? ".json" : ".csv,.xml,.txt"}
-      />
-
-      {/* Top Green Toolbar */}
-      <Box
-        sx={{
-          backgroundColor: "#81b953",
-          color: "#fff",
-          display: "flex",
-          alignItems: "center",
-          px: 1,
-          py: 0.5,
-          gap: 1,
-        }}
-      >
-        <Button
-          startIcon={<AddIcon />}
-          onClick={handleNew}
-          disabled={readOnly}
-          sx={{
-            color: "#fff",
-            textTransform: "none",
-            minWidth: "auto",
-            fontSize: "0.875rem",
-            opacity: readOnly ? 0.5 : 1,
-          }}
-        >
-          New {title ? `(${title})` : ""}
-        </Button>
-        <Button
-          startIcon={<FolderOpenIcon />}
-          onClick={handleOpen}
-          disabled={readOnly}
-          sx={{
-            color: "#fff",
-            textTransform: "none",
-            minWidth: "auto",
-            fontSize: "0.875rem",
-            opacity: readOnly ? 0.5 : 1,
-          }}
-        >
-          Open
-        </Button>
-        <Button
-          startIcon={<SaveIcon />}
-          onClick={handleSave}
-          sx={{ color: "#fff", textTransform: "none", minWidth: "auto", fontSize: "0.875rem" }}
-        >
-          Save
-        </Button>
-        <Button
-          startIcon={<ContentCopyIcon />}
-          onClick={handleCopy}
-          sx={{ color: "#fff", textTransform: "none", minWidth: "auto", fontSize: "0.875rem" }}
-        >
-          Copy
-        </Button>
-        <Box sx={{ flexGrow: 1 }} />
-        <Button
-          startIcon={<FullscreenIcon />}
-          sx={{ color: "#fff", textTransform: "none", minWidth: "auto", fontSize: "0.875rem" }}
-        >
-          Full screen
-        </Button>
-      </Box>
-
       {/* View Mode Switcher */}
       <Box
         sx={{
