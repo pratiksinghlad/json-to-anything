@@ -6,7 +6,7 @@ A simple, robust, and user-friendly web application for converting JSON data to 
 
 ## ✨ Features
 
-- **📝 JSON Editor** - Large, syntax-highlighted JSON editor with validation
+- **📝 JSON to anything** - Large, syntax-highlighted JSON to anything with validation
 - **🔄 Real-time Conversion** - Instant CSV preview as you type
 - **⚙️ Flexible Options**
   - Multiple separator choices (comma, semicolon, tab)
@@ -67,18 +67,22 @@ npm run lint
 ### Conversion Rules
 
 1. **JSON Input Formats**
+
    - Direct array of objects: `[{...}, {...}]`
    - Object with data property: `{ "data": [{...}] }`
 
 2. **Nested Objects**
+
    - Flattened using dot notation
    - Example: `{ "profile": { "name": "Alice" } }` → `profile.name`
 
 3. **Arrays**
+
    - Converted to JSON strings
    - Example: `["a", "b"]` → `"[\"a\",\"b\"]"`
 
 4. **CSV Formatting**
+
    - RFC4180 compliant
    - Proper escaping of quotes, commas, and newlines
    - Quotes are doubled: `"hello"` → `"""hello"""`
@@ -91,6 +95,7 @@ npm run lint
 ### Example
 
 **Input JSON:**
+
 ```json
 [
   {
@@ -116,6 +121,7 @@ npm run lint
 ```
 
 **Output CSV:**
+
 ```csv
 email,id,name,profile.joined,profile.role,tags
 alice@example.com,1,Alice,2023-04-12T08:00:00Z,engineer,"[""frontend"",""react""]"
@@ -208,4 +214,3 @@ Made with ❤️ by [Pratik Singh Lad](https://github.com/pratiksinghlad)
 - [GitHub Repository](https://github.com/pratiksinghlad/json-to-anything)
 - [Report Issues](https://github.com/pratiksinghlad/json-to-anything/issues)
 - [Request Features](https://github.com/pratiksinghlad/json-to-anything/issues/new)
-

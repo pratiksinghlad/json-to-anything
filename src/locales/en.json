@@ -2,7 +2,10 @@
   "menu": {
     "jsonToCsv": "JSON to CSV",
     "jsonToXml": "JSON to XML",
+    "csvToJson": "CSV to JSON",
+    "xmlToJson": "XML to JSON",
     "beautifyJson": "Beautify JSON",
+    "validateJson": "Validate JSON",
     "compare": "Compare",
     "about": "About"
   },
@@ -18,7 +21,7 @@
     "mainNavigation": "Main navigation",
     "languageSelector": "Language selector",
     "currentPage": "Current page",
-    "jsonEditor": "JSON editor",
+    "jsonEditor": "JSON to anything",
     "downloadCsv": "Download CSV file",
     "downloadJson": "Download JSON file",
     "copyCsv": "Copy CSV to clipboard",
@@ -32,7 +35,11 @@
     },
     "beautify": {
       "title": "Beautify JSON",
-      "comingSoon": "JSON beautification feature coming soon..."
+      "comingSoon": "JSON beautification feature coming soon...",
+      "indent": "Indent",
+      "spaces": "spaces",
+      "tabOption": "Tab",
+      "copyFormatted": "Copy Formatted"
     },
     "compare": {
       "title": "Compare JSON",
@@ -43,6 +50,38 @@
       "p1": "A simple, robust, and user-friendly web application for converting JSON data to various formats entirely in your browser.",
       "p2": "All processing occurs directly in your browser—nothing is uploaded or stored on a server. The app is fully private and hosted on GitHub Pages, with no API calls made.",
       "by": "Made with ❤️ by"
+    },
+    "jsonToXml": {
+      "title": "JSON to XML Converter",
+      "rootName": "Root Name",
+      "attributePrefix": "Attribute Prefix",
+      "includeDeclaration": "Include XML Declaration",
+      "prettyPrint": "Pretty Print"
+    },
+    "csvToJson": {
+      "title": "CSV to JSON Converter",
+      "delimiter": "Delimiter",
+      "hasHeader": "Has Header Row",
+      "outputType": "Output Type",
+      "arrayOutput": "JSON Array",
+      "linesOutput": "JSON Lines"
+    },
+    "xmlToJson": {
+      "title": "XML to JSON Converter",
+      "parseAttributes": "Parse Attributes",
+      "explicitArray": "Explicit Array",
+      "coerceTypes": "Coerce Types"
+    },
+    "validate": {
+      "title": "Validate JSON",
+      "jsonData": "JSON Data",
+      "jsonSchema": "JSON Schema",
+      "results": "Validation Results",
+      "valid": "Valid",
+      "invalid": "Invalid",
+      "invalidJson": "Invalid JSON data",
+      "invalidSchema": "Invalid JSON schema",
+      "errorsFound": "{{count}} error(s) found"
     }
   },
   "options": {
@@ -68,6 +107,7 @@
     "csvDownloaded": "CSV downloaded successfully",
     "jsonDownloaded": "JSON downloaded successfully",
     "csvCopied": "CSV copied to clipboard",
+    "jsonCopied": "JSON copied to clipboard",
     "copyFailed": "Failed to copy to clipboard"
   },
   "editor": {

@@ -5,7 +5,10 @@ import { CssBaseline, ThemeProvider, createTheme, Box, CircularProgress } from "
 // Lazy load page components for code splitting and better performance
 const JsonToCsvPage = lazy(() => import("./pages/JsonToCsvPage"));
 const JsonToXmlPage = lazy(() => import("./pages/JsonToXmlPage"));
+const CsvToJsonPage = lazy(() => import("./pages/CsvToJsonPage"));
+const XmlToJsonPage = lazy(() => import("./pages/XmlToJsonPage"));
 const BeautifyJsonPage = lazy(() => import("./pages/BeautifyJsonPage"));
+const ValidateJsonPage = lazy(() => import("./pages/ValidateJsonPage"));
 const ComparePage = lazy(() => import("./pages/ComparePage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 
@@ -80,7 +83,10 @@ function App() {
             <Routes>
               <Route path="/" element={<JsonToCsvPage />} />
               <Route path="/json-to-xml" element={<JsonToXmlPage />} />
+              <Route path="/csv-to-json" element={<CsvToJsonPage />} />
+              <Route path="/xml-to-json" element={<XmlToJsonPage />} />
               <Route path="/beautify" element={<BeautifyJsonPage />} />
+              <Route path="/validate" element={<ValidateJsonPage />} />
               <Route path="/compare" element={<ComparePage />} />
               <Route path="/about" element={<AboutPage />} />
             </Routes>

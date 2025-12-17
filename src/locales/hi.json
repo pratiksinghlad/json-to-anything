@@ -2,7 +2,10 @@
   "menu": {
     "jsonToCsv": "JSON से CSV",
     "jsonToXml": "JSON से XML",
+    "csvToJson": "CSV से JSON",
+    "xmlToJson": "XML से JSON",
     "beautifyJson": "JSON सुंदर बनाएं",
+    "validateJson": "JSON मान्य करें",
     "compare": "तुलना करें",
     "about": "के बारे में"
   },
@@ -32,7 +35,11 @@
     },
     "beautify": {
       "title": "JSON सुंदर बनाएं",
-      "comingSoon": "JSON सुंदर बनाने की सुविधा जल्द आ रही है..."
+      "comingSoon": "JSON सुंदर बनाने की सुविधा जल्द आ रही है...",
+      "indent": "इंडेंट",
+      "spaces": "स्पेस",
+      "tabOption": "टैब",
+      "copyFormatted": "फ़ॉर्मेटेड कॉपी करें"
     },
     "compare": {
       "title": "JSON तुलना",
@@ -43,6 +50,38 @@
       "p1": "आपके ब्राउज़र में पूरी तरह से JSON डेटा को विभिन्न फ़ॉर्मेट में बदलने के लिए एक सरल, मजबूत और उपयोगकर्ता-मित्रवत वेब अनुप्रयोग।",
       "p2": "सारा प्रोसेसिंग सीधे आपके ब्राउज़र में होता है — सर्वर पर कुछ भी अपलोड या संग्रहीत नहीं किया जाता। यह ऐप पूरी तरह निजी है और GitHub Pages पर होस्ट किया गया है, बिना किसी API कॉल के।",
       "by": "❤️ के साथ बनाया गया"
+    },
+    "jsonToXml": {
+      "title": "JSON से XML कन्वर्टर",
+      "rootName": "रूट नाम",
+      "attributePrefix": "एट्रिब्यूट प्रीफ़िक्स",
+      "includeDeclaration": "XML घोषणा शामिल करें",
+      "prettyPrint": "सुंदर प्रिंट"
+    },
+    "csvToJson": {
+      "title": "CSV से JSON कन्वर्टर",
+      "delimiter": "डेलिमिटर",
+      "hasHeader": "हेडर पंक्ति है",
+      "outputType": "आउटपुट प्रकार",
+      "arrayOutput": "JSON ऐरे",
+      "linesOutput": "JSON लाइन्स"
+    },
+    "xmlToJson": {
+      "title": "XML से JSON कन्वर्टर",
+      "parseAttributes": "एट्रिब्यूट्स पार्स करें",
+      "explicitArray": "स्पष्ट ऐरे",
+      "coerceTypes": "टाइप कन्वर्ट करें"
+    },
+    "validate": {
+      "title": "JSON मान्य करें",
+      "jsonData": "JSON डेटा",
+      "jsonSchema": "JSON स्कीमा",
+      "results": "सत्यापन परिणाम",
+      "valid": "वैध",
+      "invalid": "अवैध",
+      "invalidJson": "अवैध JSON डेटा",
+      "invalidSchema": "अवैध JSON स्कीमा",
+      "errorsFound": "{{count}} त्रुटि(याँ) मिली(ं)"
     }
   },
   "options": {
@@ -68,6 +107,7 @@
     "csvDownloaded": "CSV सफलतापूर्वक डाउनलोड हुआ",
     "jsonDownloaded": "JSON सफलतापूर्वक डाउनलोड हुआ",
     "csvCopied": "CSV क्लिपबोर्ड पर कॉपी हुआ",
+    "jsonCopied": "JSON क्लिपबोर्ड पर कॉपी हुआ",
     "copyFailed": "क्लिपबोर्ड पर कॉपी करने में विफल"
   },
   "editor": {

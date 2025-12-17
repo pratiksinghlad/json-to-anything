@@ -28,7 +28,7 @@ const Header = () => {
             sx={{ width: 24, height: 24, mr: 1, display: "none" }}
           />
           <Typography variant="h6" component="div" sx={{ fontWeight: "bold", fontSize: "1.1rem" }}>
-            JSON Editor
+            JSON to anything
           </Typography>
           <Typography
             variant="body2"
@@ -50,6 +50,34 @@ const Header = () => {
             sx={{ textTransform: "none" }}
           >
             JSON to XML
+          </Button>
+          <Button
+            color="inherit"
+            onClick={() => navigate("/csv-to-json")}
+            sx={{ textTransform: "none" }}
+          >
+            CSV to JSON
+          </Button>
+          <Button
+            color="inherit"
+            onClick={() => navigate("/xml-to-json")}
+            sx={{ textTransform: "none" }}
+          >
+            XML to JSON
+          </Button>
+          <Button
+            color="inherit"
+            onClick={() => navigate("/beautify")}
+            sx={{ textTransform: "none" }}
+          >
+            Beautify
+          </Button>
+          <Button
+            color="inherit"
+            onClick={() => navigate("/validate")}
+            sx={{ textTransform: "none" }}
+          >
+            Validate
           </Button>
           <Button color="inherit" onClick={() => navigate("/about")} sx={{ textTransform: "none" }}>
             About
