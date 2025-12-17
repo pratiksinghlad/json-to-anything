@@ -1,0 +1,1 @@
+function e(e){try{return e.trim()?{success:!0,data:JSON.parse(e)}:{success:!1,error:`Input is empty`}}catch(e){return{success:!1,error:e instanceof Error?e.message:`Invalid JSON`}}}export{e as t};

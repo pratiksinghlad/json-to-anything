@@ -1,0 +1,14 @@
+import{a as e}from"./rolldown-runtime-CaomFzHi.js";import{A as t,D as n,E as r,G as i,L as a,M as o,T as s,U as c,b as l,c as u,y as d}from"./mui-vendor-JnOqsSZ-.js";import{s as f}from"./react-vendor-C089BLRD.js";import"./Header-DG5SIJLi.js";import{n as p,r as m,t as h}from"./JsonEditorLayout-ROM5x2JH.js";/* empty css                     */import{r as g}from"./vendor-CRIxYZlP.js";import{t as _}from"./parseJson-BfYKdtVN.js";var v=e(i());function y(e,t){if(e==null)return{ok:!1,error:`Input is null or undefined`};let n=t?.rootName??`root`,r=t?.declaration??!1,i=t?.attributePrefix??`@_`,a=t?.pretty??!0,o=t?.indent??2;try{let t={attributeNamePrefix:i,ignoreAttributes:!1,format:a,indentBy:` `.repeat(o),suppressEmptyNode:!1,suppressBooleanAttributes:!1},s=new g(t),c={[n]:Array.isArray(e)?{item:e}:e},l=s.build(c);return r&&(l=`<?xml version="1.0" encoding="UTF-8"?>
+`+l),{ok:!0,output:l}}catch(e){return{ok:!1,error:String(e)}}}var b=e(c()),x=`{
+  "person": {
+    "@_id": "1",
+    "name": "John Doe",
+    "age": 30,
+    "address": {
+      "street": "123 Main St",
+      "city": "New York",
+      "zip": "10001"
+    },
+    "hobbies": ["reading", "gaming", "coding"]
+  }
+}`,S=()=>{let{t:e}=f(),[i,c]=(0,v.useState)(x),[g,S]=(0,v.useState)(``),[C,w]=(0,v.useState)(),[T,E]=(0,v.useState)(`root`),[D,O]=(0,v.useState)(!1),[k,A]=(0,v.useState)(`@_`),[j,M]=(0,v.useState)(!0),[N,P]=(0,v.useState)(`2`);return(0,v.useEffect)(()=>{let t=_(i);if(!t.success){w(e(`errors.invalidJson`)),S(``);return}let n=y(t.data,{rootName:T,declaration:D,attributePrefix:k,pretty:j,indent:parseInt(N,10)});n.ok?(S(n.output),w(void 0)):(S(``),w(n.error))},[i,T,D,k,j,N,e]),(0,b.jsx)(h,{leftPanel:(0,b.jsx)(m,{title:`JSON`,value:i,onChange:c,language:`json`}),centerPanel:(0,b.jsx)(p,{}),rightPanel:(0,b.jsx)(m,{title:`XML`,value:g,language:`xml`,readOnly:!0}),bottomPanel:(0,b.jsxs)(o,{sx:{p:2},children:[(0,b.jsxs)(o,{sx:{display:`flex`,gap:2,alignItems:`center`,flexWrap:`wrap`},children:[(0,b.jsx)(u,{size:`small`,label:e(`pages.jsonToXml.rootName`),value:T,onChange:e=>E(e.target.value),sx:{width:150}}),(0,b.jsx)(u,{size:`small`,label:e(`pages.jsonToXml.attributePrefix`),value:k,onChange:e=>A(e.target.value),sx:{width:150}}),(0,b.jsxs)(n,{size:`small`,sx:{minWidth:120},children:[(0,b.jsx)(s,{id:`xml-indent-label`,children:e(`pages.beautify.indent`)}),(0,b.jsxs)(d,{labelId:`xml-indent-label`,id:`xml-indent`,value:N,label:e(`pages.beautify.indent`),onChange:e=>{P(e.target.value)},children:[(0,b.jsx)(l,{value:`2`,children:`2`}),(0,b.jsx)(l,{value:`4`,children:`4`})]})]}),(0,b.jsx)(r,{control:(0,b.jsx)(t,{checked:D,onChange:e=>O(e.target.checked)}),label:e(`pages.jsonToXml.includeDeclaration`)}),(0,b.jsx)(r,{control:(0,b.jsx)(t,{checked:j,onChange:e=>M(e.target.checked)}),label:e(`pages.jsonToXml.prettyPrint`)})]}),C&&(0,b.jsx)(a,{severity:`error`,sx:{mt:2},children:C})]})})};export{S as default};
