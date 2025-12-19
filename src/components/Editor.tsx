@@ -1,8 +1,7 @@
 import { Box, Paper, Typography, Alert } from "@mui/material";
 import { useRef, useEffect, useState } from "react";
 import Editor from "react-simple-code-editor";
-import "prismjs/themes/prism.css";
-import Prism from "prismjs";
+import { highlightJson } from "../utils/highlight";
 import { useTranslation } from "react-i18next";
 
 interface JsonEditorProps {
@@ -12,11 +11,13 @@ interface JsonEditorProps {
 }
 
 const highlight = (code: string) => {
-  // Ensure JSON language is loaded
-  if (!Prism.languages.json) {
-    return code;
+  try {
+    return highlightJson(code);
+  } catch (err) {
+    console.error("Error highlighting code:", err);
+    // In case of error, escape HTML to strictly avoid XSS, although highlightJson does this too.
+    return code.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
-  return Prism.highlight(code, Prism.languages.json, "json");
 };
 
 /**
@@ -31,28 +32,6 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
   const lineNumbersRef = useRef<HTMLDivElement>(null);
   const lineNumbersScrollableRef = useRef<HTMLDivElement>(null);
   const editorContainerRef = useRef<HTMLDivElement>(null);
-
-  // Load Prism JSON language dynamically to avoid global Prism reference issues
-  useEffect(() => {
-    const loadLanguage = async () => {
-      if (!Prism.languages.json) {
-        try {
-          // Dynamically import the JSON language and ensure it's registered
-          // @ts-expect-error: No type definitions for 'prismjs/components/prism-json'
-          await import("prismjs/components/prism-json");
-          if (!Prism.languages.json) {
-            // Some bundlers may require explicit registration
-             
-            console.error("Prism JSON language was imported, but not registered.");
-          }
-        } catch (err) {
-           
-          console.error("Failed to load Prism JSON language:", err);
-        }
-      }
-    };
-    loadLanguage();
-  }, []);
 
   // Standard multiplier for readable line spacing when deriving line-height from font-size.
   // This follows CSS defaults for most browsers (font-size * 1.2 to 1.5 is typical).
@@ -77,10 +56,14 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
       const cs = getComputedStyle(textarea as Element);
       // Parse line-height; if not available, derive from font-size using a standard multiplier
       const parsedLineHeight = parseFloat(cs.lineHeight || "");
-      let measuredLineHeight = Number.isFinite(parsedLineHeight) && parsedLineHeight > 0 ? parsedLineHeight : NaN;
+      let measuredLineHeight =
+        Number.isFinite(parsedLineHeight) && parsedLineHeight > 0 ? parsedLineHeight : NaN;
       if (Number.isNaN(measuredLineHeight)) {
         const parsedFontSize = parseFloat(cs.fontSize || "");
-        measuredLineHeight = Number.isFinite(parsedFontSize) && parsedFontSize > 0 ? parsedFontSize * LINE_HEIGHT_MULTIPLIER : 21;
+        measuredLineHeight =
+          Number.isFinite(parsedFontSize) && parsedFontSize > 0
+            ? parsedFontSize * LINE_HEIGHT_MULTIPLIER
+            : 21;
       }
 
       const paddingTop = parseFloat(cs.paddingTop || "") || 16;

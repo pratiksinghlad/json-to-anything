@@ -58,9 +58,6 @@ export default defineConfig({
               return "i18n-vendor";
             }
             if (id.includes("prismjs")) {
-              if (id.includes("prismjs/components")) {
-                return undefined;
-              }
               return "prism-vendor";
             }
             return "vendor";
