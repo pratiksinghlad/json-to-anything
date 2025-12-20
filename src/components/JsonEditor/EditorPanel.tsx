@@ -145,16 +145,24 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
       {/* View Mode Switcher */}
       <Box
         sx={{
-          background: "linear-gradient(180deg, #a5d07e 0%, #8ac05d 100%)",
+          backgroundColor: "primary.main",
           display: "flex",
           alignItems: "center",
-          px: 1,
-          py: 0.5,
-          gap: 1,
-          borderBottom: "1px solid #81b953",
+          px: 1.5,
+          py: 0.75,
+          gap: 1.5,
+          borderBottom: "1px solid",
+          borderColor: "primary.dark",
         }}
       >
-        <Box sx={{ display: "flex", backgroundColor: "#e8f5e9", borderRadius: 1, padding: 0.2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            backgroundColor: "rgba(0,0,0,0.1)",
+            borderRadius: "4px",
+            padding: "2px",
+          }}
+        >
           {["Text", "Tree", "Table"].map((mode) => {
             const m = mode.toLowerCase() as "text" | "tree" | "table";
             const isActive = viewMode === m;
@@ -164,15 +172,20 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
                 size="small"
                 onClick={() => setViewMode(m)}
                 sx={{
-                  minWidth: "auto",
-                  p: "2px 8px",
-                  color: isActive ? "#1b5e20" : "#1b5e20",
-                  fontWeight: isActive ? "bold" : "normal",
+                  minWidth: "60px",
+                  p: "4px 12px",
+                  color: isActive ? "primary.dark" : "rgba(255,255,255,0.8)",
+                  fontSize: "0.75rem",
+                  fontWeight: isActive ? "bold" : "500",
                   backgroundColor: isActive ? "#fff" : "transparent",
-                  boxShadow: isActive ? 1 : 0,
+                  borderRadius: "3px",
+                  boxShadow: isActive ? "0 1px 3px rgba(0,0,0,0.2)" : "none",
                   "&:hover": {
-                    backgroundColor: isActive ? "#fff" : "rgba(255,255,255,0.3)",
+                    backgroundColor: isActive ? "#fff" : "rgba(255,255,255,0.1)",
+                    color: isActive ? "primary.dark" : "#fff",
                   },
+                  textTransform: "none",
+                  transition: "all 0.2s ease",
                 }}
               >
                 {mode}
@@ -182,13 +195,19 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
         </Box>
 
         <Box
-          sx={{ width: "1px", height: "20px", backgroundColor: "rgba(255,255,255,0.5)", mx: 1 }}
+          sx={{ width: "1px", height: "20px", backgroundColor: "rgba(255,255,255,0.2)", mx: 0.5 }}
         />
 
-        <IconButton size="small" sx={{ color: "#fff" }}>
+        <IconButton
+          size="small"
+          sx={{ color: "rgba(255,255,255,0.9)", "&:hover": { bgcolor: "rgba(255,255,255,0.1)" } }}
+        >
           <SearchIcon fontSize="small" />
         </IconButton>
-        <IconButton size="small" sx={{ color: "#fff" }}>
+        <IconButton
+          size="small"
+          sx={{ color: "rgba(255,255,255,0.9)", "&:hover": { bgcolor: "rgba(255,255,255,0.1)" } }}
+        >
           <RefreshIcon fontSize="small" />
         </IconButton>
       </Box>

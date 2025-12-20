@@ -56,9 +56,11 @@ export default function OptionsBar({
       sx={{
         p: 2.5,
         mb: 2,
-        border: "2px solid #e0e0e0",
-        borderRadius: "8px",
+        border: "1px solid",
+        borderColor: "divider",
+        borderRadius: "12px",
         backgroundColor: "#ffffff",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
       }}
     >
       <Stack direction={{ xs: "column", sm: "row" }} spacing={3} alignItems="center">
@@ -69,13 +71,13 @@ export default function OptionsBar({
             "& .MuiOutlinedInput-root": {
               backgroundColor: "#ffffff",
               "& fieldset": {
-                borderColor: "#d0d0d0",
+                borderColor: "divider",
               },
               "&:hover fieldset": {
-                borderColor: "#1976d2",
+                borderColor: "primary.main",
               },
               "&.Mui-focused fieldset": {
-                borderColor: "#1976d2",
+                borderColor: "primary.main",
               },
             },
           }}
