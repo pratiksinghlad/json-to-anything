@@ -9,9 +9,9 @@ permissions:
   contents: read
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     container:
-      image: node:20-slim
+      image: node:22-slim
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache@v4
