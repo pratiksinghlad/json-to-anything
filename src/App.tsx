@@ -12,7 +12,7 @@ const ValidateJsonPage = lazy(() => import("./pages/ValidateJsonPage"));
 const ComparePage = lazy(() => import("./pages/ComparePage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 
-// Theme configuration matching the JSON Editor Dark/Light mix
+// Theme configuration matching the JSON to anything Dark/Light mix
 const theme = createTheme({
   palette: {
     mode: "light", // Base is light, but header is dark

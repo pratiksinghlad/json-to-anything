@@ -17,12 +17,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 import Editor from "react-simple-code-editor";
-// @ts-ignore
-import { highlight, languages } from "prismjs/components/prism-core";
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-javascript";
-import "prismjs/components/prism-json";
-import "prismjs/themes/prism.css";
+import { highlight } from "../../utils/highlight";
 
 export interface EditorPanelProps {
   initialValue?: string;
@@ -124,7 +119,7 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
       <Editor
         value={currentCode}
         onValueChange={updateCode}
-        highlight={(code) => highlight(code, languages[language] || languages.json, language)}
+        highlight={(code) => highlight(code, language)}
         disabled={readOnly}
         padding={10}
         style={{
