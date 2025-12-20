@@ -9,7 +9,7 @@ const Header = () => {
       position="static"
       elevation={0}
       sx={{
-        bgcolor: "primary.main",
+        bgcolor: "secondary.main",
         color: "#ffffff",
         height: "48px",
         justifyContent: "center",

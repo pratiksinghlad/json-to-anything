@@ -17,7 +17,14 @@ const theme = createTheme({
   palette: {
     mode: "light", // Base is light, but header is dark
     primary: {
-      main: "#1976d2",
+      main: "#2563eb",
+      light: "#60a5fa",
+      dark: "#1d4ed8",
+    },
+    secondary: {
+      main: "#1e293b",
+      light: "#334155",
+      dark: "#0f172a",
     },
     background: {
       default: "#ffffff",
