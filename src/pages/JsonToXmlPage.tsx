@@ -77,11 +77,16 @@ const JsonToXmlPage = () => {
   return (
     <JsonEditorLayout
       leftPanel={
-        <EditorPanel title="JSON" value={jsonInput} onChange={setJsonInput} language="json" />
+        <EditorPanel
+          title={t("common.json")}
+          value={jsonInput}
+          onChange={setJsonInput}
+          language="json"
+        />
       }
       centerPanel={<CenterPanel />}
       rightPanel={
-        <EditorPanel title="XML" value={xmlOutput} language="xml" readOnly={true} />
+        <EditorPanel title={t("common.xml")} value={xmlOutput} language="xml" readOnly={true} />
       }
       bottomPanel={
         <Box sx={{ p: 2 }}>
@@ -123,9 +128,7 @@ const JsonToXmlPage = () => {
               label={t("pages.jsonToXml.includeDeclaration")}
             />
             <FormControlLabel
-              control={
-                <Checkbox checked={pretty} onChange={(e) => setPretty(e.target.checked)} />
-              }
+              control={<Checkbox checked={pretty} onChange={(e) => setPretty(e.target.checked)} />}
               label={t("pages.jsonToXml.prettyPrint")}
             />
           </Box>

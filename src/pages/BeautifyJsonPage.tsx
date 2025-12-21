@@ -1,14 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Alert,
-  Snackbar,
-} from "@mui/material";
+import { Box, FormControl, InputLabel, Select, MenuItem, Alert, Snackbar } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
 import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
 import EditorPanel from "../components/JsonEditor/EditorPanel";
@@ -63,7 +55,7 @@ const BeautifyJsonPage = () => {
       <JsonEditorLayout
         leftPanel={
           <EditorPanel
-            title="JSON"
+            title={t("common.json")}
             value={jsonInput}
             onChange={setJsonInput}
             language="json"

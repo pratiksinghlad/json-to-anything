@@ -63,11 +63,16 @@ const CsvToJsonPage = () => {
   return (
     <JsonEditorLayout
       leftPanel={
-        <EditorPanel title="CSV" value={csvInput} onChange={setCsvInput} language="csv" />
+        <EditorPanel
+          title={t("common.csv")}
+          value={csvInput}
+          onChange={setCsvInput}
+          language="csv"
+        />
       }
       centerPanel={<CenterPanel />}
       rightPanel={
-        <EditorPanel title="JSON" value={jsonOutput} language="json" readOnly={true} />
+        <EditorPanel title={t("common.json")} value={jsonOutput} language="json" readOnly={true} />
       }
       bottomPanel={
         <Box sx={{ p: 2 }}>

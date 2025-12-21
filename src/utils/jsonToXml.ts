@@ -22,7 +22,7 @@ export function jsonToXml(inputJson: unknown, options?: JsonToXmlOptions): JsonT
     return { ok: false, error: "Input is null or undefined" };
   }
 
-  const rootName = options?.rootName ?? "root";
+  const rootName = options?.rootName !== undefined ? options.rootName : "root";
   const declaration = options?.declaration ?? false;
   const attributePrefix = options?.attributePrefix ?? "@_";
   const pretty = options?.pretty ?? true;
@@ -40,10 +40,28 @@ export function jsonToXml(inputJson: unknown, options?: JsonToXmlOptions): JsonT
 
     const builder = new XMLBuilder(builderOptions);
 
-    // Wrap data in root element - arrays get wrapped with 'item' key to preserve structure
-    const dataToConvert = {
-      [rootName]: Array.isArray(inputJson) ? { item: inputJson } : inputJson,
-    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let dataToConvert: any;
+
+    if (Array.isArray(inputJson)) {
+      // If root level is an array, we must wrap it
+      dataToConvert = { [rootName]: { item: inputJson } };
+    } else if (typeof inputJson === "object" && inputJson !== null) {
+      const keys = Object.keys(inputJson);
+      if (keys.length === 1 && !rootName) {
+        // If there's only one key and no explicit rootName desired, use that key as root
+        dataToConvert = inputJson;
+      } else if (rootName) {
+        // Wrap in user-defined root
+        dataToConvert = { [rootName]: inputJson };
+      } else {
+        // Default wrap in 'root'
+        dataToConvert = { root: inputJson };
+      }
+    } else {
+      // Primitive values
+      dataToConvert = { [rootName || "root"]: inputJson };
+    }
 
     let xmlOutput = builder.build(dataToConvert);
 

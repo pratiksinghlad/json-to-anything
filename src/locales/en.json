@@ -111,7 +111,19 @@
     "copyFailed": "Failed to copy to clipboard"
   },
   "editor": {
-    "title": "JSON Input"
+    "title": "JSON Input",
+    "textView": "Text",
+    "treeView": "Tree",
+    "tableView": "Table",
+    "invalidJsonTree": "Invalid JSON content for Tree View",
+    "arrayObjectsTable": "Table View requires a JSON Array of Objects.",
+    "showingRows": "Showing first {{count}} rows"
+  },
+  "common": {
+    "json": "JSON",
+    "csv": "CSV",
+    "xml": "XML",
+    "tablePreview": "Table Preview"
   },
   "errors": {
     "emptyInput": "Input is empty",

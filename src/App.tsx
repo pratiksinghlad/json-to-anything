@@ -78,14 +78,7 @@ function App() {
             backgroundColor: "#ffffff",
           }}
         >
-          {/* Note: NavBar is currently hidden in new design inside JsonToCsvPage, 
-              but other pages might still need it. 
-              The new JsonEditorLayout has its own Header. 
-              If we want the new design everywhere, we might need to remove NavBar or make it conditional.
-              For now, let's keep NavBar for non-editor pages, but JsonToCsvPage uses its own layout so it might double up.
-              Actually, JsonEditorLayout includes a Header, so we should probably NOT render NavBar on pages that use JsonEditorLayout.
-              However, for simplicity and to follow "make this json to csv page working", I will let Routes handle it.
-           */}
+          {/* Main Content Area */}
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<JsonToCsvPage />} />

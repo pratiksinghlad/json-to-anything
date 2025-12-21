@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
-  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -12,9 +12,6 @@ import {
   Paper,
   Alert,
 } from "@mui/material";
-
-import SearchIcon from "@mui/icons-material/Search";
-import RefreshIcon from "@mui/icons-material/Refresh";
 
 import Editor from "react-simple-code-editor";
 import { highlight } from "../../utils/highlight";
@@ -35,6 +32,7 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
   language = "json",
   readOnly = false,
 }) => {
+  const { t } = useTranslation();
   const [internalCode, setInternalCode] = useState(initialValue);
   const [viewMode, setViewMode] = useState<"text" | "tree" | "table">("text");
 
@@ -71,7 +69,7 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
           </Box>
         );
       }
-      return <Alert severity="warning">Invalid JSON content for Tree View</Alert>;
+      return <Alert severity="warning">{t("editor.invalidJsonTree")}</Alert>;
     }
 
     if (viewMode === "table") {
@@ -105,13 +103,13 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
             </Table>
             {parsedJson.length > 100 && (
               <Box sx={{ p: 1, textAlign: "center", fontStyle: "italic", color: "gray" }}>
-                Showing first 100 rows
+                {t("editor.showingRows", { count: 100 })}
               </Box>
             )}
           </TableContainer>
         );
       }
-      return <Alert severity="warning">Table View requires a JSON Array of Objects.</Alert>;
+      return <Alert severity="warning">{t("editor.arrayObjectsTable")}</Alert>;
     }
 
     // Default Text View
@@ -132,6 +130,12 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
     );
   };
 
+  const viewModes = [
+    { label: t("editor.textView"), value: "text" },
+    { label: t("editor.treeView"), value: "tree" },
+    { label: t("editor.tableView"), value: "table" },
+  ];
+
   return (
     <Box
       sx={{
@@ -145,50 +149,50 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
       {/* View Mode Switcher */}
       <Box
         sx={{
-          backgroundColor: "primary.main",
+          backgroundColor: "secondary.main",
           display: "flex",
           alignItems: "center",
           px: 1.5,
           py: 0.75,
           gap: 1.5,
           borderBottom: "1px solid",
-          borderColor: "primary.dark",
+          borderColor: "secondary.dark",
         }}
       >
         <Box
           sx={{
             display: "flex",
-            backgroundColor: "rgba(0,0,0,0.1)",
+            backgroundColor: "rgba(255,255,255,0.1)",
             borderRadius: "4px",
             padding: "2px",
           }}
         >
-          {["Text", "Tree", "Table"].map((mode) => {
-            const m = mode.toLowerCase() as "text" | "tree" | "table";
+          {viewModes.map((mode) => {
+            const m = mode.value as "text" | "tree" | "table";
             const isActive = viewMode === m;
             return (
               <Button
-                key={mode}
+                key={mode.value}
                 size="small"
                 onClick={() => setViewMode(m)}
                 sx={{
                   minWidth: "60px",
                   p: "4px 12px",
-                  color: isActive ? "primary.dark" : "rgba(255,255,255,0.8)",
+                  color: isActive ? "secondary.main" : "rgba(255,255,255,0.8)",
                   fontSize: "0.75rem",
                   fontWeight: isActive ? "bold" : "500",
                   backgroundColor: isActive ? "#fff" : "transparent",
                   borderRadius: "3px",
                   boxShadow: isActive ? "0 1px 3px rgba(0,0,0,0.2)" : "none",
                   "&:hover": {
-                    backgroundColor: isActive ? "#fff" : "rgba(255,255,255,0.1)",
-                    color: isActive ? "primary.dark" : "#fff",
+                    backgroundColor: isActive ? "#fff" : "rgba(255,255,255,0.15)",
+                    color: isActive ? "secondary.main" : "#fff",
                   },
                   textTransform: "none",
                   transition: "all 0.2s ease",
                 }}
               >
-                {mode}
+                {mode.label}
               </Button>
             );
           })}
@@ -197,19 +201,6 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
         <Box
           sx={{ width: "1px", height: "20px", backgroundColor: "rgba(255,255,255,0.2)", mx: 0.5 }}
         />
-
-        <IconButton
-          size="small"
-          sx={{ color: "rgba(255,255,255,0.9)", "&:hover": { bgcolor: "rgba(255,255,255,0.1)" } }}
-        >
-          <SearchIcon fontSize="small" />
-        </IconButton>
-        <IconButton
-          size="small"
-          sx={{ color: "rgba(255,255,255,0.9)", "&:hover": { bgcolor: "rgba(255,255,255,0.1)" } }}
-        >
-          <RefreshIcon fontSize="small" />
-        </IconButton>
       </Box>
 
       {/* Editor Area */}

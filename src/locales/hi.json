@@ -111,7 +111,19 @@
     "copyFailed": "क्लिपबोर्ड पर कॉपी करने में विफल"
   },
   "editor": {
-    "title": "JSON इनपुट"
+    "title": "JSON इनपुट",
+    "textView": "टेक्स्ट",
+    "treeView": "ट्री",
+    "tableView": "टेबल",
+    "invalidJsonTree": "ट्री व्यू के लिए अमान्य JSON सामग्री",
+    "arrayObjectsTable": "टेबल व्यू के लिए ऑब्जेक्ट्स की JSON एरे आवश्यक है।",
+    "showingRows": "पहली {{count}} पंक्तियाँ दिखाई जा रही हैं"
+  },
+  "common": {
+    "json": "JSON",
+    "csv": "CSV",
+    "xml": "XML",
+    "tablePreview": "टेबल प्रीव्यू"
   },
   "errors": {
     "emptyInput": "इनपुट खाली है",
