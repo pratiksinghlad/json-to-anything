@@ -52,11 +52,16 @@ const XmlToJsonPage = () => {
   return (
     <JsonEditorLayout
       leftPanel={
-        <EditorPanel title="XML" value={xmlInput} onChange={setXmlInput} language="xml" />
+        <EditorPanel
+          title={t("common.xml")}
+          value={xmlInput}
+          onChange={setXmlInput}
+          language="xml"
+        />
       }
       centerPanel={<CenterPanel />}
       rightPanel={
-        <EditorPanel title="JSON" value={jsonOutput} language="json" readOnly={true} />
+        <EditorPanel title={t("common.json")} value={jsonOutput} language="json" readOnly={true} />
       }
       bottomPanel={
         <Box sx={{ p: 2 }}>

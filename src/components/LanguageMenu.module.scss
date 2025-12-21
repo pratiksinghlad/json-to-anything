@@ -1,5 +1,5 @@
-@use '../../styles/variables' as *;
-@use '../../styles/mixins' as *;
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
 
 .languageMenu {
   position: relative;
@@ -13,8 +13,8 @@
     border-radius: $radius-md;
     color: #ffffff;
     cursor: pointer;
-    @include transition(background-color, border-color, color);
-    @include focus-visible;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    outline: none;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);
@@ -41,7 +41,7 @@
 
   &__icon {
     font-size: 18px;
-    @include transition(transform);
+    transition: transform 0.2s;
 
     &--open {
       transform: rotate(180deg);
@@ -54,10 +54,10 @@
   border: none;
 
   .languageMenu__label {
-    @include sr-only;
+    display: none;
   }
 
   &:hover {
-    background-color: $hover-bg;
+    background-color: rgba(255, 255, 255, 0.1);
   }
 }

@@ -10,34 +10,46 @@ const escapeHtml = (text: string): string => {
     .replace(/'/g, '&#39;');
 };
 
-// Simple JSON syntax highlighting
+// Simple JSON syntax highlighting - improved
 export const highlightJson = (code: string): string => {
   const escaped = escapeHtml(code);
   
   return escaped
-    // Strings (double-quoted)
-    .replace(/"([^"\\]|\\.)*"/g, '<span style="color: #a31515;">$&</span>')
+    // Use token replacements to avoid overlapping
+    // Keywords (keys)
+    .replace(/(&quot;[^&]*&quot;)(\s*:)/g, 'TOKEN_KEY_$1_TOKEN_END$2')
+    // Strings (values) - only those not already marked as keys
+    .replace(/(&quot;[^&]*&quot;)(?![^TOKEN]*_TOKEN_END)/g, 'TOKEN_STR_$1_TOKEN_END')
     // Numbers
-    .replace(/\b(-?\d+\.?\d*)\b/g, '<span style="color: #098658;">$1</span>')
+    .replace(/\b(-?\d+\.?\d*)\b/g, 'TOKEN_NUM_$1_TOKEN_END')
     // Booleans and null
-    .replace(/\b(true|false|null)\b/g, '<span style="color: #0000ff;">$1</span>')
-    // Property names (keys before colon)
-    .replace(/(&quot;[^&]*&quot;)(\s*:)/g, '<span style="color: #0451a5;">$1</span>$2');
+    .replace(/\b(true|false|null)\b/g, 'TOKEN_BOOL_$1_TOKEN_END')
+    // Final replacements
+    .split('TOKEN_KEY_').join('<span style="color: #0451a5;">')
+    .split('TOKEN_STR_').join('<span style="color: #a31515;">')
+    .split('TOKEN_NUM_').join('<span style="color: #098658;">')
+    .split('TOKEN_BOOL_').join('<span style="color: #0000ff;">')
+    .split('_TOKEN_END').join('</span>');
 };
 
-// Simple XML/HTML syntax highlighting
+// Simple XML/HTML syntax highlighting - improved to avoid self-highlighting tags
 export const highlightXml = (code: string): string => {
   const escaped = escapeHtml(code);
   
+  // Use a temporary replacement for the highlight tags to avoid collisions
+  // Then replace them back at the end
   return escaped
-    // Tags
-    .replace(/(&lt;\/?[\w-]+)/g, '<span style="color: #800000;">$1</span>')
-    // Attributes
-    .replace(/([\w-]+)(=)/g, '<span style="color: #ff0000;">$1</span>$2')
-    // Attribute values
-    .replace(/(=)(&quot;[^&]*&quot;)/g, '$1<span style="color: #0000ff;">$2</span>')
-    // Closing bracket
-    .replace(/(\/?&gt;)/g, '<span style="color: #800000;">$1</span>');
+    .replace(/(&lt;\/?[\w-]+)/g, 'TOKEN_START_TAG_$1_TOKEN_END_TAG')
+    .replace(/([\w-]+)(=)/g, 'TOKEN_START_ATTR_$1_TOKEN_END_ATTR_$2')
+    .replace(/(=)(&quot;[^&]*&quot;)/g, '$1TOKEN_START_VAL_$2_TOKEN_END_VAL')
+    .replace(/(\/?&gt;)/g, 'TOKEN_START_TAG_$1_TOKEN_END_TAG')
+    // Final replacements to actual HTML spans
+    .split('TOKEN_START_TAG_').join('<span style="color: #800000;">')
+    .split('_TOKEN_END_TAG').join('</span>')
+    .split('TOKEN_START_ATTR_').join('<span style="color: #ff0000;">')
+    .split('_TOKEN_END_ATTR_').join('</span>')
+    .split('TOKEN_START_VAL_').join('<span style="color: #0000ff;">')
+    .split('_TOKEN_END_VAL').join('</span>');
 };
 
 // Simple CSV highlighting (just escape, no colors needed)

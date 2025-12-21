@@ -32,6 +32,8 @@ export function xmlToJson(input: string, options?: XmlToJsonOptions): XmlToJsonR
       parseTagValue: coerceTypes,
       parseAttributeValue: coerceTypes,
       trimValues: true,
+      processEntities: true,
+      allowBooleanAttributes: true,
     };
 
     // Only add isArray if explicitArray is true

@@ -111,7 +111,19 @@
     "copyFailed": "Error al copiar al portapapeles"
   },
   "editor": {
-    "title": "Entrada JSON"
+    "title": "Entrada JSON",
+    "textView": "Texto",
+    "treeView": "Árbol",
+    "tableView": "Tabla",
+    "invalidJsonTree": "Contenido JSON no válido para la vista de árbol",
+    "arrayObjectsTable": "La vista de tabla requiere una matriz JSON de objetos.",
+    "showingRows": "Mostrando las primeras {{count}} filas"
+  },
+  "common": {
+    "json": "JSON",
+    "csv": "CSV",
+    "xml": "XML",
+    "tablePreview": "Vista previa de la tabla"
   },
   "errors": {
     "emptyInput": "La entrada está vacía",

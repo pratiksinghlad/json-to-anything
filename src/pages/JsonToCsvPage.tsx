@@ -100,12 +100,17 @@ const JsonToCsvPage = () => {
   return (
     <JsonEditorLayout
       leftPanel={
-        <EditorPanel title="JSON" value={jsonInput} onChange={setJsonInput} language="json" />
+        <EditorPanel
+          title={t("common.json")}
+          value={jsonInput}
+          onChange={setJsonInput}
+          language="json"
+        />
       }
       centerPanel={<CenterPanel />} // We can pass transform handlers here later if we want buttons to do it
       rightPanel={
         <EditorPanel
-          title="CSV"
+          title={t("common.csv")}
           value={csvData}
           language="csv" // We might need to ensure 'csv' is loaded in EditorPanel or fall back to plain text
           readOnly={true}
@@ -115,7 +120,7 @@ const JsonToCsvPage = () => {
         normalizedData.length > 0 ? (
           <Box sx={{ p: 2 }}>
             <Box sx={{ mb: 2, display: "flex", gap: 2, alignItems: "center" }}>
-              <Typography variant="h6">Table Preview</Typography>
+              <Typography variant="h6">{t("common.tablePreview")}</Typography>
               <DownloadButtons
                 csvData={csvData}
                 jsonData={jsonInput}
