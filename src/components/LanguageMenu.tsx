@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Menu, MenuItem, IconButton } from "@mui/material";
+import { Menu, MenuItem, IconButton, Button } from "@mui/material";
 import { Language as LanguageIcon, ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 import { languageOptions } from "../menuData";
 import { themeConfig } from "../themeConfig";
@@ -96,21 +96,23 @@ const LanguageMenu = ({ mobile = false }: LanguageMenuProps) => {
 
   return (
     <div className={styles.languageMenu}>
-      <button
+      <Button
         onClick={handleClick}
         aria-label={t("aria.languageSelector")}
         aria-expanded={open}
         aria-haspopup="true"
         className={styles.languageMenu__button}
+        startIcon={<LanguageIcon className={styles.languageMenu__flag} />}
+        endIcon={
+          <ExpandMoreIcon
+            className={`${styles.languageMenu__icon} ${
+              open ? styles["languageMenu__icon--open"] : ""
+            }`}
+          />
+        }
       >
-        <LanguageIcon className={styles.languageMenu__flag} />
         <span className={styles.languageMenu__label}>{currentLanguage.nativeLabel}</span>
-        <ExpandMoreIcon
-          className={`${styles.languageMenu__icon} ${
-            open ? styles["languageMenu__icon--open"] : ""
-          }`}
-        />
-      </button>
+      </Button>
       <Menu
         anchorEl={anchorEl}
         open={open}
