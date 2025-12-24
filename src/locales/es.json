@@ -123,7 +123,9 @@
     "json": "JSON",
     "csv": "CSV",
     "xml": "XML",
-    "tablePreview": "Vista previa de la tabla"
+    "tablePreview": "Vista previa de la tabla",
+    "copyToClipboard": "Copiar al portapapeles",
+    "copied": "¡Copiado!"
   },
   "errors": {
     "emptyInput": "La entrada está vacía",

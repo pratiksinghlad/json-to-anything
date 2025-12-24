@@ -42,7 +42,7 @@ const Header = () => {
       position="static"
       elevation={0}
       sx={{
-        bgcolor: "secondary.main",
+        bgcolor: "primary.main",
         color: "#ffffff",
         height: "48px",
         justifyContent: "center",
@@ -89,7 +89,7 @@ const Header = () => {
         <Box sx={{ flexGrow: 1 }} />
 
         {/* Language Menu and Mobile Toggle */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, minWidth: "fit-content" }}>
           <LanguageMenu />
           {isMobile && (
             <IconButton
