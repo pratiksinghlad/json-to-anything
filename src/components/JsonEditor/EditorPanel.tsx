@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Box,
@@ -15,6 +15,7 @@ import {
 
 import Editor from "react-simple-code-editor";
 import { highlight } from "../../utils/highlight";
+import CopyButton from "../CopyButton";
 
 export interface EditorPanelProps {
   initialValue?: string;
@@ -35,6 +36,7 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
   const { t } = useTranslation();
   const [internalCode, setInternalCode] = useState(initialValue);
   const [viewMode, setViewMode] = useState<"text" | "tree" | "table">("text");
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const currentCode = value !== undefined ? value : internalCode;
 
@@ -118,7 +120,7 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
         value={currentCode}
         onValueChange={updateCode}
         highlight={(code) => highlight(code, language)}
-        disabled={readOnly}
+        readOnly={readOnly}
         padding={10}
         style={{
           fontFamily: '"Fira Code", "Fira Mono", monospace',
@@ -128,6 +130,21 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
         textareaClassName="editor-textarea"
       />
     );
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "a") {
+      if (viewMode !== "text") {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        if (contentRef.current) {
+          range.selectNodeContents(contentRef.current);
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+          e.preventDefault();
+        }
+      }
+    }
   };
 
   const viewModes = [
@@ -197,20 +214,33 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
             );
           })}
         </Box>
-
         <Box
           sx={{ width: "1px", height: "20px", backgroundColor: "rgba(255,255,255,0.2)", mx: 0.5 }}
         />
+        <Box sx={{ flexGrow: 1 }} />
+        <CopyButton value={currentCode} />
       </Box>
 
       {/* Editor Area */}
       <Box
+        ref={contentRef}
+        onKeyDown={handleKeyDown}
+        onClick={() => {
+          if (viewMode === "text") {
+            contentRef.current?.querySelector("textarea")?.focus();
+          }
+        }}
+        tabIndex={0}
         sx={{
           flexGrow: 1,
           position: "relative",
           height: "calc(100% - 75px)",
           backgroundColor: "#fff",
           overflow: "auto",
+          "&:focus": {
+            outline: "none",
+            boxShadow: "inset 0 0 0 2px rgba(25, 118, 210, 0.2)",
+          },
         }}
       >
         {renderContent()}
