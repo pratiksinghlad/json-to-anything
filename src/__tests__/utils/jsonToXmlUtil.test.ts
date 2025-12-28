@@ -26,23 +26,34 @@ describe("jsonToXml", () => {
     }
   });
 
-  it("should include XML declaration when requested", () => {
-    const input = { name: "John" };
-    const result = jsonToXml(input, { declaration: true });
-    
-    expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.output).toContain('<?xml version="1.0" encoding="UTF-8"?>');
-    }
-  });
-
-  it("should not include XML declaration by default", () => {
+  it("should include XML declaration by default", () => {
     const input = { name: "John" };
     const result = jsonToXml(input);
     
     expect(result.ok).toBe(true);
     if (result.ok) {
+      expect(result.output).toContain('<?xml version="1.0" encoding="UTF-8" ?>');
+    }
+  });
+
+  it("should not include XML declaration when explicitly disabled", () => {
+    const input = { name: "John" };
+    const result = jsonToXml(input, { declaration: false });
+    
+    expect(result.ok).toBe(true);
+    if (result.ok) {
       expect(result.output).not.toContain("<?xml");
+    }
+  });
+
+  it("should auto-detect root name from single key object when no rootName provided", () => {
+    const input = { person: { name: "John" } };
+    const result = jsonToXml(input);
+    
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.output).toContain("<person>");
+      expect(result.output).not.toContain("<root>");
     }
   });
 

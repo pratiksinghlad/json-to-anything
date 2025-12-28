@@ -22,8 +22,11 @@ export function jsonToXml(inputJson: unknown, options?: JsonToXmlOptions): JsonT
     return { ok: false, error: "Input is null or undefined" };
   }
 
-  const rootName = options?.rootName !== undefined ? options.rootName : "root";
-  const declaration = options?.declaration ?? false;
+  // Smarter root handling
+  // If rootName is not provided, we try to use the single key from inputJson if it's an object
+  // Otherwise default to 'root'
+  const rootNameInput = options?.rootName;
+  const includeDeclaration = options?.declaration ?? true; // Default to true as requested
   const attributePrefix = options?.attributePrefix ?? "@_";
   const pretty = options?.pretty ?? true;
   const indent = options?.indent ?? 2;
@@ -45,29 +48,36 @@ export function jsonToXml(inputJson: unknown, options?: JsonToXmlOptions): JsonT
 
     if (Array.isArray(inputJson)) {
       // If root level is an array, we must wrap it
-      dataToConvert = { [rootName]: { item: inputJson } };
+      const actualRootName = rootNameInput || "root";
+      dataToConvert = { [actualRootName]: { item: inputJson } };
     } else if (typeof inputJson === "object" && inputJson !== null) {
       const keys = Object.keys(inputJson);
-      if (keys.length === 1 && !rootName) {
+      
+      if (keys.length === 1 && !rootNameInput) {
         // If there's only one key and no explicit rootName desired, use that key as root
         dataToConvert = inputJson;
-      } else if (rootName) {
+      } else if (rootNameInput) {
         // Wrap in user-defined root
-        dataToConvert = { [rootName]: inputJson };
+        dataToConvert = { [rootNameInput]: inputJson };
       } else {
-        // Default wrap in 'root'
+        // Default wrap in 'root' if multiple keys and no root name
         dataToConvert = { root: inputJson };
       }
     } else {
       // Primitive values
-      dataToConvert = { [rootName || "root"]: inputJson };
+      dataToConvert = { [rootNameInput || "root"]: inputJson };
     }
 
     let xmlOutput = builder.build(dataToConvert);
 
-    // Add XML declaration if requested
-    if (declaration) {
-      xmlOutput = '<?xml version="1.0" encoding="UTF-8"?>\n' + xmlOutput;
+    // Ensure xmlOutput is a string and handle potential undefined/null from builder
+    if (typeof xmlOutput !== "string") {
+      xmlOutput = String(xmlOutput || "");
+    }
+
+    // Add XML declaration if requested and not already present
+    if (includeDeclaration && !xmlOutput.trim().startsWith("<?xml")) {
+      xmlOutput = `<?xml version="1.0" encoding="UTF-8" ?>\n${xmlOutput}`;
     }
 
     return { ok: true, output: xmlOutput };
