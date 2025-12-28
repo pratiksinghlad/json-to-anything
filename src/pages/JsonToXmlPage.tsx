@@ -37,8 +37,8 @@ const JsonToXmlPage = () => {
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
   const [xmlOutput, setXmlOutput] = useState("");
   const [error, setError] = useState<string | undefined>();
-  const [rootName, setRootName] = useState("root");
-  const [declaration, setDeclaration] = useState(false);
+  const [rootName, setRootName] = useState("");
+  const [declaration, setDeclaration] = useState(true);
   const [attributePrefix, setAttributePrefix] = useState("@_");
   const [pretty, setPretty] = useState(true);
   const [indent, setIndent] = useState("2");
