@@ -1,168 +1,92 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Menu, MenuItem, IconButton, Button } from "@mui/material";
-import { Language as LanguageIcon, ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
+import { FormControl, Select, MenuItem, Box, type SelectChangeEvent } from "@mui/material";
+import { Language as LanguageIcon } from "@mui/icons-material";
 import { languageOptions } from "../menuData";
-import { themeConfig } from "../themeConfig";
-import styles from "./LanguageMenu.module.scss";
 
-interface LanguageMenuProps {
-  mobile?: boolean;
-}
-
-const LanguageMenu = ({ mobile = false }: LanguageMenuProps) => {
+const LanguageMenu = () => {
   const { i18n, t } = useTranslation();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleLanguageChange = (event: SelectChangeEvent) => {
+    i18n.changeLanguage(event.target.value);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const getNormalizedLanguage = () => {
+    const lang = i18n.language ? i18n.language.split("-")[0] : "en";
+    return languageOptions.some((opt) => opt.code === lang) ? lang : "en";
   };
 
-  const handleLanguageChange = (languageCode: string) => {
-    i18n.changeLanguage(languageCode);
-    handleClose();
-  };
+  const currentLang = getNormalizedLanguage();
 
-  const currentLanguage =
-    languageOptions.find((lang) => lang.code === i18n.language) || languageOptions[0];
-
-  if (mobile) {
-    return (
-      <div className={styles.languageMenu}>
-        <IconButton
-          onClick={handleClick}
-          aria-label={t("aria.languageSelector")}
-          aria-expanded={open}
-          aria-haspopup="true"
-          className={styles.languageMenu__button + " " + styles["languageMenu__button--mobile"]}
-        >
-          <LanguageIcon />
-        </IconButton>
-        <Menu
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: "rgba(255, 255, 255, 0.1)",
+        borderRadius: "4px",
+        px: 1,
+        transition: "all 0.2s ease",
+        "&:hover": {
+          backgroundColor: "rgba(255, 255, 255, 0.15)",
+        },
+      }}
+    >
+      <LanguageIcon sx={{ fontSize: 18, mr: 0.5, color: "rgba(255, 255, 255, 0.8)" }} />
+      <FormControl variant="standard" size="small">
+        <Select
+          value={currentLang}
+          onChange={handleLanguageChange}
+          disableUnderline
           sx={{
-            "& .MuiPaper-root": {
-              backgroundColor: themeConfig.SURFACE_BG,
-              border: `2px solid ${themeConfig.BORDER_COLOR}`,
-              borderRadius: "8px",
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-            },
-            "& .MuiMenuItem-root": {
-              color: themeConfig.TEXT_PRIMARY,
-              fontSize: "0.9375rem",
-              padding: "12px 20px",
-              "&:hover": {
-                backgroundColor: themeConfig.SURFACE_LIGHT,
+            color: "#fff",
+            fontSize: "0.85rem",
+            fontWeight: 500,
+            "& .MuiSelect-select": {
+              py: 0.5,
+              pr: "24px !important",
+              display: "flex",
+              alignItems: "center",
+              "&:focus": {
+                backgroundColor: "transparent",
               },
-              "&.Mui-selected": {
-                backgroundColor: themeConfig.ACTIVE_BG,
-                color: themeConfig.PRIMARY_COLOR,
-                fontWeight: 600,
-                "&:hover": {
-                  backgroundColor: themeConfig.ACTIVE_BG_HOVER,
+            },
+            "& .MuiSvgIcon-root": {
+              color: "rgba(255, 255, 255, 0.7)",
+              fontSize: "1.2rem",
+            },
+          }}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                mt: 1,
+                bgcolor: "#1e293b",
+                color: "#fff",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+                "& .MuiMenuItem-root": {
+                  fontSize: "0.875rem",
+                  "&:hover": {
+                    bgcolor: "rgba(255,255,255,0.1)",
+                  },
+                  "&.Mui-selected": {
+                    bgcolor: "primary.main",
+                    "&:hover": {
+                      bgcolor: "primary.dark",
+                    },
+                  },
                 },
               },
             },
           }}
+          aria-label={t("aria.languageSelector")}
         >
-          {languageOptions.map((lang) => (
-            <MenuItem
-              key={lang.code}
-              onClick={() => handleLanguageChange(lang.code)}
-              selected={lang.code === i18n.language}
-            >
-              {lang.nativeLabel}
+          {languageOptions.map((option) => (
+            <MenuItem key={option.code} value={option.code}>
+              {option.nativeLabel}
             </MenuItem>
           ))}
-        </Menu>
-      </div>
-    );
-  }
-
-  return (
-    <div className={styles.languageMenu}>
-      <Button
-        onClick={handleClick}
-        aria-label={t("aria.languageSelector")}
-        aria-expanded={open}
-        aria-haspopup="true"
-        className={styles.languageMenu__button}
-        startIcon={<LanguageIcon className={styles.languageMenu__flag} />}
-        endIcon={
-          <ExpandMoreIcon
-            className={`${styles.languageMenu__icon} ${
-              open ? styles["languageMenu__icon--open"] : ""
-            }`}
-          />
-        }
-      >
-        <span className={styles.languageMenu__label}>{currentLanguage.nativeLabel}</span>
-      </Button>
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-        sx={{
-          "& .MuiPaper-root": {
-            backgroundColor: themeConfig.SURFACE_BG,
-            border: `2px solid ${themeConfig.BORDER_COLOR}`,
-            borderRadius: "8px",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-            marginTop: "8px",
-          },
-          "& .MuiMenuItem-root": {
-            color: themeConfig.TEXT_PRIMARY,
-            fontSize: "0.9375rem",
-            padding: "12px 20px",
-            minWidth: "160px",
-            "&:hover": {
-              backgroundColor: themeConfig.SURFACE_LIGHT,
-            },
-            "&.Mui-selected": {
-              backgroundColor: themeConfig.ACTIVE_BG,
-              color: themeConfig.PRIMARY_COLOR,
-              fontWeight: 600,
-              "&:hover": {
-                backgroundColor: themeConfig.ACTIVE_BG_HOVER,
-              },
-            },
-          },
-        }}
-      >
-        {languageOptions.map((lang) => (
-          <MenuItem
-            key={lang.code}
-            onClick={() => handleLanguageChange(lang.code)}
-            selected={lang.code === i18n.language}
-          >
-            {lang.nativeLabel}
-          </MenuItem>
-        ))}
-      </Menu>
-    </div>
+        </Select>
+      </FormControl>
+    </Box>
   );
 };
 
