@@ -1,54 +1,16 @@
 import { useTranslation } from "react-i18next";
 import { FormControl, Select, MenuItem, Box, type SelectChangeEvent } from "@mui/material";
 import { Language as LanguageIcon } from "@mui/icons-material";
-import { languageOptions } from "../../menuData";
+import { languageOptions } from "../menuData";
 
-interface LanguageMenuProps {
-  mobile?: boolean;
-}
-
-const LanguageMenu = ({ mobile = false }: LanguageMenuProps) => {
+const LanguageDropdown = () => {
   const { i18n, t } = useTranslation();
 
   const handleLanguageChange = (event: SelectChangeEvent) => {
     i18n.changeLanguage(event.target.value);
   };
 
-  const getNormalizedLanguage = () => {
-    const lang = i18n.language ? i18n.language.split("-")[0] : "en";
-    return languageOptions.some((opt) => opt.code === lang) ? lang : "en";
-  };
-
-  const currentLang = getNormalizedLanguage();
-
-  if (mobile) {
-    return (
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        <FormControl variant="standard" size="small">
-          <Select
-            value={currentLang}
-            onChange={handleLanguageChange}
-            disableUnderline
-            IconComponent={() => null} // Hide arrow for mobile icon button style
-            renderValue={() => <LanguageIcon sx={{ color: "#fff" }} />}
-            sx={{
-              "& .MuiSelect-select": {
-                p: 1,
-                display: "flex",
-                alignItems: "center",
-              },
-            }}
-          >
-            {languageOptions.map((option) => (
-              <MenuItem key={option.code} value={option.code}>
-                {option.nativeLabel}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
-    );
-  }
+  const currentLang = i18n.language.split("-")[0];
 
   return (
     <Box
@@ -76,7 +38,7 @@ const LanguageMenu = ({ mobile = false }: LanguageMenuProps) => {
             fontWeight: 500,
             "& .MuiSelect-select": {
               py: 0.5,
-              pr: "24px !important",
+              pr: "24px !important", // Space for the arrow
               display: "flex",
               alignItems: "center",
               "&:focus": {
@@ -123,4 +85,4 @@ const LanguageMenu = ({ mobile = false }: LanguageMenuProps) => {
   );
 };
 
-export default LanguageMenu;
+export default LanguageDropdown;

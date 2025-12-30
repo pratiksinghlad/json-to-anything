@@ -19,7 +19,7 @@ i18n
     supportedLngs: ["en", "es", "hi"],
     nonExplicitSupportedLngs: true, // Allows 'en-US' to fallback to 'en'
     detection: {
-      order: ["localStorage", "navigator", "htmlTag", "path", "subdomain"],
+      order: ["localStorage", "navigator", "htmlTag"],
       caches: ["localStorage"],
       lookupLocalStorage: "appLanguage", // Match existing localStorage key
     },
