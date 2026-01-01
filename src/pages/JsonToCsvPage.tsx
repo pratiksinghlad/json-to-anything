@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 // components
 import OptionsBar from "../components/OptionsBar";
-import PreviewTable from "../components/PreviewTable";
 import DownloadButtons from "../components/DownloadButtons";
 import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
 import EditorPanel from "../components/JsonEditor/EditorPanel";
@@ -39,7 +38,6 @@ const JsonToCsvPage = () => {
   const { t } = useTranslation();
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
   const [error, setError] = useState<string | undefined>();
-  const [normalizedData, setNormalizedData] = useState<Record<string, unknown>[]>([]);
   const [csvData, setCsvData] = useState("");
   const [separator, setSeparator] = useState<"," | ";" | "\t">(",");
   const [includeHeader, setIncludeHeader] = useState(true);
@@ -57,7 +55,6 @@ const JsonToCsvPage = () => {
         setError(t("errors.invalidJson"));
         console.log(error);
       }
-      setNormalizedData([]);
       setCsvData("");
       return;
     }
@@ -75,14 +72,12 @@ const JsonToCsvPage = () => {
       setError(
         map[normalizeResult.error || ""] || normalizeResult.error || t("errors.invalidInputType"),
       );
-      setNormalizedData([]);
       setCsvData("");
       return;
     }
 
-    // Clear error and update normalized data
+    // Clear error
     setError(undefined);
-    setNormalizedData(normalizeResult.data || []);
 
     // Convert to CSV
     const options: CsvOptions = {
@@ -117,15 +112,10 @@ const JsonToCsvPage = () => {
         />
       }
       bottomPanel={
-        normalizedData.length > 0 ? (
+        jsonInput ? (
           <Box sx={{ p: 2 }}>
             <Box sx={{ mb: 2, display: "flex", gap: 2, alignItems: "center" }}>
-              <Typography variant="h6">{t("common.tablePreview")}</Typography>
-              <DownloadButtons
-                csvData={csvData}
-                jsonData={jsonInput}
-                disabled={normalizedData.length === 0}
-              />
+              <DownloadButtons csvData={csvData} jsonData={jsonInput} disabled={!csvData} />
             </Box>
             <OptionsBar
               separator={separator}
@@ -137,9 +127,6 @@ const JsonToCsvPage = () => {
               onTrimEmptyColumnsChange={setTrimEmptyColumns}
               onPascalCaseHeadersChange={setPascalCaseHeaders}
             />
-            <Box sx={{ mt: 2 }}>
-              <PreviewTable data={normalizedData} pascalCaseHeaders={pascalCaseHeaders} />
-            </Box>
           </Box>
         ) : null
       }

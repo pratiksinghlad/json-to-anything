@@ -20,6 +20,7 @@ const AboutPage = () => {
           </Typography>
           <Typography variant="body1" paragraph>
             {t("pages.about.by")}
+            &nbsp;
             <Link
               href="https://github.com/pratiksinghlad"
               target="_blank"
