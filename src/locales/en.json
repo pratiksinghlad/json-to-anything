@@ -116,7 +116,11 @@
     "treeView": "Tree",
     "tableView": "Table",
     "invalidJsonTree": "Invalid JSON content for Tree View",
+    "invalidCsvTree": "Invalid CSV content for Tree View",
+    "invalidXmlTree": "Invalid XML content for Tree View",
     "arrayObjectsTable": "Table View requires a JSON Array of Objects.",
+    "validCsvTable": "Table View requires a valid CSV with headers",
+    "validXmlTable": "Table View requires an XML with repeating structures",
     "showingRows": "Showing first {{count}} rows"
   },
   "common": {

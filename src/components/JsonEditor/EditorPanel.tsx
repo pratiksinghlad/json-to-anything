@@ -11,11 +11,16 @@ import {
   TableRow,
   Paper,
   Alert,
+  Typography,
 } from "@mui/material";
 
 import Editor from "react-simple-code-editor";
 import { highlight } from "../../utils/highlight";
 import CopyButton from "../CopyButton";
+import { csvToJson } from "../../utils/csvToJson";
+import { xmlToJson } from "../../utils/xmlToJson";
+import { normalizeData } from "../../utils/normalizeData";
+import { getAllKeys, flattenObject } from "../../utils/flattenObject";
 
 export interface EditorPanelProps {
   initialValue?: string;
@@ -49,69 +54,132 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
     }
   };
 
-  // Helper to parse JSON safely for Tree/Table views
-  const getParsedJson = () => {
+  // Helper to parse data safely based on language
+  const getParsedData = () => {
+    if (!currentCode || currentCode.trim() === "") return null;
+
     try {
+      if (language === "json") {
+        return JSON.parse(currentCode);
+      }
+      if (language === "csv") {
+        const result = csvToJson(currentCode);
+        return result.ok ? result.output : null;
+      }
+      if (language === "xml") {
+        const result = xmlToJson(currentCode);
+        return result.ok ? result.output : null;
+      }
+      // Fallback: try to parse as JSON anyway
       return JSON.parse(currentCode);
     } catch {
       return null;
     }
   };
 
-  const parsedJson = viewMode !== "text" ? getParsedJson() : null;
+  const parsedData = viewMode !== "text" ? getParsedData() : null;
 
   const renderContent = () => {
     if (viewMode === "tree") {
-      if (parsedJson) {
+      if (parsedData) {
         return (
           <Box sx={{ p: 2 }}>
-            <pre style={{ overflow: "auto", maxHeight: "500px" }}>
-              {JSON.stringify(parsedJson, null, 2)}
+            <pre
+              style={{
+                margin: 0,
+                fontFamily: '"Fira Code", "Fira Mono", monospace',
+                fontSize: "13px",
+                lineHeight: "1.5",
+                color: "#2c3e50",
+              }}
+            >
+              {JSON.stringify(parsedData, null, 2)}
             </pre>
           </Box>
         );
       }
-      return <Alert severity="warning">{t("editor.invalidJsonTree")}</Alert>;
+      const errorMsg =
+        language === "json"
+          ? t("editor.invalidJsonTree")
+          : language === "csv"
+          ? t("editor.invalidCsvTree")
+          : t("editor.invalidXmlTree");
+      return <Alert severity="warning">{errorMsg}</Alert>;
     }
 
     if (viewMode === "table") {
-      if (Array.isArray(parsedJson) && parsedJson.length > 0 && typeof parsedJson[0] === "object") {
-        const headers = Object.keys(parsedJson[0]);
+      const normalized = normalizeData(parsedData);
+      if (normalized.success && normalized.data && normalized.data.length > 0) {
+        const columns = getAllKeys(normalized.data);
+        const displayData = normalized.data.slice(0, 100);
+        const hasMore = normalized.data.length > 100;
+
         return (
-          <TableContainer component={Paper} elevation={0}>
+          <TableContainer component={Paper} elevation={0} sx={{ height: "100%", borderRadius: 0 }}>
             <Table size="small" stickyHeader>
               <TableHead>
                 <TableRow>
-                  {headers.map((header) => (
-                    <TableCell key={header} sx={{ fontWeight: "bold" }}>
-                      {header}
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column}
+                      sx={{
+                        fontWeight: "bold",
+                        backgroundColor: "#f8f9fa",
+                        whiteSpace: "nowrap",
+                        borderRight: "1px solid #e9ecef",
+                      }}
+                    >
+                      {column}
                     </TableCell>
                   ))}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {parsedJson.slice(0, 100).map((row: Record<string, unknown>, i: number) => (
-                  <TableRow key={i}>
-                    {headers.map((header) => (
-                      <TableCell key={header}>
-                        {typeof row[header] === "object"
-                          ? JSON.stringify(row[header])
-                          : String(row[header])}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
+                {displayData.map((row, i) => {
+                  const flattened = flattenObject(row);
+                  return (
+                    <TableRow key={i} hover>
+                      {columns.map((column) => {
+                        const cellValue = flattened[column];
+                        const displayValue =
+                          cellValue === null || cellValue === undefined ? "" : String(cellValue);
+                        return (
+                          <TableCell
+                            key={column}
+                            sx={{
+                              borderRight: "1px solid #e9ecef",
+                              maxWidth: "300px",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {displayValue}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
-            {parsedJson.length > 100 && (
-              <Box sx={{ p: 1, textAlign: "center", fontStyle: "italic", color: "gray" }}>
-                {t("editor.showingRows", { count: 100 })}
+            {hasMore && (
+              <Box sx={{ p: 1.5, textAlign: "center", backgroundColor: "#f8f9fa" }}>
+                <Typography variant="caption" color="text.secondary">
+                  {t("editor.showingRows", { count: 100 })}
+                </Typography>
               </Box>
             )}
           </TableContainer>
         );
       }
-      return <Alert severity="warning">{t("editor.arrayObjectsTable")}</Alert>;
+      const errorMsg =
+        language === "json"
+          ? t("editor.arrayObjectsTable")
+          : language === "csv"
+          ? t("editor.validCsvTable")
+          : t("editor.validXmlTable");
+      return <Alert severity="warning">{errorMsg}</Alert>;
     }
 
     // Default Text View
