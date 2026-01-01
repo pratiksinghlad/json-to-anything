@@ -140,9 +140,9 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
                   return (
                     <TableRow key={i} hover>
                       {columns.map((column) => {
-                        const value = flattened[column];
+                        const cellValue = flattened[column];
                         const displayValue =
-                          value === null || value === undefined ? "" : String(value);
+                          cellValue === null || cellValue === undefined ? "" : String(cellValue);
                         return (
                           <TableCell
                             key={column}
