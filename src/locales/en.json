@@ -111,6 +111,7 @@
     "copyFailed": "Failed to copy to clipboard"
   },
   "editor": {
+    "ariaLabel": "{{language}} code editor",
     "title": "JSON Input",
     "textView": "Text",
     "treeView": "Tree",

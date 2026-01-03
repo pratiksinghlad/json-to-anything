@@ -111,6 +111,7 @@
     "copyFailed": "क्लिपबोर्ड पर कॉपी करने में विफल"
   },
   "editor": {
+    "ariaLabel": "{{language}} कोड संपादक",
     "title": "JSON इनपुट",
     "textView": "टेक्स्ट",
     "treeView": "ट्री",

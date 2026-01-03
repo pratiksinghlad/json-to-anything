@@ -111,6 +111,7 @@
     "copyFailed": "Error al copiar al portapapeles"
   },
   "editor": {
+    "ariaLabel": "Editor de código {{language}}",
     "title": "Entrada JSON",
     "textView": "Texto",
     "treeView": "Árbol",

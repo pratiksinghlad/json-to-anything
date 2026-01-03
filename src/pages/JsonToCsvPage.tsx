@@ -51,9 +51,9 @@ const JsonToCsvPage = () => {
       // Map parse errors to i18n keys
       if (parseResult.error === "Input is empty") {
         setError(t("errors.emptyInput"));
+        console.log(error);
       } else {
         setError(t("errors.invalidJson"));
-        console.log(error);
       }
       setCsvData("");
       return;

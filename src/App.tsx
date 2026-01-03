@@ -12,14 +12,16 @@ const ValidateJsonPage = lazy(() => import("./pages/ValidateJsonPage"));
 const ComparePage = lazy(() => import("./pages/ComparePage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 
+import { themeConfig } from "./themeConfig";
+
 // Theme configuration matching the JSON to anything Dark/Light mix
 const theme = createTheme({
   palette: {
-    mode: "light", // Base is light, but header is dark
+    mode: "light",
     primary: {
-      main: "#2563eb",
-      light: "#60a5fa",
-      dark: "#1d4ed8",
+      main: themeConfig.PRIMARY_COLOR,
+      light: themeConfig.PRIMARY_LIGHT,
+      dark: themeConfig.PRIMARY_DARK,
     },
     secondary: {
       main: "#1e293b",
@@ -27,8 +29,8 @@ const theme = createTheme({
       dark: "#0f172a",
     },
     background: {
-      default: "#ffffff",
-      paper: "#ffffff",
+      default: themeConfig.SURFACE_BG,
+      paper: themeConfig.SURFACE_BG,
     },
   },
   typography: {
