@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [
     react(),
     svgr(),
-    checker({
+    process.env.NODE_ENV === "production" ? null : checker({
       typescript: true,
       eslint: {
         lintCommand: 'eslint "./src/**/*.{ts,tsx}" --max-warnings=0',
@@ -30,7 +30,7 @@ export default defineConfig({
       ext: ".gz",
       threshold: 1024,
     }),
-  ],
+  ].filter(Boolean),
   server: {
     port: 3001,
   },
@@ -56,9 +56,6 @@ export default defineConfig({
             }
             if (id.includes("i18next")) {
               return "i18n-vendor";
-            }
-            if (id.includes("prismjs")) {
-              return "prism-vendor";
             }
             return "vendor";
           }

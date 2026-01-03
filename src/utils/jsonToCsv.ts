@@ -1,4 +1,4 @@
-import { flattenObject, getAllKeys } from "./flattenObject";
+import { flattenObject } from "./flattenObject";
 
 export interface CsvOptions {
   separator: "," | ";" | "\t";
@@ -53,15 +53,25 @@ export function jsonToCsv(data: Record<string, unknown>[], options: CsvOptions):
 
   const { separator, includeHeader, trimEmptyColumns, pascalCaseHeaders } = options;
 
-  // Get all unique keys from all objects
-  let columns = getAllKeys(data);
+  // Flatten all data once
+  const flattenedData = data.map(obj => flattenObject(obj));
+
+  // Get all unique keys from flattened data
+  const keysSet = new Set<string>();
+  for (const obj of flattenedData) {
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        keysSet.add(key);
+      }
+    }
+  }
+  let columns = Array.from(keysSet).sort();
 
   // If trimEmptyColumns is true, remove columns that are empty in all rows
   if (trimEmptyColumns) {
     columns = columns.filter((col) => {
-      return data.some((row) => {
-        const flattened = flattenObject(row);
-        const value = flattened[col];
+      return flattenedData.some((row) => {
+        const value = row[col];
         return value !== null && value !== undefined && value !== "";
       });
     });
@@ -81,8 +91,7 @@ export function jsonToCsv(data: Record<string, unknown>[], options: CsvOptions):
   }
 
   // Add data rows
-  for (const obj of data) {
-    const flattened = flattenObject(obj);
+  for (const flattened of flattenedData) {
     const row = columns.map((col) => escapeCsvCell(flattened[col], separator)).join(separator);
     lines.push(row);
   }

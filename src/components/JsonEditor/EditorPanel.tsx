@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Box,
@@ -54,9 +54,9 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
     }
   };
 
-  // Helper to parse data safely based on language
-  const getParsedData = () => {
-    if (!currentCode || currentCode.trim() === "") return null;
+  // Memoize parsed data to avoid re-parsing on every render
+  const parsedData = useMemo(() => {
+    if (viewMode === "text" || !currentCode || currentCode.trim() === "") return null;
 
     try {
       if (language === "json") {
@@ -70,14 +70,11 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
         const result = xmlToJson(currentCode);
         return result.ok ? result.output : null;
       }
-      // Fallback: try to parse as JSON anyway
       return JSON.parse(currentCode);
     } catch {
       return null;
     }
-  };
-
-  const parsedData = viewMode !== "text" ? getParsedData() : null;
+  }, [currentCode, language, viewMode]);
 
   const renderContent = () => {
     if (viewMode === "tree") {
@@ -196,6 +193,8 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
           minHeight: "100%",
         }}
         textareaClassName="editor-textarea"
+        textareaId={`editor-${language}`}
+        aria-label={t("editor.ariaLabel", { language })}
       />
     );
   };
