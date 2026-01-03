@@ -1,0 +1,17 @@
+{
+  "name": "JSON to Anything",
+  "short_name": "JSON2Any",
+  "description": "Convert JSON to CSV, XML, and more instantly. Simple, fast, and secure.",
+  "start_url": "/json-to-anything/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "json.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
