@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CssBaseline, ThemeProvider, createTheme, Box, CircularProgress } from "@mui/material";
+import { globalThemeConfig } from "./themeConfig";
 
 // Lazy load page components for code splitting and better performance
 const JsonToCsvPage = lazy(() => import("./pages/JsonToCsvPage"));
@@ -13,16 +14,14 @@ const ComparePage = lazy(() => import("./pages/ComparePage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const JsonToToonPage = lazy(() => import("./pages/JsonToToonPage"));
 
-import { themeConfig } from "./themeConfig";
-
 // Theme configuration matching the JSON to anything Dark/Light mix
 const theme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: themeConfig.PRIMARY_COLOR,
-      light: themeConfig.PRIMARY_LIGHT,
-      dark: themeConfig.PRIMARY_DARK,
+      main: globalThemeConfig.PRIMARY_COLOR,
+      light: globalThemeConfig.PRIMARY_LIGHT,
+      dark: globalThemeConfig.PRIMARY_DARK,
     },
     secondary: {
       main: "#1e293b",
@@ -30,8 +29,8 @@ const theme = createTheme({
       dark: "#0f172a",
     },
     background: {
-      default: themeConfig.SURFACE_BG,
-      paper: themeConfig.SURFACE_BG,
+      default: globalThemeConfig.SURFACE_BG,
+      paper: globalThemeConfig.SURFACE_BG,
     },
   },
   typography: {
