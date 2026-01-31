@@ -7,6 +7,7 @@
     "beautifyJson": "JSON सुंदर बनाएं",
     "validateJson": "JSON मान्य करें",
     "compare": "तुलना करें",
+    "jsonToToon": "JSON से TOON",
     "about": "के बारे में"
   },
   "language": {
@@ -82,6 +83,17 @@
       "invalidJson": "अवैध JSON डेटा",
       "invalidSchema": "अवैध JSON स्कीमा",
       "errorsFound": "{{count}} त्रुटि(याँ) मिली(ं)"
+    },
+    "jsonToToon": {
+      "title": "JSON से TOON कन्वर्टर",
+      "subtitle": "JSON को TOON फॉर्मेट में बदलें - LLM टोकन उपयोग 30-60% कम करें",
+      "tokenStats": "टोकन सांख्यिकी",
+      "jsonTokens": "JSON टोकन",
+      "toonTokens": "TOON टोकन",
+      "saved": "बचत",
+      "tokens": "टोकन",
+      "processing": "बड़ी फ़ाइल प्रोसेस हो रही है...",
+      "privacyNote": "सारा परिवर्तन आपके ब्राउज़र में स्थानीय रूप से होता है।"
     }
   },
   "options": {
@@ -96,6 +108,7 @@
   "buttons": {
     "downloadCsv": "CSV डाउनलोड करें",
     "downloadJson": "JSON डाउनलोड करें",
+    "downloadToon": "TOON डाउनलोड करें",
     "copyCsv": "CSV कॉपी करें",
     "showRawData": "कच्चा डेटा दिखाएँ"
   },
@@ -106,6 +119,7 @@
   "snackbar": {
     "csvDownloaded": "CSV सफलतापूर्वक डाउनलोड हुआ",
     "jsonDownloaded": "JSON सफलतापूर्वक डाउनलोड हुआ",
+    "toonDownloaded": "TOON सफलतापूर्वक डाउनलोड हुआ",
     "csvCopied": "CSV क्लिपबोर्ड पर कॉपी हुआ",
     "jsonCopied": "JSON क्लिपबोर्ड पर कॉपी हुआ",
     "copyFailed": "क्लिपबोर्ड पर कॉपी करने में विफल"
@@ -124,6 +138,7 @@
     "json": "JSON",
     "csv": "CSV",
     "xml": "XML",
+    "toon": "TOON",
     "tablePreview": "टेबल प्रीव्यू",
     "copyToClipboard": "क्लिपबोर्ड पर कॉपी करें",
     "copied": "कॉपी हो गया!"
