@@ -7,6 +7,7 @@
     "beautifyJson": "Embellecer JSON",
     "validateJson": "Validar JSON",
     "compare": "Comparar",
+    "jsonToToon": "JSON a TOON",
     "about": "Acerca de"
   },
   "language": {
@@ -82,6 +83,17 @@
       "invalidJson": "Datos JSON inválidos",
       "invalidSchema": "Esquema JSON inválido",
       "errorsFound": "{{count}} error(es) encontrado(s)"
+    },
+    "jsonToToon": {
+      "title": "Convertidor de JSON a TOON",
+      "subtitle": "Convertir JSON a formato TOON - Reduce el uso de tokens LLM en 30-60%",
+      "tokenStats": "Estadísticas de Tokens",
+      "jsonTokens": "Tokens JSON",
+      "toonTokens": "Tokens TOON",
+      "saved": "Ahorrado",
+      "tokens": "tokens",
+      "processing": "Procesando archivo grande...",
+      "privacyNote": "Toda la conversión ocurre localmente en tu navegador."
     }
   },
   "options": {
@@ -96,6 +108,7 @@
   "buttons": {
     "downloadCsv": "Descargar CSV",
     "downloadJson": "Descargar JSON",
+    "downloadToon": "Descargar TOON",
     "copyCsv": "Copiar CSV",
     "showRawData": "Mostrar datos"
   },
@@ -106,6 +119,7 @@
   "snackbar": {
     "csvDownloaded": "CSV descargado correctamente",
     "jsonDownloaded": "JSON descargado correctamente",
+    "toonDownloaded": "TOON descargado correctamente",
     "csvCopied": "CSV copiado al portapapeles",
     "jsonCopied": "JSON copiado al portapapeles",
     "copyFailed": "Error al copiar al portapapeles"
@@ -124,6 +138,7 @@
     "json": "JSON",
     "csv": "CSV",
     "xml": "XML",
+    "toon": "TOON",
     "tablePreview": "Vista previa de la tabla",
     "copyToClipboard": "Copiar al portapapeles",
     "copied": "¡Copiado!"

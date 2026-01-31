@@ -7,6 +7,7 @@
     "beautifyJson": "Beautify JSON",
     "validateJson": "Validate JSON",
     "compare": "Compare",
+    "jsonToToon": "JSON to TOON",
     "about": "About"
   },
   "language": {
@@ -82,6 +83,17 @@
       "invalidJson": "Invalid JSON data",
       "invalidSchema": "Invalid JSON schema",
       "errorsFound": "{{count}} error(s) found"
+    },
+    "jsonToToon": {
+      "title": "JSON to TOON Converter",
+      "subtitle": "Convert JSON to TOON Format - Reduce LLM token usage by 30-60%",
+      "tokenStats": "Token Statistics",
+      "jsonTokens": "JSON Tokens",
+      "toonTokens": "TOON Tokens",
+      "saved": "Saved",
+      "tokens": "tokens",
+      "processing": "Processing large file...",
+      "privacyNote": "All conversion happens locally in your browser."
     }
   },
   "options": {
@@ -96,6 +108,7 @@
   "buttons": {
     "downloadCsv": "Download CSV",
     "downloadJson": "Download JSON",
+    "downloadToon": "Download TOON",
     "copyCsv": "Copy CSV",
     "showRawData": "Show raw data"
   },
@@ -106,6 +119,7 @@
   "snackbar": {
     "csvDownloaded": "CSV downloaded successfully",
     "jsonDownloaded": "JSON downloaded successfully",
+    "toonDownloaded": "TOON downloaded successfully",
     "csvCopied": "CSV copied to clipboard",
     "jsonCopied": "JSON copied to clipboard",
     "copyFailed": "Failed to copy to clipboard"
@@ -128,6 +142,7 @@
     "json": "JSON",
     "csv": "CSV",
     "xml": "XML",
+    "toon": "TOON",
     "tablePreview": "Table Preview",
     "copyToClipboard": "Copy to clipboard",
     "copied": "Copied!"

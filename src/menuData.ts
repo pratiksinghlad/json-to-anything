@@ -42,6 +42,11 @@ export const menuItems: MenuItem[] = [
     path: "/compare",
   },
   {
+    key: "json-to-toon",
+    labelKey: "menu.jsonToToon",
+    path: "/json-to-toon",
+  },
+  {
     key: "about",
     labelKey: "menu.about",
     path: "/about",

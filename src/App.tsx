@@ -11,6 +11,7 @@ const BeautifyJsonPage = lazy(() => import("./pages/BeautifyJsonPage"));
 const ValidateJsonPage = lazy(() => import("./pages/ValidateJsonPage"));
 const ComparePage = lazy(() => import("./pages/ComparePage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
+const JsonToToonPage = lazy(() => import("./pages/JsonToToonPage"));
 
 import { themeConfig } from "./themeConfig";
 
@@ -90,6 +91,7 @@ function App() {
               <Route path="/beautify" element={<BeautifyJsonPage />} />
               <Route path="/validate" element={<ValidateJsonPage />} />
               <Route path="/compare" element={<ComparePage />} />
+              <Route path="/json-to-toon" element={<JsonToToonPage />} />
               <Route path="/about" element={<AboutPage />} />
             </Routes>
           </Suspense>
