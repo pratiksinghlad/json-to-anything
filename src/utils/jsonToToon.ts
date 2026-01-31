@@ -53,8 +53,9 @@ function formatValue(value: unknown): string {
   if (typeof value === "number") return value.toString();
   if (typeof value === "string") {
     if (needsQuoting(value)) {
-      // Escape quotes and wrap in quotes
-      return `"${value.replace(/"/g, '\\"')}"`;
+      // Escape backslashes and quotes, then wrap in quotes
+      const escaped = value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+      return `"${escaped}"`;
     }
     return value;
   }
