@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CssBaseline, ThemeProvider, createTheme, Box, CircularProgress } from "@mui/material";
+import { themeConfig } from "./themeConfig";
 
 // Lazy load page components for code splitting and better performance
 const JsonToCsvPage = lazy(() => import("./pages/JsonToCsvPage"));
@@ -12,8 +13,6 @@ const ValidateJsonPage = lazy(() => import("./pages/ValidateJsonPage"));
 const ComparePage = lazy(() => import("./pages/ComparePage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const JsonToToonPage = lazy(() => import("./pages/JsonToToonPage"));
-
-import { themeConfig } from "./themeConfig";
 
 import { themeConfig } from "./themeConfig";
 
