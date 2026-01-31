@@ -4,7 +4,7 @@
  * Update PRIMARY_COLOR to change the menu color throughout the application.
  */
 
-export const themeConfig = {
+export const globalThemeConfig = {
   // Primary color - Change this to update menu colors
   PRIMARY_COLOR: "#2563eb",
   PRIMARY_DARK: "#1d4ed8",
@@ -39,4 +39,4 @@ export const themeConfig = {
   },
 } as const;
 
-export type ThemeConfig = typeof themeConfig;
+export type ThemeConfig = typeof globalThemeConfig;
