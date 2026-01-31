@@ -31,3 +31,6 @@ jobs:
         with:
           name: dist-files
           path: build/
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: npm run deploy
