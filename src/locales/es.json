@@ -82,7 +82,9 @@
       "invalid": "Inválido",
       "invalidJson": "Datos JSON inválidos",
       "invalidSchema": "Esquema JSON inválido",
-      "errorsFound": "{{count}} error(es) encontrado(s)"
+      "errorsFound": "{{count}} error(es) encontrado(s)",
+      "line": "Línea",
+      "path": "Ruta"
     },
     "jsonToToon": {
       "title": "Convertidor de JSON a TOON",

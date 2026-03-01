@@ -39,8 +39,11 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ["react", "react-dom", "@mui/material", "@emotion/react", "@emotion/styled"],
+    // Exclude WASM module from pre-bundling — it is lazy-loaded at runtime
+    exclude: ["json_engine"],
   },
-  assetsInclude: ["**/*.jpg", "**/*.png", "**/*.svg", "**/*.gif", "**/*.webp"],
+  // Include WASM + standard image assets
+  assetsInclude: ["**/*.jpg", "**/*.png", "**/*.svg", "**/*.gif", "**/*.webp", "**/*.wasm"],
   base: "/json-to-anything/",
   build: {
     outDir: "build",

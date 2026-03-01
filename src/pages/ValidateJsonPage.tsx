@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, Alert, Typography, Chip, List, ListItem, ListItemText } from "@mui/material";
+import { Box, Typography, Chip, List, ListItem, ListItemText } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
@@ -44,31 +44,46 @@ const ValidateJsonPage = () => {
   const [schemaInput, setSchemaInput] = useState(DEFAULT_SCHEMA);
   const [validationResult, setValidationResult] = useState<{
     valid: boolean;
-    errors?: Array<{ path: string; message: string }>;
+    errors?: Array<{ path: string; message: string; line?: number }>;
   } | null>(null);
-  const [parseError, setParseError] = useState<string | undefined>();
 
   useEffect(() => {
     // Parse JSON input
     const jsonParseResult = parseJson(jsonInput);
     if (!jsonParseResult.success) {
-      setParseError(t("pages.validate.invalidJson"));
-      setValidationResult(null);
+      setValidationResult({
+        valid: false,
+        errors: [
+          {
+            path: "",
+            message: `${t("pages.validate.invalidJson")}: ${jsonParseResult.error}`,
+            line: jsonParseResult.line,
+          },
+        ],
+      });
       return;
     }
 
     // Parse schema
     const schemaParseResult = parseJson(schemaInput);
     if (!schemaParseResult.success) {
-      setParseError(t("pages.validate.invalidSchema"));
-      setValidationResult(null);
+      setValidationResult({
+        valid: false,
+        errors: [
+          {
+            path: "",
+            message: `${t("pages.validate.invalidSchema")}: ${schemaParseResult.error}`,
+            line: schemaParseResult.line,
+          },
+        ],
+      });
       return;
     }
 
-    setParseError(undefined);
-
     // Validate JSON against schema
-    const result = validateJson(jsonParseResult.data, schemaParseResult.data);
+    const result = validateJson(jsonParseResult.data, schemaParseResult.data, {
+      jsonString: jsonInput,
+    });
     setValidationResult(result);
   }, [jsonInput, schemaInput, t]);
 
@@ -97,13 +112,7 @@ const ValidateJsonPage = () => {
             {t("pages.validate.results")}
           </Typography>
 
-          {parseError && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {parseError}
-            </Alert>
-          )}
-
-          {validationResult && !parseError && (
+          {validationResult && (
             <>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
                 {validationResult.valid ? (
@@ -125,17 +134,47 @@ const ValidateJsonPage = () => {
 
               {!validationResult.valid && validationResult.errors && (
                 <Box sx={{ mt: 2 }}>
-                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                  <Typography variant="subtitle2" sx={{ mb: 1, color: "error.main" }}>
                     {t("pages.validate.errorsFound", { count: validationResult.errors.length })}
                   </Typography>
-                  <List dense sx={{ bgcolor: "background.paper", borderRadius: 1 }}>
+                  <List
+                    dense
+                    sx={{
+                      bgcolor: "rgba(211, 47, 47, 0.05)",
+                      borderRadius: 1,
+                      border: "1px solid rgba(211, 47, 47, 0.2)",
+                    }}
+                  >
                     {validationResult.errors.map((err, index) => (
-                      <ListItem key={index} sx={{ borderBottom: "1px solid #eee" }}>
+                      <ListItem
+                        key={index}
+                        sx={{
+                          borderBottom:
+                            index < (validationResult.errors?.length || 0) - 1
+                              ? "1px solid rgba(211, 47, 47, 0.1)"
+                              : "none",
+                        }}
+                      >
                         <ListItemText
                           primary={
-                            <Typography variant="body2" component="span">
-                              <strong>{err.path || "/"}</strong>: {err.message}
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "error.main", fontWeight: 500 }}
+                            >
+                              {err.line && (
+                                <Box component="span" sx={{ mr: 1, fontWeight: "bold" }}>
+                                  [{t("pages.validate.line")} {err.line}]
+                                </Box>
+                              )}
+                              {err.message}
                             </Typography>
+                          }
+                          secondary={
+                            err.path ? (
+                              <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                                {t("pages.validate.path")}: <strong>{err.path}</strong>
+                              </Typography>
+                            ) : null
                           }
                         />
                       </ListItem>

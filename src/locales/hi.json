@@ -82,7 +82,9 @@
       "invalid": "अवैध",
       "invalidJson": "अवैध JSON डेटा",
       "invalidSchema": "अवैध JSON स्कीमा",
-      "errorsFound": "{{count}} त्रुटि(याँ) मिली(ं)"
+      "errorsFound": "{{count}} त्रुटि(याँ) मिली(ं)",
+      "line": "पंक्ति",
+      "path": "पथ"
     },
     "jsonToToon": {
       "title": "JSON से TOON कन्वर्टर",
