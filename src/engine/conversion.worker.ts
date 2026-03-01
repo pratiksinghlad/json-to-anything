@@ -88,7 +88,7 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
 
     post({ type: "progress", id, percent: 50 });
 
-    const result = strategy.convert(parsedData, options);
+    const result = strategy.convert(parsedData, options as any);
 
     post({ type: "progress", id, percent: 100 });
 
