@@ -14,7 +14,10 @@ vi.mock("react-i18next", async () => {
         const translations: Record<string, string> = {
           "menu.jsonToCsv": "JSON to CSV",
           "menu.jsonToXml": "JSON to XML",
+          "menu.csvToJson": "CSV to JSON",
+          "menu.xmlToJson": "XML to JSON",
           "menu.beautifyJson": "Beautify JSON",
+          "menu.validateJson": "Validate JSON",
           "menu.compare": "Compare",
           "menu.about": "About",
           "aria.openMenu": "Open navigation menu",
@@ -88,7 +91,10 @@ describe("MobileMenu", () => {
     const nav = screen.getByRole("navigation");
     expect(nav).toHaveTextContent("JSON to CSV");
     expect(nav).toHaveTextContent("JSON to XML");
+    expect(nav).toHaveTextContent("CSV to JSON");
+    expect(nav).toHaveTextContent("XML to JSON");
     expect(nav).toHaveTextContent("Beautify JSON");
+    expect(nav).toHaveTextContent("Validate JSON");
     expect(nav).toHaveTextContent("Compare");
     expect(nav).toHaveTextContent("About");
   });
@@ -118,10 +124,10 @@ describe("MobileMenu", () => {
     const hamburger = screen.getByLabelText("Open navigation menu");
     fireEvent.click(hamburger);
 
-    const validateButton = screen.getAllByText("Validate JSON").find((el) => 
+    const jsonToCsvButton = screen.getAllByText("JSON to CSV").find((el) => 
       el.tagName === "SPAN" && el.closest("button")
     );
-    expect(validateButton?.closest("button")).toHaveAttribute("aria-current", "page");
+    expect(jsonToCsvButton?.closest("button")).toHaveAttribute("aria-current", "page");
   });
 
   it("has correct aria attributes for accessibility", () => {

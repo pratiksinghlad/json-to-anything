@@ -1,0 +1,65 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.languageMenu {
+  position: relative;
+
+  &__button {
+    @include flex-center;
+    gap: $spacing-sm;
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: $radius-md;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    outline: none;
+    text-transform: none;
+    min-height: 36px;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    &[aria-expanded="true"] {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-color: #ffffff;
+    }
+  }
+
+  &__flag {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  &__label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  &__icon {
+    font-size: 18px;
+    transition: transform 0.2s;
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.languageMenu__button--mobile {
+  padding: $spacing-sm;
+  border: none;
+
+  .languageMenu__label {
+    display: none;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}

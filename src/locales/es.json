@@ -2,8 +2,12 @@
   "menu": {
     "jsonToCsv": "JSON a CSV",
     "jsonToXml": "JSON a XML",
+    "csvToJson": "CSV a JSON",
+    "xmlToJson": "XML a JSON",
     "beautifyJson": "Embellecer JSON",
+    "validateJson": "Validar JSON",
     "compare": "Comparar",
+    "jsonToToon": "JSON a TOON",
     "about": "Acerca de"
   },
   "language": {
@@ -32,7 +36,11 @@
     },
     "beautify": {
       "title": "Embellecer JSON",
-      "comingSoon": "La función de embellecimiento de JSON llegará pronto..."
+      "comingSoon": "La función de embellecimiento de JSON llegará pronto...",
+      "indent": "Sangría",
+      "spaces": "espacios",
+      "tabOption": "Tabulación",
+      "copyFormatted": "Copiar Formateado"
     },
     "compare": {
       "title": "Comparar JSON",
@@ -43,6 +51,51 @@
       "p1": "Una aplicación web simple, robusta y fácil de usar para convertir datos JSON a varios formatos directamente en tu navegador.",
       "p2": "Todo el procesamiento ocurre directamente en tu navegador; nada se sube ni se almacena en un servidor. La aplicación es totalmente privada y está alojada en GitHub Pages, sin llamadas a API.",
       "by": "Hecho con ❤️ por"
+    },
+    "jsonToXml": {
+      "title": "Convertidor de JSON a XML",
+      "rootName": "Nombre Raíz",
+      "attributePrefix": "Prefijo de Atributo",
+      "includeDeclaration": "Incluir Declaración XML",
+      "prettyPrint": "Formato Legible"
+    },
+    "csvToJson": {
+      "title": "Convertidor de CSV a JSON",
+      "delimiter": "Delimitador",
+      "hasHeader": "Tiene Fila de Encabezado",
+      "outputType": "Tipo de Salida",
+      "arrayOutput": "Array JSON",
+      "linesOutput": "Líneas JSON"
+    },
+    "xmlToJson": {
+      "title": "Convertidor de XML a JSON",
+      "parseAttributes": "Parsear Atributos",
+      "explicitArray": "Array Explícito",
+      "coerceTypes": "Convertir Tipos"
+    },
+    "validate": {
+      "title": "Validar JSON",
+      "jsonData": "Datos JSON",
+      "jsonSchema": "Esquema JSON",
+      "results": "Resultados de Validación",
+      "valid": "Válido",
+      "invalid": "Inválido",
+      "invalidJson": "Datos JSON inválidos",
+      "invalidSchema": "Esquema JSON inválido",
+      "errorsFound": "{{count}} error(es) encontrado(s)",
+      "line": "Línea",
+      "path": "Ruta"
+    },
+    "jsonToToon": {
+      "title": "Convertidor de JSON a TOON",
+      "subtitle": "Convertir JSON a formato TOON - Reduce el uso de tokens LLM en 30-60%",
+      "tokenStats": "Estadísticas de Tokens",
+      "jsonTokens": "Tokens JSON",
+      "toonTokens": "Tokens TOON",
+      "saved": "Ahorrado",
+      "tokens": "tokens",
+      "processing": "Procesando archivo grande...",
+      "privacyNote": "Toda la conversión ocurre localmente en tu navegador."
     }
   },
   "options": {
@@ -57,6 +110,7 @@
   "buttons": {
     "downloadCsv": "Descargar CSV",
     "downloadJson": "Descargar JSON",
+    "downloadToon": "Descargar TOON",
     "copyCsv": "Copiar CSV",
     "showRawData": "Mostrar datos"
   },
@@ -67,11 +121,29 @@
   "snackbar": {
     "csvDownloaded": "CSV descargado correctamente",
     "jsonDownloaded": "JSON descargado correctamente",
+    "toonDownloaded": "TOON descargado correctamente",
     "csvCopied": "CSV copiado al portapapeles",
+    "jsonCopied": "JSON copiado al portapapeles",
     "copyFailed": "Error al copiar al portapapeles"
   },
   "editor": {
-    "title": "Entrada JSON"
+    "ariaLabel": "Editor de código {{language}}",
+    "title": "Entrada JSON",
+    "textView": "Texto",
+    "treeView": "Árbol",
+    "tableView": "Tabla",
+    "invalidJsonTree": "Contenido JSON no válido para la vista de árbol",
+    "arrayObjectsTable": "La vista de tabla requiere una matriz JSON de objetos.",
+    "showingRows": "Mostrando las primeras {{count}} filas"
+  },
+  "common": {
+    "json": "JSON",
+    "csv": "CSV",
+    "xml": "XML",
+    "toon": "TOON",
+    "tablePreview": "Vista previa de la tabla",
+    "copyToClipboard": "Copiar al portapapeles",
+    "copied": "¡Copiado!"
   },
   "errors": {
     "emptyInput": "La entrada está vacía",

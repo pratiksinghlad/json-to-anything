@@ -1,24 +1,36 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { CssBaseline, ThemeProvider, createTheme, Box, CircularProgress } from "@mui/material";
+import { globalThemeConfig } from "./themeConfig";
 
 // Lazy load page components for code splitting and better performance
 const JsonToCsvPage = lazy(() => import("./pages/JsonToCsvPage"));
 const JsonToXmlPage = lazy(() => import("./pages/JsonToXmlPage"));
+const CsvToJsonPage = lazy(() => import("./pages/CsvToJsonPage"));
+const XmlToJsonPage = lazy(() => import("./pages/XmlToJsonPage"));
 const BeautifyJsonPage = lazy(() => import("./pages/BeautifyJsonPage"));
+const ValidateJsonPage = lazy(() => import("./pages/ValidateJsonPage"));
 const ComparePage = lazy(() => import("./pages/ComparePage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
+const JsonToToonPage = lazy(() => import("./pages/JsonToToonPage"));
 
-// Theme configuration matching the JSON Editor Dark/Light mix
+// Theme configuration matching the JSON to anything Dark/Light mix
 const theme = createTheme({
   palette: {
-    mode: "light", // Base is light, but header is dark
+    mode: "light",
     primary: {
-      main: "#1976d2",
+      main: globalThemeConfig.PRIMARY_COLOR,
+      light: globalThemeConfig.PRIMARY_LIGHT,
+      dark: globalThemeConfig.PRIMARY_DARK,
+    },
+    secondary: {
+      main: "#1e293b",
+      light: "#334155",
+      dark: "#0f172a",
     },
     background: {
-      default: "#ffffff",
-      paper: "#ffffff",
+      default: globalThemeConfig.SURFACE_BG,
+      paper: globalThemeConfig.SURFACE_BG,
     },
   },
   typography: {
@@ -68,20 +80,17 @@ function App() {
             backgroundColor: "#ffffff",
           }}
         >
-          {/* Note: NavBar is currently hidden in new design inside JsonToCsvPage, 
-              but other pages might still need it. 
-              The new JsonEditorLayout has its own Header. 
-              If we want the new design everywhere, we might need to remove NavBar or make it conditional.
-              For now, let's keep NavBar for non-editor pages, but JsonToCsvPage uses its own layout so it might double up.
-              Actually, JsonEditorLayout includes a Header, so we should probably NOT render NavBar on pages that use JsonEditorLayout.
-              However, for simplicity and to follow "make this json to csv page working", I will let Routes handle it.
-           */}
+          {/* Main Content Area */}
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<JsonToCsvPage />} />
               <Route path="/json-to-xml" element={<JsonToXmlPage />} />
+              <Route path="/csv-to-json" element={<CsvToJsonPage />} />
+              <Route path="/xml-to-json" element={<XmlToJsonPage />} />
               <Route path="/beautify" element={<BeautifyJsonPage />} />
+              <Route path="/validate" element={<ValidateJsonPage />} />
               <Route path="/compare" element={<ComparePage />} />
+              <Route path="/json-to-toon" element={<JsonToToonPage />} />
               <Route path="/about" element={<AboutPage />} />
             </Routes>
           </Suspense>

@@ -2,8 +2,12 @@
   "menu": {
     "jsonToCsv": "JSON to CSV",
     "jsonToXml": "JSON to XML",
+    "csvToJson": "CSV to JSON",
+    "xmlToJson": "XML to JSON",
     "beautifyJson": "Beautify JSON",
+    "validateJson": "Validate JSON",
     "compare": "Compare",
+    "jsonToToon": "JSON to TOON",
     "about": "About"
   },
   "language": {
@@ -18,7 +22,7 @@
     "mainNavigation": "Main navigation",
     "languageSelector": "Language selector",
     "currentPage": "Current page",
-    "jsonEditor": "JSON editor",
+    "jsonEditor": "JSON to anything",
     "downloadCsv": "Download CSV file",
     "downloadJson": "Download JSON file",
     "copyCsv": "Copy CSV to clipboard",
@@ -32,7 +36,11 @@
     },
     "beautify": {
       "title": "Beautify JSON",
-      "comingSoon": "JSON beautification feature coming soon..."
+      "comingSoon": "JSON beautification feature coming soon...",
+      "indent": "Indent",
+      "spaces": "spaces",
+      "tabOption": "Tab",
+      "copyFormatted": "Copy Formatted"
     },
     "compare": {
       "title": "Compare JSON",
@@ -43,6 +51,51 @@
       "p1": "A simple, robust, and user-friendly web application for converting JSON data to various formats entirely in your browser.",
       "p2": "All processing occurs directly in your browser—nothing is uploaded or stored on a server. The app is fully private and hosted on GitHub Pages, with no API calls made.",
       "by": "Made with ❤️ by"
+    },
+    "jsonToXml": {
+      "title": "JSON to XML Converter",
+      "rootName": "Root Name",
+      "attributePrefix": "Attribute Prefix",
+      "includeDeclaration": "Include XML Declaration",
+      "prettyPrint": "Pretty Print"
+    },
+    "csvToJson": {
+      "title": "CSV to JSON Converter",
+      "delimiter": "Delimiter",
+      "hasHeader": "Has Header Row",
+      "outputType": "Output Type",
+      "arrayOutput": "JSON Array",
+      "linesOutput": "JSON Lines"
+    },
+    "xmlToJson": {
+      "title": "XML to JSON Converter",
+      "parseAttributes": "Parse Attributes",
+      "explicitArray": "Explicit Array",
+      "coerceTypes": "Coerce Types"
+    },
+    "validate": {
+      "title": "Validate JSON",
+      "jsonData": "JSON Data",
+      "jsonSchema": "JSON Schema",
+      "results": "Validation Results",
+      "valid": "Valid",
+      "invalid": "Invalid",
+      "invalidJson": "Invalid JSON data",
+      "invalidSchema": "Invalid JSON schema",
+      "errorsFound": "{{count}} error(s) found",
+      "line": "Line",
+      "path": "Path"
+    },
+    "jsonToToon": {
+      "title": "JSON to TOON Converter",
+      "subtitle": "Convert JSON to TOON Format - Reduce LLM token usage by 30-60%",
+      "tokenStats": "Token Statistics",
+      "jsonTokens": "JSON Tokens",
+      "toonTokens": "TOON Tokens",
+      "saved": "Saved",
+      "tokens": "tokens",
+      "processing": "Processing large file...",
+      "privacyNote": "All conversion happens locally in your browser."
     }
   },
   "options": {
@@ -57,6 +110,7 @@
   "buttons": {
     "downloadCsv": "Download CSV",
     "downloadJson": "Download JSON",
+    "downloadToon": "Download TOON",
     "copyCsv": "Copy CSV",
     "showRawData": "Show raw data"
   },
@@ -67,11 +121,33 @@
   "snackbar": {
     "csvDownloaded": "CSV downloaded successfully",
     "jsonDownloaded": "JSON downloaded successfully",
+    "toonDownloaded": "TOON downloaded successfully",
     "csvCopied": "CSV copied to clipboard",
+    "jsonCopied": "JSON copied to clipboard",
     "copyFailed": "Failed to copy to clipboard"
   },
   "editor": {
-    "title": "JSON Input"
+    "ariaLabel": "{{language}} code editor",
+    "title": "JSON Input",
+    "textView": "Text",
+    "treeView": "Tree",
+    "tableView": "Table",
+    "invalidJsonTree": "Invalid JSON content for Tree View",
+    "invalidCsvTree": "Invalid CSV content for Tree View",
+    "invalidXmlTree": "Invalid XML content for Tree View",
+    "arrayObjectsTable": "Table View requires a JSON Array of Objects.",
+    "validCsvTable": "Table View requires a valid CSV with headers",
+    "validXmlTable": "Table View requires an XML with repeating structures",
+    "showingRows": "Showing first {{count}} rows"
+  },
+  "common": {
+    "json": "JSON",
+    "csv": "CSV",
+    "xml": "XML",
+    "toon": "TOON",
+    "tablePreview": "Table Preview",
+    "copyToClipboard": "Copy to clipboard",
+    "copied": "Copied!"
   },
   "errors": {
     "emptyInput": "Input is empty",

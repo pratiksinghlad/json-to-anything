@@ -1,8 +1,41 @@
-import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Button,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { menuItems } from "../../menuData";
+import LanguageMenu from "../LanguageMenu";
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    setDrawerOpen(false);
+  };
+
+  const toggleDrawer = (open: boolean) => () => {
+    setDrawerOpen(open);
+  };
 
   return (
     <AppBar
@@ -21,42 +54,95 @@ const Header = () => {
           sx={{ display: "flex", alignItems: "center", mr: 2, cursor: "pointer" }}
           onClick={() => navigate("/")}
         >
-          <Box
-            component="img"
-            src="/json-icon.svg"
-            alt=""
-            sx={{ width: 24, height: 24, mr: 1, display: "none" }}
-          />
-          <Typography variant="h6" component="div" sx={{ fontWeight: "bold", fontSize: "1.1rem" }}>
-            JSON Editor
-          </Typography>
-          <Typography
-            variant="body2"
-            component="div"
-            sx={{ fontWeight: "light", ml: 0.5, opacity: 0.8 }}
-          >
-            Online
+          <Typography variant="h6" component="div" sx={{ fontWeight: "bold", fontSize: "1.0rem" }}>
+            JSON to anything
           </Typography>
         </Box>
 
-        {/* Navigation Items */}
-        <Box sx={{ display: "flex", gap: 1 }}>
-          <Button color="inherit" onClick={() => navigate("/")} sx={{ textTransform: "none" }}>
-            JSON to CSV
-          </Button>
-          <Button
-            color="inherit"
-            onClick={() => navigate("/json-to-xml")}
-            sx={{ textTransform: "none" }}
-          >
-            JSON to XML
-          </Button>
-          <Button color="inherit" onClick={() => navigate("/about")} sx={{ textTransform: "none" }}>
-            About
-          </Button>
-        </Box>
+        {/* Desktop Navigation */}
+        {!isMobile && (
+          <Box sx={{ display: "flex", gap: 0.5 }}>
+            {menuItems.map((item) => (
+              <Button
+                key={item.key}
+                color="inherit"
+                onClick={() => handleNavigation(item.path)}
+                sx={{
+                  textTransform: "none",
+                  fontSize: "0.85rem",
+                  opacity: location.pathname === item.path ? 1 : 0.7,
+                  borderBottom: location.pathname === item.path ? "2px solid #fff" : "none",
+                  borderRadius: 0,
+                  px: 1,
+                  minWidth: "auto",
+                  "&:hover": {
+                    opacity: 1,
+                  },
+                }}
+              >
+                {t(item.labelKey)}
+              </Button>
+            ))}
+          </Box>
+        )}
 
         <Box sx={{ flexGrow: 1 }} />
+
+        {/* Language Menu and Mobile Toggle */}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, minWidth: "fit-content" }}>
+          <LanguageMenu />
+          {isMobile && (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={toggleDrawer(true)}
+              sx={{ ml: 1 }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+        </Box>
+
+        {/* Mobile Drawer */}
+        <Drawer
+          anchor="right"
+          open={drawerOpen}
+          onClose={toggleDrawer(false)}
+          sx={{
+            "& .MuiPaper-root": {
+              width: 250,
+              bgcolor: "secondary.main",
+              color: "#ffffff",
+            },
+          }}
+        >
+          <Box sx={{ p: 2, display: "flex", justifyContent: "flex-end" }}>
+            <IconButton color="inherit" onClick={toggleDrawer(false)}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <List>
+            {menuItems.map((item) => (
+              <ListItem key={item.key} disablePadding>
+                <ListItemButton
+                  onClick={() => handleNavigation(item.path)}
+                  selected={location.pathname === item.path}
+                  sx={{
+                    "&.Mui-selected": {
+                      bgcolor: "rgba(255,255,255,0.1)",
+                    },
+                    "&:hover": {
+                      bgcolor: "rgba(255,255,255,0.05)",
+                    },
+                  }}
+                >
+                  <ListItemText primary={t(item.labelKey)} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
       </Toolbar>
     </AppBar>
   );

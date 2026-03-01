@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [
     react(),
     svgr(),
-    checker({
+    process.env.NODE_ENV === "production" ? null : checker({
       typescript: true,
       eslint: {
         lintCommand: 'eslint "./src/**/*.{ts,tsx}" --max-warnings=0',
@@ -30,7 +30,7 @@ export default defineConfig({
       ext: ".gz",
       threshold: 1024,
     }),
-  ],
+  ].filter(Boolean),
   server: {
     port: 3001,
   },
@@ -39,8 +39,11 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ["react", "react-dom", "@mui/material", "@emotion/react", "@emotion/styled"],
+    // Exclude WASM module from pre-bundling — it is lazy-loaded at runtime
+    exclude: ["json_engine"],
   },
-  assetsInclude: ["**/*.jpg", "**/*.png", "**/*.svg", "**/*.gif", "**/*.webp"],
+  // Include WASM + standard image assets
+  assetsInclude: ["**/*.jpg", "**/*.png", "**/*.svg", "**/*.gif", "**/*.webp", "**/*.wasm"],
   base: "/json-to-anything/",
   build: {
     outDir: "build",
@@ -56,12 +59,6 @@ export default defineConfig({
             }
             if (id.includes("i18next")) {
               return "i18n-vendor";
-            }
-            if (id.includes("prismjs")) {
-              if (id.includes("prismjs/components")) {
-                return undefined;
-              }
-              return "prism-vendor";
             }
             return "vendor";
           }

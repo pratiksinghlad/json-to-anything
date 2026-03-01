@@ -17,14 +17,34 @@ export const menuItems: MenuItem[] = [
     path: "/json-to-xml",
   },
   {
+    key: "csv-to-json",
+    labelKey: "menu.csvToJson",
+    path: "/csv-to-json",
+  },
+  {
+    key: "xml-to-json",
+    labelKey: "menu.xmlToJson",
+    path: "/xml-to-json",
+  },
+  {
     key: "beautify-json",
     labelKey: "menu.beautifyJson",
     path: "/beautify",
   },
   {
+    key: "validate-json",
+    labelKey: "menu.validateJson",
+    path: "/validate",
+  },
+  {
     key: "compare",
     labelKey: "menu.compare",
     path: "/compare",
+  },
+  {
+    key: "json-to-toon",
+    labelKey: "menu.jsonToToon",
+    path: "/json-to-toon",
   },
   {
     key: "about",

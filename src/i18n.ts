@@ -4,12 +4,10 @@ import enTranslations from "./locales/en.json";
 import esTranslations from "./locales/es.json";
 import hiTranslations from "./locales/hi.json";
 
-// Detect saved language or use browser language
-const savedLanguage = localStorage.getItem("appLanguage");
-const browserLanguage = navigator.language.split("-")[0];
-const defaultLanguage = savedLanguage || (["en", "es", "hi"].includes(browserLanguage) ? browserLanguage : "en");
+import LanguageDetector from "i18next-browser-languagedetector";
 
 i18n
+  .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
@@ -17,17 +15,22 @@ i18n
       es: { translation: esTranslations },
       hi: { translation: hiTranslations },
     },
-    lng: defaultLanguage,
     fallbackLng: "en",
+    supportedLngs: ["en", "es", "hi"],
+    nonExplicitSupportedLngs: true, // Allows 'en-US' to fallback to 'en'
+    detection: {
+      order: ["localStorage", "navigator", "htmlTag"],
+      caches: ["localStorage"],
+      lookupLocalStorage: "appLanguage", // Match existing localStorage key
+    },
     interpolation: {
       escapeValue: false, // React already escapes values
     },
   });
 
-// Save language preference when it changes
+// Update document language on change
 i18n.on("languageChanged", (lng) => {
-  localStorage.setItem("appLanguage", lng);
-  document.documentElement.lang = lng;
+  document.documentElement.lang = lng.split("-")[0];
 });
 
 export default i18n;
