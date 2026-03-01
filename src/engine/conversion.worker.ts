@@ -87,7 +87,8 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
     }
 
     post({ type: "progress", id, percent: 50 });
-
+    
+    //eslint-disable-next-line
     const result = strategy.convert(parsedData, options as any);
 
     post({ type: "progress", id, percent: 100 });
