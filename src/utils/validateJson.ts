@@ -32,8 +32,8 @@ export function findLineNumberInJson(json: string, pointer: string): number | un
   let currentLine = 1;
 
   for (const segment of segments) {
-    // Escape quote if needed (JSON keys are usually quoted)
-    const escapedSegment = segment.replace(/"/g, '\\"');
+    // Escape backslashes and quotes to match JSON string encoding for keys
+    const escapedSegment = segment.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
     
     // Search for the key or array index
     // We look for "key": or [index]
