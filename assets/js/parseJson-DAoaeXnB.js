@@ -1,2 +1,0 @@
-function e(e){try{return e.trim()?{success:!0,data:JSON.parse(e)}:{success:!1,error:`Input is empty`}}catch(t){let n=t instanceof Error?t.message:String(t),r,i;if(t instanceof SyntaxError){let t=n.match(/position\s+(\d+)/i);if(t){let n=parseInt(t[1],10),a=e.substring(0,n).split(`
-`);r=a.length,i=a[a.length-1].length+1}}return{success:!1,error:n,line:r,column:i}}}export{e as t};
