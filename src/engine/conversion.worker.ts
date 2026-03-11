@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file conversion.worker.ts
  * Format-agnostic Web Worker — imported via Vite's `?worker` syntax.

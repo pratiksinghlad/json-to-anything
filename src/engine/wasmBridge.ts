@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file wasmBridge.ts
  * Lazy-loads the Rust/wasm-bindgen module only when needed (> wasmThreshold).

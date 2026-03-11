@@ -5,10 +5,10 @@ import {
   Paper,
   Typography,
   Chip,
-  Alert,
   LinearProgress,
   Button,
   Snackbar,
+  Alert,
 } from "@mui/material";
 import SavingsIcon from "@mui/icons-material/Savings";
 import TokenIcon from "@mui/icons-material/Token";
@@ -20,9 +20,11 @@ import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
 import EditorPanel from "../components/JsonEditor/EditorPanel";
 import CenterPanel from "../components/JsonEditor/CenterPanel";
 import CopyButton from "../components/CopyButton";
+import ValidationResults from "../components/ValidationResults";
 import { parseJson } from "../utils/parseJson";
 import { jsonToToon } from "../utils/jsonToToon";
 import { countTokens, calculateSavings, formatNumber } from "../utils/tokenizer";
+import type { ValidationError } from "../types/validationTypes";
 
 const DEFAULT_JSON = `[
   {
@@ -55,7 +57,7 @@ const JsonToToonPage = () => {
   const { t } = useTranslation();
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
   const [toonOutput, setToonOutput] = useState("");
-  const [error, setError] = useState<string | undefined>();
+  const [errors, setErrors] = useState<ValidationError[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -101,11 +103,12 @@ const JsonToToonPage = () => {
     // Validate JSON first
     const parseResult = parseJson(jsonInput);
     if (!parseResult.success) {
-      if (parseResult.error === "Input is empty") {
-        setError(t("errors.emptyInput"));
-      } else {
-        setError(t("errors.invalidJson"));
-      }
+      setErrors([
+        {
+          message: parseResult.error || t("errors.invalidJson"),
+          line: parseResult.line,
+        },
+      ]);
       setToonOutput("");
       setJsonTokens(0);
       setToonTokens(0);
@@ -125,12 +128,12 @@ const JsonToToonPage = () => {
         const result = jsonToToon(parseResult.data, toonOptions);
 
         if (!result.success) {
-          setError(result.error);
+          setErrors([{ message: result.error }]);
           setToonOutput("");
           setJsonTokens(0);
           setToonTokens(0);
         } else {
-          setError(undefined);
+          setErrors([]);
           setToonOutput(result.output);
 
           // Count tokens for both formats
@@ -141,7 +144,7 @@ const JsonToToonPage = () => {
           setToonTokens(toonTokenResult.tokenCount);
         }
       } catch (e) {
-        setError(e instanceof Error ? e.message : "Conversion error");
+        setErrors([{ message: e instanceof Error ? e.message : "Conversion error" }]);
         setToonOutput("");
       } finally {
         setIsProcessing(false);
@@ -284,15 +287,11 @@ const JsonToToonPage = () => {
               </Box>
             )}
 
-            {/* Error display */}
-            {error && (
-              <Alert severity="error" sx={{ mb: 2 }}>
-                {error}
-              </Alert>
-            )}
+            {/* Validation error display */}
+            <ValidationResults errors={errors} />
 
             {/* Token Stats Card */}
-            {!error && <TokenStatsCard />}
+            {errors.length === 0 && <TokenStatsCard />}
 
             {/* Action buttons */}
             <Box sx={{ mt: 2, display: "flex", gap: 2, alignItems: "center", flexWrap: "wrap" }}>
