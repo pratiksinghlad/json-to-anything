@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, Typography, Chip, List, ListItem, ListItemText } from "@mui/material";
+import { Box, Typography, Chip } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import ErrorIcon from "@mui/icons-material/Error";
 import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
 import EditorPanel from "../components/JsonEditor/EditorPanel";
 import CenterPanel from "../components/JsonEditor/CenterPanel";
+import ValidationResults from "../components/ValidationResults";
 import { validateJson } from "../utils/validateJson";
 import { parseJson } from "../utils/parseJson";
+import type { ValidationError } from "../types/validationTypes";
 
 const DEFAULT_JSON = `{
   "name": "Alice Example",
@@ -42,41 +43,35 @@ const ValidateJsonPage = () => {
   const { t } = useTranslation();
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
   const [schemaInput, setSchemaInput] = useState(DEFAULT_SCHEMA);
-  const [validationResult, setValidationResult] = useState<{
-    valid: boolean;
-    errors?: Array<{ path: string; message: string; line?: number }>;
-  } | null>(null);
+  const [isValid, setIsValid] = useState(false);
+  const [errors, setErrors] = useState<ValidationError[]>([]);
 
   useEffect(() => {
     // Parse JSON input
     const jsonParseResult = parseJson(jsonInput);
     if (!jsonParseResult.success) {
-      setValidationResult({
-        valid: false,
-        errors: [
-          {
-            path: "",
-            message: `${t("pages.validate.invalidJson")}: ${jsonParseResult.error}`,
-            line: jsonParseResult.line,
-          },
-        ],
-      });
+      setIsValid(false);
+      setErrors([
+        {
+          path: "",
+          message: `${t("pages.validate.invalidJson")}: ${jsonParseResult.error}`,
+          line: jsonParseResult.line,
+        },
+      ]);
       return;
     }
 
     // Parse schema
     const schemaParseResult = parseJson(schemaInput);
     if (!schemaParseResult.success) {
-      setValidationResult({
-        valid: false,
-        errors: [
-          {
-            path: "",
-            message: `${t("pages.validate.invalidSchema")}: ${schemaParseResult.error}`,
-            line: schemaParseResult.line,
-          },
-        ],
-      });
+      setIsValid(false);
+      setErrors([
+        {
+          path: "",
+          message: `${t("pages.validate.invalidSchema")}: ${schemaParseResult.error}`,
+          line: schemaParseResult.line,
+        },
+      ]);
       return;
     }
 
@@ -84,7 +79,9 @@ const ValidateJsonPage = () => {
     const result = validateJson(jsonParseResult.data, schemaParseResult.data, {
       jsonString: jsonInput,
     });
-    setValidationResult(result);
+
+    setIsValid(result.valid);
+    setErrors(result.errors ?? []);
   }, [jsonInput, schemaInput, t]);
 
   return (
@@ -112,78 +109,18 @@ const ValidateJsonPage = () => {
             {t("pages.validate.results")}
           </Typography>
 
-          {validationResult && (
-            <>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-                {validationResult.valid ? (
-                  <Chip
-                    icon={<CheckCircleIcon />}
-                    label={t("pages.validate.valid")}
-                    color="success"
-                    variant="filled"
-                  />
-                ) : (
-                  <Chip
-                    icon={<ErrorIcon />}
-                    label={t("pages.validate.invalid")}
-                    color="error"
-                    variant="filled"
-                  />
-                )}
-              </Box>
-
-              {!validationResult.valid && validationResult.errors && (
-                <Box sx={{ mt: 2 }}>
-                  <Typography variant="subtitle2" sx={{ mb: 1, color: "error.main" }}>
-                    {t("pages.validate.errorsFound", { count: validationResult.errors.length })}
-                  </Typography>
-                  <List
-                    dense
-                    sx={{
-                      bgcolor: "rgba(211, 47, 47, 0.05)",
-                      borderRadius: 1,
-                      border: "1px solid rgba(211, 47, 47, 0.2)",
-                    }}
-                  >
-                    {validationResult.errors.map((err, index) => (
-                      <ListItem
-                        key={index}
-                        sx={{
-                          borderBottom:
-                            index < (validationResult.errors?.length || 0) - 1
-                              ? "1px solid rgba(211, 47, 47, 0.1)"
-                              : "none",
-                        }}
-                      >
-                        <ListItemText
-                          primary={
-                            <Typography
-                              variant="body2"
-                              sx={{ color: "error.main", fontWeight: 500 }}
-                            >
-                              {err.line && (
-                                <Box component="span" sx={{ mr: 1, fontWeight: "bold" }}>
-                                  [{t("pages.validate.line")} {err.line}]
-                                </Box>
-                              )}
-                              {err.message}
-                            </Typography>
-                          }
-                          secondary={
-                            err.path ? (
-                              <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                                {t("pages.validate.path")}: <strong>{err.path}</strong>
-                              </Typography>
-                            ) : null
-                          }
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Box>
-              )}
-            </>
+          {isValid && errors.length === 0 && (
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+              <Chip
+                icon={<CheckCircleIcon />}
+                label={t("pages.validate.valid")}
+                color="success"
+                variant="filled"
+              />
+            </Box>
           )}
+
+          <ValidationResults errors={errors} />
         </Box>
       }
     />

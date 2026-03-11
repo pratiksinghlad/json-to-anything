@@ -7,10 +7,12 @@ import DownloadButtons from "../components/DownloadButtons";
 import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
 import EditorPanel from "../components/JsonEditor/EditorPanel";
 import CenterPanel from "../components/JsonEditor/CenterPanel";
+import ValidationResults from "../components/ValidationResults";
 import { parseJson } from "../utils/parseJson";
 import { normalizeData } from "../utils/normalizeData";
 import { jsonToCsv } from "../utils/jsonToCsv";
 import type { CsvOptions } from "../utils/jsonToCsv";
+import type { ValidationError } from "../types/validationTypes";
 
 const DEFAULT_JSON = `[
   {
@@ -37,7 +39,7 @@ const DEFAULT_JSON = `[
 const JsonToCsvPage = () => {
   const { t } = useTranslation();
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
-  const [error, setError] = useState<string | undefined>();
+  const [errors, setErrors] = useState<ValidationError[]>([]);
   const [csvData, setCsvData] = useState("");
   const [separator, setSeparator] = useState<"," | ";" | "\t">(",");
   const [includeHeader, setIncludeHeader] = useState(true);
@@ -48,13 +50,12 @@ const JsonToCsvPage = () => {
     // Parse and validate JSON
     const parseResult = parseJson(jsonInput);
     if (!parseResult.success) {
-      // Map parse errors to i18n keys
-      if (parseResult.error === "Input is empty") {
-        setError(t("errors.emptyInput"));
-        console.log(error);
-      } else {
-        setError(t("errors.invalidJson"));
-      }
+      setErrors([
+        {
+          message: parseResult.error || t("errors.invalidJson"),
+          line: parseResult.line,
+        },
+      ]);
       setCsvData("");
       return;
     }
@@ -69,15 +70,20 @@ const JsonToCsvPage = () => {
         "Data array is empty": t("errors.dataArrayEmpty"),
         "Data array must contain only objects": t("errors.dataArrayOnlyObjects"),
       };
-      setError(
-        map[normalizeResult.error || ""] || normalizeResult.error || t("errors.invalidInputType"),
-      );
+      setErrors([
+        {
+          message:
+            map[normalizeResult.error || ""] ||
+            normalizeResult.error ||
+            t("errors.invalidInputType"),
+        },
+      ]);
       setCsvData("");
       return;
     }
 
-    // Clear error
-    setError(undefined);
+    // Clear errors
+    setErrors([]);
 
     // Convert to CSV
     const options: CsvOptions = {
@@ -91,7 +97,6 @@ const JsonToCsvPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jsonInput, separator, includeHeader, trimEmptyColumns, pascalCaseHeaders, t]);
 
-  // We no longer wrap in Container, as JsonEditorLayout handles the full screen structure
   return (
     <JsonEditorLayout
       leftPanel={
@@ -102,18 +107,14 @@ const JsonToCsvPage = () => {
           language="json"
         />
       }
-      centerPanel={<CenterPanel />} // We can pass transform handlers here later if we want buttons to do it
+      centerPanel={<CenterPanel />}
       rightPanel={
-        <EditorPanel
-          title={t("common.csv")}
-          value={csvData}
-          language="csv" // We might need to ensure 'csv' is loaded in EditorPanel or fall back to plain text
-          readOnly={true}
-        />
+        <EditorPanel title={t("common.csv")} value={csvData} language="csv" readOnly={true} />
       }
       bottomPanel={
         jsonInput ? (
           <Box sx={{ p: 2 }}>
+            <ValidationResults errors={errors} />
             <Box sx={{ mb: 2, display: "flex", gap: 2, alignItems: "center" }}>
               <DownloadButtons csvData={csvData} jsonData={jsonInput} disabled={!csvData} />
             </Box>

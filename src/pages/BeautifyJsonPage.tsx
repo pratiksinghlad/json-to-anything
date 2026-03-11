@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, FormControl, InputLabel, Select, MenuItem, Alert, Snackbar } from "@mui/material";
+import { Box, FormControl, InputLabel, Select, MenuItem, Snackbar } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
 import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
 import EditorPanel from "../components/JsonEditor/EditorPanel";
 import CenterPanel from "../components/JsonEditor/CenterPanel";
+import ValidationResults from "../components/ValidationResults";
+import { parseJson } from "../utils/parseJson";
 import { formatJson } from "../utils/formatJson";
+import type { ValidationError } from "../types/validationTypes";
 
 const DEFAULT_JSON = `{"name":"John","age":30,"city":"New York","hobbies":["reading","gaming"],"address":{"street":"123 Main St","zip":"10001"}}`;
 
@@ -15,23 +18,37 @@ const BeautifyJsonPage = () => {
   const { t } = useTranslation();
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
   const [formattedOutput, setFormattedOutput] = useState("");
-  const [error, setError] = useState<string | undefined>();
+  const [errors, setErrors] = useState<ValidationError[]>([]);
   const [indent, setIndent] = useState<IndentOption>("2");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
   useEffect(() => {
+    // Validate JSON first to get structured error info
+    const parseResult = parseJson(jsonInput);
+    if (!parseResult.success) {
+      setErrors([
+        {
+          message: parseResult.error || t("errors.invalidJson"),
+          line: parseResult.line,
+        },
+      ]);
+      setFormattedOutput("");
+      return;
+    }
+
+    // Format the validated JSON
     const indentValue = indent === "tab" ? "tab" : parseInt(indent, 10);
     const result = formatJson(jsonInput, { indent: indentValue as number | "tab" });
 
     if (result.ok) {
       setFormattedOutput(result.output);
-      setError(undefined);
+      setErrors([]);
     } else {
       setFormattedOutput("");
-      setError(result.error);
+      setErrors([{ message: result.error }]);
     }
-  }, [jsonInput, indent]);
+  }, [jsonInput, indent, t]);
 
   const handleIndentChange = (event: SelectChangeEvent) => {
     setIndent(event.target.value as IndentOption);
@@ -109,11 +126,7 @@ const BeautifyJsonPage = () => {
                 {t("pages.beautify.copyFormatted")}
               </Box>
             </Box>
-            {error && (
-              <Alert severity="error" sx={{ mt: 2 }}>
-                {error}
-              </Alert>
-            )}
+            <ValidationResults errors={errors} />
           </Box>
         }
       />

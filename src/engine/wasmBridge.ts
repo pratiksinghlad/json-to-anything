@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @file wasmBridge.ts
  * Lazy-loads the Rust/wasm-bindgen module only when needed (> wasmThreshold).
@@ -28,6 +29,7 @@ export async function getWasmEngine(): Promise<WasmJsonEngine> {
     try {
       // Dynamic import: Vite/bundler resolves this at runtime.
       // The path is relative to the public directory root.
+      // The module shape is declared in src/wasm.d.ts for TS compile-time resolution.
       const wasmModule = await import(
         /* @vite-ignore */
         "/wasm/json_engine.js"

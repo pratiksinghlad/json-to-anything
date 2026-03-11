@@ -6,7 +6,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Alert,
   FormControlLabel,
   Checkbox,
   TextField,
@@ -15,8 +14,10 @@ import type { SelectChangeEvent } from "@mui/material";
 import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
 import EditorPanel from "../components/JsonEditor/EditorPanel";
 import CenterPanel from "../components/JsonEditor/CenterPanel";
+import ValidationResults from "../components/ValidationResults";
 import { jsonToXml } from "../utils/jsonToXml";
 import { parseJson } from "../utils/parseJson";
+import type { ValidationError } from "../types/validationTypes";
 
 const DEFAULT_JSON = `{
   "person": {
@@ -36,7 +37,7 @@ const JsonToXmlPage = () => {
   const { t } = useTranslation();
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
   const [xmlOutput, setXmlOutput] = useState("");
-  const [error, setError] = useState<string | undefined>();
+  const [errors, setErrors] = useState<ValidationError[]>([]);
   const [rootName, setRootName] = useState("");
   const [declaration, setDeclaration] = useState(true);
   const [attributePrefix, setAttributePrefix] = useState("@_");
@@ -47,7 +48,12 @@ const JsonToXmlPage = () => {
     // First parse the JSON input
     const parseResult = parseJson(jsonInput);
     if (!parseResult.success) {
-      setError(t("errors.invalidJson"));
+      setErrors([
+        {
+          message: parseResult.error || t("errors.invalidJson"),
+          line: parseResult.line,
+        },
+      ]);
       setXmlOutput("");
       return;
     }
@@ -63,10 +69,10 @@ const JsonToXmlPage = () => {
 
     if (result.ok) {
       setXmlOutput(result.output);
-      setError(undefined);
+      setErrors([]);
     } else {
       setXmlOutput("");
-      setError(result.error);
+      setErrors([{ message: result.error }]);
     }
   }, [jsonInput, rootName, declaration, attributePrefix, pretty, indent, t]);
 
@@ -90,6 +96,7 @@ const JsonToXmlPage = () => {
       }
       bottomPanel={
         <Box sx={{ p: 2 }}>
+          <ValidationResults errors={errors} />
           <Box sx={{ display: "flex", gap: 2, alignItems: "center", flexWrap: "wrap" }}>
             <TextField
               size="small"
@@ -132,11 +139,6 @@ const JsonToXmlPage = () => {
               label={t("pages.jsonToXml.prettyPrint")}
             />
           </Box>
-          {error && (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {error}
-            </Alert>
-          )}
         </Box>
       }
     />
