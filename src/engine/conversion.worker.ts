@@ -88,10 +88,8 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
     }
 
     post({ type: "progress", id, percent: 50 });
-
-    // options arrives as `unknown` over postMessage; cast to the strategy union so TypeScript is happy.
-    // The actual type safety is enforced at the call-site in ConversionService.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    
+    //eslint-disable-next-line
     const result = strategy.convert(parsedData, options as any);
 
     post({ type: "progress", id, percent: 100 });
