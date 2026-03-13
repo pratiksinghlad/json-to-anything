@@ -50,17 +50,12 @@ const ValidationResults = ({ errors }: ValidationResultsProps) => {
               key={index}
               sx={{
                 borderBottom:
-                  index < errors.length - 1
-                    ? "1px solid rgba(211, 47, 47, 0.1)"
-                    : "none",
+                  index < errors.length - 1 ? "1px solid rgba(211, 47, 47, 0.1)" : "none",
               }}
             >
               <ListItemText
                 primary={
-                  <Typography
-                    variant="body2"
-                    sx={{ color: "error.main", fontWeight: 500 }}
-                  >
+                  <Typography variant="body2" sx={{ color: "error.main", fontWeight: 500 }}>
                     {err.line && (
                       <Box component="span" sx={{ mr: 1, fontWeight: "bold" }}>
                         [{t("pages.validate.line")} {err.line}]
@@ -81,6 +76,7 @@ const ValidationResults = ({ errors }: ValidationResultsProps) => {
           ))}
         </List>
       </Box>
+      <br></br>
     </Box>
   );
 };
