@@ -4,6 +4,9 @@ import svgr from "vite-plugin-svgr";
 import viteCompression from "vite-plugin-compression";
 import checker from "vite-plugin-checker";
 
+// Set by `tauri dev` / `tauri build` — undefined during normal web builds
+const isTauri = !!process.env.TAURI_ENV_PLATFORM;
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -31,22 +34,46 @@ export default defineConfig({
       threshold: 1024,
     }),
   ].filter(Boolean),
+
+  // Disable terminal clear — useful for Tauri dev, harmless for web
+  clearScreen: false,
+
   server: {
     port: 3001,
+    // Tauri requires a strict port so it knows where to connect
+    strictPort: isTauri,
+    // Allow Tauri's remote dev host (mobile/VM) when set
+    host: process.env.TAURI_DEV_HOST || false,
+    hmr: process.env.TAURI_DEV_HOST
+      ? {
+          protocol: "ws",
+          host: process.env.TAURI_DEV_HOST,
+          port: 5183,
+        }
+      : undefined,
   },
+
   resolve: {
     dedupe: ["react", "react-dom"],
   },
+
   optimizeDeps: {
     include: ["react", "react-dom", "@mui/material", "@emotion/react", "@emotion/styled"],
     // Exclude WASM module from pre-bundling — it is lazy-loaded at runtime
     exclude: ["json_engine"],
   },
+
   // Include WASM + standard image assets
   assetsInclude: ["**/*.jpg", "**/*.png", "**/*.svg", "**/*.gif", "**/*.webp", "**/*.wasm"],
-  base: "/json-to-anything/",
+
+  // Tauri needs relative paths; web build uses the GitHub Pages sub-path
+  base: isTauri ? "./" : "/json-to-anything/",
+
   build: {
     outDir: "build",
+    // WebView2 (Tauri on Windows) is Chromium-based; target chrome105 for Tauri,
+    // keep es2021 for web to maximise compatibility
+    target: isTauri ? "chrome105" : "es2021",
     rollupOptions: {
       output: {
         manualChunks: (id) => {
@@ -72,7 +99,7 @@ export default defineConfig({
     minify: true,
     cssCodeSplit: true,
     sourcemap: false,
-    target: "es2021",
     reportCompressedSize: false,
   },
 });
+
