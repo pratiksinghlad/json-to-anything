@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect, useState } from "react";
+import { useRef, useLayoutEffect } from "react";
 import { Box } from "@mui/material";
 import type { DiffLine } from "../../engine/diffTypes";
 import { EDITOR_FONT_SIZE, EDITOR_LINE_HEIGHT, EDITOR_PADDING, GUTTER_WIDTH } from "../JsonEditor/LineNumberGutter";
@@ -10,57 +10,58 @@ interface DiffViewerProps {
 const DiffViewer: React.FC<DiffViewerProps> = ({ lines }) => {
   const leftScrollRef = useRef<HTMLDivElement>(null);
   const rightScrollRef = useRef<HTMLDivElement>(null);
-  const [isScrollingLeft, setIsScrollingLeft] = useState(false);
-  const [isScrollingRight, setIsScrollingRight] = useState(false);
+  // Using a ref to track scroll source prevents infinite loops without triggering re-renders
+  const scrollLockRef = useRef<{ left: boolean; right: boolean }>({ left: false, right: false });
 
   // Synchronize scrolling between left and right panes
-  const handleScrollLeft = () => {
-    if (isScrollingRight) return;
-    setIsScrollingLeft(true);
-    if (leftScrollRef.current && rightScrollRef.current) {
-      rightScrollRef.current.scrollTop = leftScrollRef.current.scrollTop;
-      rightScrollRef.current.scrollLeft = leftScrollRef.current.scrollLeft;
-    }
-  };
-
-  const handleScrollRight = () => {
-    if (isScrollingLeft) return;
-    setIsScrollingRight(true);
-    if (leftScrollRef.current && rightScrollRef.current) {
-      leftScrollRef.current.scrollTop = rightScrollRef.current.scrollTop;
-      leftScrollRef.current.scrollLeft = rightScrollRef.current.scrollLeft;
-    }
-  };
-
   useLayoutEffect(() => {
     let leftTimer: NodeJS.Timeout;
     let rightTimer: NodeJS.Timeout;
 
     const left = leftScrollRef.current;
     const right = rightScrollRef.current;
+    if (!left || !right) return;
 
     const onLeftScroll = () => {
-      handleScrollLeft();
+      if (scrollLockRef.current.right) return;
+      scrollLockRef.current.left = true;
+
+      if (right) {
+        right.scrollTop = left.scrollTop;
+        right.scrollLeft = left.scrollLeft;
+      }
+
       clearTimeout(leftTimer);
-      leftTimer = setTimeout(() => setIsScrollingLeft(false), 50);
+      leftTimer = setTimeout(() => {
+        scrollLockRef.current.left = false;
+      }, 50);
     };
 
     const onRightScroll = () => {
-      handleScrollRight();
+      if (scrollLockRef.current.left) return;
+      scrollLockRef.current.right = true;
+
+      if (left) {
+        left.scrollTop = right.scrollTop;
+        left.scrollLeft = right.scrollLeft;
+      }
+
       clearTimeout(rightTimer);
-      rightTimer = setTimeout(() => setIsScrollingRight(false), 50);
+      rightTimer = setTimeout(() => {
+        scrollLockRef.current.right = false;
+      }, 50);
     };
 
-    left?.addEventListener("scroll", onLeftScroll, { passive: true });
-    right?.addEventListener("scroll", onRightScroll, { passive: true });
+    left.addEventListener("scroll", onLeftScroll, { passive: true });
+    right.addEventListener("scroll", onRightScroll, { passive: true });
 
     return () => {
-      left?.removeEventListener("scroll", onLeftScroll);
-      right?.removeEventListener("scroll", onRightScroll);
+      left.removeEventListener("scroll", onLeftScroll);
+      right.removeEventListener("scroll", onRightScroll);
       clearTimeout(leftTimer);
       clearTimeout(rightTimer);
     };
-  }, [isScrollingLeft, isScrollingRight]);
+  }, []);
 
   const renderGutterCell = (lineNumber: number | null, isAdded: boolean, isRemoved: boolean) => (
     <Box

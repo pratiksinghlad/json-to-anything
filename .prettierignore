@@ -9,3 +9,5 @@ __snapshots__
 *.html
 package.json
 package-lock.json
+
+src-tauri/target

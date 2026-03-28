@@ -6,7 +6,7 @@ import react from "eslint-plugin-react";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist", "build", "coverage", "node_modules", "**/__snapshots__"] },
+  { ignores: ["dist", "build", "coverage", "node_modules", "**/__snapshots__", "src-tauri/target"] },
   {
     files: ["**/*.{ts,tsx}"],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],

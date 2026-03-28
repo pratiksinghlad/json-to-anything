@@ -94,7 +94,7 @@ const JsonToCsvPage = () => {
     };
     const csv = jsonToCsv(normalizeResult.data || [], options);
     setCsvData(csv);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [jsonInput, separator, includeHeader, trimEmptyColumns, pascalCaseHeaders, t]);
 
   return (
