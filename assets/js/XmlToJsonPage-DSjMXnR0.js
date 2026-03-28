@@ -1,4 +1,4 @@
-import{a as e}from"./rolldown-runtime-CaomFzHi.js";import{H as t,J as n,L as r,W as i,rt as a,tt as o}from"./mui-vendor-Ddt1bepO.js";import{c as s}from"./react-vendor-D1lzJujb.js";import"./Header-DBm1wvbw.js";import{n as c,o as l,r as u,t as d}from"./JsonEditorLayout-C0YASu5v.js";import"./vendor-BDOsHKQ3.js";var f=e(a()),p=e(o()),m=`<?xml version="1.0" encoding="UTF-8"?>
+import{a as e}from"./rolldown-runtime-CaomFzHi.js";import{H as t,J as n,L as r,W as i,rt as a,tt as o}from"./mui-vendor-Ddt1bepO.js";import{l as s}from"./react-vendor-BTgi8mlX.js";import"./Header-MOAJ0uEF.js";import{n as c,o as l,r as u,t as d}from"./JsonEditorLayout-CfXqUhtX.js";import"./vendor-BKuhHPdh.js";var f=e(a()),p=e(o()),m=`<?xml version="1.0" encoding="UTF-8"?>
 <root>
   <person id="1">
     <name>Alice Example</name>

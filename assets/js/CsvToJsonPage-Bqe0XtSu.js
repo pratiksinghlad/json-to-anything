@@ -1,4 +1,4 @@
-import{a as e}from"./rolldown-runtime-CaomFzHi.js";import{H as t,I as n,J as r,L as i,O as a,R as o,W as s,k as c,rt as l,tt as u}from"./mui-vendor-Ddt1bepO.js";import{c as d}from"./react-vendor-D1lzJujb.js";import"./Header-DBm1wvbw.js";import{n as f,r as p,s as m,t as h}from"./JsonEditorLayout-C0YASu5v.js";import"./vendor-BDOsHKQ3.js";var g=e(l()),_=e(u()),v=`name,age,email,city
+import{a as e}from"./rolldown-runtime-CaomFzHi.js";import{H as t,I as n,J as r,L as i,O as a,R as o,W as s,k as c,rt as l,tt as u}from"./mui-vendor-Ddt1bepO.js";import{l as d}from"./react-vendor-BTgi8mlX.js";import"./Header-MOAJ0uEF.js";import{n as f,r as p,s as m,t as h}from"./JsonEditorLayout-CfXqUhtX.js";import"./vendor-BKuhHPdh.js";var g=e(l()),_=e(u()),v=`name,age,email,city
 John Doe,30,john@example.com,New York
 Jane Smith,25,jane@example.com,Los Angeles
 Bob Johnson,35,bob@example.com,Chicago`,y=()=>{let{t:e}=d(),[l,u]=(0,g.useState)(v),[y,b]=(0,g.useState)(``),[x,S]=(0,g.useState)(),[C,w]=(0,g.useState)(`,`),[T,E]=(0,g.useState)(!0),[D,O]=(0,g.useState)(`array`);return(0,g.useEffect)(()=>{let e=m(l,{delimiter:C,hasHeader:T,outputType:D});e.ok?(b(D===`lines`?e.output.join(`
