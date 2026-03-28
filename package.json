@@ -15,7 +15,9 @@
     "lint": "eslint . --max-warnings=0 --fix",
     "tauri": "tauri",
     "tauri:dev": "tauri dev --target x86_64-pc-windows-msvc",
-    "tauri:build": "tauri build --target x86_64-pc-windows-msvc"
+    "tauri:build": "tauri build",
+    "build:windows": "pwsh ./build.ps1 -Architecture x64",
+    "build:windows:arm64": "pwsh ./build.ps1 -Architecture arm64"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
