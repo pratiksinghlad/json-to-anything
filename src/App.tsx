@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, HashRouter, Routes, Route } from "react-router-dom";
 import { CssBaseline, ThemeProvider, createTheme, Box, CircularProgress } from "@mui/material";
 import { globalThemeConfig } from "./themeConfig";
 
@@ -51,6 +51,10 @@ const theme = createTheme({
 // Detect base path from Vite config
 const basename = import.meta.env.BASE_URL || "/";
 
+// Detect if running in Tauri environment
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isTauri = typeof window !== "undefined" && (window as any).__TAURI_INTERNALS__ !== undefined;
+
 // Loading fallback component
 const PageLoader = () => (
   <Box
@@ -68,10 +72,17 @@ const PageLoader = () => (
 );
 
 function App() {
+  // Use HashRouter for Tauri to handle routing correctly with local protocols
+  // Use BrowserRouter for web to have cleaner URLs
+  const Router = isTauri ? HashRouter : BrowserRouter;
+  
+  // For Tauri, we don't want a relative basename like "./" from Vite to mess up HashRouter
+  const routerBasename = isTauri ? "/" : basename;
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router basename={basename}>
+      <Router basename={routerBasename}>
         <Box
           sx={{
             display: "flex",

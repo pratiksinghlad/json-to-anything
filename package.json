@@ -12,7 +12,12 @@
     "predeploy": "npm run build",
     "postbuild": "node scripts/copy-404.js",
     "deploy": "npm run build && node scripts/copy-404.js && gh-pages -d build",
-    "lint": "eslint . --max-warnings=0 --fix"
+    "lint": "eslint . --max-warnings=0 --fix",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev --target x86_64-pc-windows-msvc",
+    "tauri:build": "tauri build",
+    "build:windows": "pwsh ./build.ps1 -Architecture x64",
+    "build:windows:arm64": "pwsh ./build.ps1 -Architecture arm64"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -39,6 +44,9 @@
     "vite-plugin-svgr": "^4.5.0"
   },
   "devDependencies": {
+    "@tauri-apps/api": "^2.10.1",
+    "@tauri-apps/plugin-shell": "^2.3.5",
+    "@tauri-apps/cli": "^2.10.1",
     "@eslint/js": "^9.36.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
