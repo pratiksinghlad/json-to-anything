@@ -43,8 +43,15 @@
       "copyFormatted": "Copy Formatted"
     },
     "compare": {
-      "title": "Compare JSON",
-      "comingSoon": "JSON comparison feature coming soon..."
+      "title": "Compare",
+      "original": "Original",
+      "modified": "Modified",
+      "compareBtn": "Compare",
+      "resetBtn": "Edit",
+      "additions": "additions",
+      "deletions": "deletions",
+      "noChanges": "No differences found.",
+      "comparing": "Comparing..."
     },
     "about": {
       "title": "About JSON to Anything",

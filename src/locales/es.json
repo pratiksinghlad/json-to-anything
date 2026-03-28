@@ -44,7 +44,14 @@
     },
     "compare": {
       "title": "Comparar JSON",
-      "comingSoon": "La función de comparación de JSON llegará pronto..."
+      "original": "Original",
+      "modified": "Modificado",
+      "compareBtn": "Comparar",
+      "resetBtn": "Editar",
+      "additions": "adiciones",
+      "deletions": "eliminaciones",
+      "noChanges": "No se encontraron diferencias.",
+      "comparing": "Comparando..."
     },
     "about": {
       "title": "Acerca de JSON to Anything",

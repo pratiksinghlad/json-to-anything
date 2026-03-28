@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useLayoutEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Box,
@@ -17,6 +17,7 @@ import {
 import Editor from "react-simple-code-editor";
 import { highlight } from "../../utils/highlight";
 import CopyButton from "../CopyButton";
+import LineNumberGutter, { EDITOR_FONT_SIZE, EDITOR_LINE_HEIGHT, EDITOR_PADDING } from "./LineNumberGutter";
 import { csvToJson } from "../../utils/csvToJson";
 import { xmlToJson } from "../../utils/xmlToJson";
 import { normalizeData } from "../../utils/normalizeData";
@@ -41,9 +42,25 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
   const { t } = useTranslation();
   const [internalCode, setInternalCode] = useState(initialValue);
   const [viewMode, setViewMode] = useState<"text" | "tree" | "table">("text");
+
+  // Ref for the wrapper div that contains react-simple-code-editor
+  const editorWrapperRef = useRef<HTMLDivElement>(null);
+  // Ref for the <textarea> inside react-simple-code-editor (actual scroll host)
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  // Ref for outer area (used for Ctrl+A in non-text modes)
   const contentRef = useRef<HTMLDivElement>(null);
 
   const currentCode = value !== undefined ? value : internalCode;
+
+  // Locate the textarea inside react-simple-code-editor after DOM commits.
+  // useLayoutEffect runs synchronously after the DOM is painted, guaranteeing
+  // the textarea exists before the gutter attaches its scroll listener.
+  useLayoutEffect(() => {
+    if (viewMode !== "text") return;
+    const wrapper = editorWrapperRef.current;
+    if (!wrapper) return;
+    textareaRef.current = wrapper.querySelector<HTMLTextAreaElement>("textarea");
+  }, [viewMode]);
 
   const updateCode = (newCode: string) => {
     if (value === undefined) {
@@ -75,6 +92,21 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
       return null;
     }
   }, [currentCode, language, viewMode]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "a") {
+      if (viewMode !== "text") {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        if (contentRef.current) {
+          range.selectNodeContents(contentRef.current);
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+          e.preventDefault();
+        }
+      }
+    }
+  };
 
   const renderContent = () => {
     if (viewMode === "tree") {
@@ -179,39 +211,26 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
       return <Alert severity="warning">{errorMsg}</Alert>;
     }
 
-    // Default Text View
+    // Text view – the gutter is rendered alongside (see JSX below)
     return (
       <Editor
         value={currentCode}
         onValueChange={updateCode}
         highlight={(code) => highlight(code, language)}
         readOnly={readOnly}
-        padding={10}
+        padding={EDITOR_PADDING}
         style={{
           fontFamily: '"Fira Code", "Fira Mono", monospace',
-          fontSize: 14,
+          fontSize: EDITOR_FONT_SIZE,
+          lineHeight: `${EDITOR_LINE_HEIGHT}px`,
           minHeight: "100%",
+          flex: 1,
         }}
         textareaClassName="editor-textarea"
         textareaId={`editor-${language}`}
         aria-label={t("editor.ariaLabel", { language })}
       />
     );
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === "a") {
-      if (viewMode !== "text") {
-        const selection = window.getSelection();
-        const range = document.createRange();
-        if (contentRef.current) {
-          range.selectNodeContents(contentRef.current);
-          selection?.removeAllRanges();
-          selection?.addRange(range);
-          e.preventDefault();
-        }
-      }
-    }
   };
 
   const viewModes = [
@@ -292,25 +311,44 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
       <Box
         ref={contentRef}
         onKeyDown={handleKeyDown}
-        onClick={() => {
-          if (viewMode === "text") {
-            contentRef.current?.querySelector("textarea")?.focus();
-          }
-        }}
         tabIndex={0}
         sx={{
           flexGrow: 1,
-          position: "relative",
-          height: "calc(100% - 75px)",
-          backgroundColor: "#fff",
-          overflow: "auto",
-          "&:focus": {
-            outline: "none",
-            boxShadow: "inset 0 0 0 2px rgba(25, 118, 210, 0.2)",
-          },
+          display: "flex",
+          flexDirection: "row",
+          minHeight: 0,
+          overflow: "hidden",
+          "&:focus": { outline: "none" },
         }}
       >
-        {renderContent()}
+        {/*
+         * In text mode: render gutter + editor wrapper side by side.
+         * The gutter listens to scroll events on the <textarea> inside the wrapper.
+         * In tree/table modes: no gutter, content fills the full width.
+         */}
+        {viewMode === "text" && (
+          <LineNumberGutter code={currentCode} textareaRef={textareaRef} />
+        )}
+
+        {/* Editor / content wrapper */}
+        <Box
+          ref={editorWrapperRef}
+          onClick={() => {
+            if (viewMode === "text") {
+              editorWrapperRef.current?.querySelector<HTMLTextAreaElement>("textarea")?.focus();
+            }
+          }}
+          sx={{
+            flexGrow: 1,
+            overflow: "auto",
+            backgroundColor: "#fff",
+            "&:focus-within": {
+              boxShadow: "inset 0 0 0 2px rgba(25, 118, 210, 0.2)",
+            },
+          }}
+        >
+          {renderContent()}
+        </Box>
       </Box>
     </Box>
   );

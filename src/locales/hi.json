@@ -44,7 +44,14 @@
     },
     "compare": {
       "title": "JSON तुलना",
-      "comingSoon": "JSON तुलना सुविधा जल्द आ रही है..."
+      "original": "मूल",
+      "modified": "संशोधित",
+      "compareBtn": "तुलना करें",
+      "resetBtn": "संपादित करें",
+      "additions": "जोड़े गए",
+      "deletions": "हटाए गए",
+      "noChanges": "कोई अंतर नहीं मिला।",
+      "comparing": "तुलना हो रही है..."
     },
     "about": {
       "title": "JSON to Anything के बारे में",
