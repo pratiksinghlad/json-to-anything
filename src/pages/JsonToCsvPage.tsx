@@ -11,6 +11,7 @@ import ValidationResults from "../components/ValidationResults";
 import { parseJson } from "../utils/parseJson";
 import { normalizeData } from "../utils/normalizeData";
 import { jsonToCsv } from "../utils/jsonToCsv";
+import { isBlankInput } from "../utils/isBlankInput";
 import type { CsvOptions } from "../utils/jsonToCsv";
 import type { ValidationError } from "../types/validationTypes";
 
@@ -47,6 +48,12 @@ const JsonToCsvPage = () => {
   const [pascalCaseHeaders, setPascalCaseHeaders] = useState(false);
 
   useEffect(() => {
+    if (isBlankInput(jsonInput)) {
+      setErrors([]);
+      setCsvData("");
+      return;
+    }
+
     // Parse and validate JSON
     const parseResult = parseJson(jsonInput);
     if (!parseResult.success) {
@@ -112,7 +119,7 @@ const JsonToCsvPage = () => {
         <EditorPanel title={t("common.csv")} value={csvData} language="csv" readOnly={true} />
       }
       bottomPanel={
-        jsonInput ? (
+        !isBlankInput(jsonInput) ? (
           <Box sx={{ p: 2 }}>
             <ValidationResults errors={errors} />
             <Box sx={{ mb: 2, display: "flex", gap: 2, alignItems: "center" }}>

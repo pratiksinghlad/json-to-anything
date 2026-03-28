@@ -24,6 +24,7 @@ import ValidationResults from "../components/ValidationResults";
 import { parseJson } from "../utils/parseJson";
 import { jsonToToon } from "../utils/jsonToToon";
 import { countTokens, calculateSavings, formatNumber } from "../utils/tokenizer";
+import { isBlankInput } from "../utils/isBlankInput";
 import type { ValidationError } from "../types/validationTypes";
 
 const DEFAULT_JSON = `[
@@ -100,6 +101,15 @@ const JsonToToonPage = () => {
 
   // Convert JSON to TOON and calculate tokens
   const processConversion = useCallback(() => {
+    if (isBlankInput(jsonInput)) {
+      setErrors([]);
+      setToonOutput("");
+      setJsonTokens(0);
+      setToonTokens(0);
+      setIsProcessing(false);
+      return;
+    }
+
     // Validate JSON first
     const parseResult = parseJson(jsonInput);
     if (!parseResult.success) {

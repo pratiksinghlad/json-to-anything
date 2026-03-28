@@ -58,7 +58,7 @@ export default defineConfig({
   },
 
   optimizeDeps: {
-    include: ["react", "react-dom", "@mui/material", "@emotion/react", "@emotion/styled"],
+    include: ["react", "react-dom", "@mui/material", "@mui/icons-material", "@emotion/react", "@emotion/styled"],
     // Exclude WASM module from pre-bundling — it is lazy-loaded at runtime
     exclude: ["json_engine"],
   },

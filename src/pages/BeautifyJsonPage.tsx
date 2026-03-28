@@ -8,6 +8,7 @@ import CenterPanel from "../components/JsonEditor/CenterPanel";
 import ValidationResults from "../components/ValidationResults";
 import { parseJson } from "../utils/parseJson";
 import { formatJson } from "../utils/formatJson";
+import { isBlankInput } from "../utils/isBlankInput";
 import type { ValidationError } from "../types/validationTypes";
 
 const DEFAULT_JSON = `{"name":"John","age":30,"city":"New York","hobbies":["reading","gaming"],"address":{"street":"123 Main St","zip":"10001"}}`;
@@ -24,6 +25,12 @@ const BeautifyJsonPage = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
   useEffect(() => {
+    if (isBlankInput(jsonInput)) {
+      setErrors([]);
+      setFormattedOutput("");
+      return;
+    }
+
     // Validate JSON first to get structured error info
     const parseResult = parseJson(jsonInput);
     if (!parseResult.success) {

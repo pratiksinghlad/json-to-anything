@@ -154,7 +154,9 @@
     "toon": "TOON",
     "tablePreview": "Table Preview",
     "copyToClipboard": "Copy to clipboard",
-    "copied": "Copied!"
+    "copied": "Copied!",
+    "clear": "Clear",
+    "cleared": "Cleared!"
   },
   "errors": {
     "emptyInput": "Input is empty",

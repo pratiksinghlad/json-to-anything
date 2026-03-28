@@ -17,6 +17,7 @@ import CenterPanel from "../components/JsonEditor/CenterPanel";
 import ValidationResults from "../components/ValidationResults";
 import { jsonToXml } from "../utils/jsonToXml";
 import { parseJson } from "../utils/parseJson";
+import { isBlankInput } from "../utils/isBlankInput";
 import type { ValidationError } from "../types/validationTypes";
 
 const DEFAULT_JSON = `{
@@ -45,6 +46,12 @@ const JsonToXmlPage = () => {
   const [indent, setIndent] = useState("2");
 
   useEffect(() => {
+    if (isBlankInput(jsonInput)) {
+      setErrors([]);
+      setXmlOutput("");
+      return;
+    }
+
     // First parse the JSON input
     const parseResult = parseJson(jsonInput);
     if (!parseResult.success) {

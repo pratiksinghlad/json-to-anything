@@ -17,6 +17,7 @@ import {
 import Editor from "react-simple-code-editor";
 import { highlight } from "../../utils/highlight";
 import CopyButton from "../CopyButton";
+import ClearButton from "../ClearButton";
 import LineNumberGutter, { EDITOR_FONT_SIZE, EDITOR_LINE_HEIGHT, EDITOR_PADDING } from "./LineNumberGutter";
 import { csvToJson } from "../../utils/csvToJson";
 import { xmlToJson } from "../../utils/xmlToJson";
@@ -31,6 +32,10 @@ export interface EditorPanelProps {
   language?: string; // e.g., "json", "csv", "xml"
   readOnly?: boolean;
 }
+
+// @ts-ignore - Handle possible default export mismatch in ESM/React 19
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const EditorComponent = (Editor as any).default || Editor;
 
 const EditorPanel: React.FC<EditorPanelProps> = ({
   initialValue = "{}",
@@ -213,10 +218,10 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
 
     // Text view – the gutter is rendered alongside (see JSX below)
     return (
-      <Editor
+      <EditorComponent
         value={currentCode}
         onValueChange={updateCode}
-        highlight={(code) => highlight(code, language)}
+        highlight={(code: string) => highlight(code, language)}
         readOnly={readOnly}
         padding={EDITOR_PADDING}
         style={{
@@ -304,6 +309,10 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
           sx={{ width: "1px", height: "20px", backgroundColor: "rgba(255,255,255,0.2)", mx: 0.5 }}
         />
         <Box sx={{ flexGrow: 1 }} />
+        <ClearButton 
+          onClear={() => updateCode("")} 
+          disabled={!currentCode || currentCode.trim() === ""} 
+        />
         <CopyButton value={currentCode} />
       </Box>
 

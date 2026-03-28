@@ -150,7 +150,9 @@
     "toon": "TOON",
     "tablePreview": "टेबल प्रीव्यू",
     "copyToClipboard": "क्लिपबोर्ड पर कॉपी करें",
-    "copied": "कॉपी हो गया!"
+    "copied": "कॉपी हो गया!",
+    "clear": "साफ़ करें",
+    "cleared": "साफ़ हो गया!"
   },
   "errors": {
     "emptyInput": "इनपुट खाली है",

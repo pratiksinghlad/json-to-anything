@@ -8,6 +8,7 @@ import CenterPanel from "../components/JsonEditor/CenterPanel";
 import ValidationResults from "../components/ValidationResults";
 import { validateJson } from "../utils/validateJson";
 import { parseJson } from "../utils/parseJson";
+import { isBlankInput } from "../utils/isBlankInput";
 import type { ValidationError } from "../types/validationTypes";
 
 const DEFAULT_JSON = `{
@@ -47,6 +48,12 @@ const ValidateJsonPage = () => {
   const [errors, setErrors] = useState<ValidationError[]>([]);
 
   useEffect(() => {
+    if (isBlankInput(jsonInput) || isBlankInput(schemaInput)) {
+      setIsValid(false);
+      setErrors([]);
+      return;
+    }
+
     // Parse JSON input
     const jsonParseResult = parseJson(jsonInput);
     if (!jsonParseResult.success) {
