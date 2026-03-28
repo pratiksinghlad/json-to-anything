@@ -44,7 +44,14 @@
     },
     "compare": {
       "title": "Compare",
-      "comingSoon": "Compare feature coming soon..."
+      "original": "Original",
+      "modified": "Modified",
+      "compareBtn": "Compare",
+      "resetBtn": "Edit",
+      "additions": "additions",
+      "deletions": "deletions",
+      "noChanges": "No differences found.",
+      "comparing": "Comparing..."
     },
     "about": {
       "title": "About JSON to Anything",
