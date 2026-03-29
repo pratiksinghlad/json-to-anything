@@ -1,7 +1,7 @@
 {
   "name": "json-to-anything",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "start": "vite",
@@ -20,7 +20,6 @@
     "build:windows:arm64": "pwsh ./build.ps1 -Architecture arm64"
   },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fontsource/roboto": "^5.2.10",
