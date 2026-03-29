@@ -1,0 +1,21 @@
+import{a as e}from"./rolldown-runtime-B589uzA9.js";import{B as t,D as n,E as r,M as i,V as a,at as o,et as s,j as c,q as l,st as u,z as d}from"./mui-vendor-C8SM3Xjj.js";import{l as f}from"./react-vendor-DTrGPlSO.js";import{a as p,n as m,r as h,t as g}from"./JsonEditorLayout-DS_LdOWy.js";import{t as _}from"./ValidationResults-FZZUigPN.js";import{t as v}from"./parseJson-DIS0zLKv.js";import{t as y}from"./isBlankInput-BFuadj8S.js";import{n as b,t as x}from"./jsonToCsv-BwqvIeCs.js";var S=e(u(),1),C=o();function w({separator:e,includeHeader:o,trimEmptyColumns:l,pascalCaseHeaders:u,onSeparatorChange:p,onIncludeHeaderChange:m,onTrimEmptyColumnsChange:h,onPascalCaseHeadersChange:g}){let{t:_}=f(),v=e=>{p(e.target.value)},y=e=>{switch(e){case`,`:return _(`options.separatorComma`);case`;`:return _(`options.separatorSemicolon`);case`	`:return _(`options.separatorTab`);default:return e}};return(0,C.jsx)(s,{elevation:0,sx:{p:2.5,mb:2,border:`1px solid`,borderColor:`divider`,borderRadius:`12px`,backgroundColor:`#ffffff`,boxShadow:`0 2px 8px rgba(0,0,0,0.05)`},children:(0,C.jsxs)(n,{direction:{xs:`column`,sm:`row`},spacing:3,alignItems:`center`,children:[(0,C.jsxs)(a,{size:`small`,sx:{minWidth:150,"& .MuiOutlinedInput-root":{backgroundColor:`#ffffff`,"& fieldset":{borderColor:`divider`},"&:hover fieldset":{borderColor:`primary.main`},"&.Mui-focused fieldset":{borderColor:`primary.main`}}},children:[(0,C.jsx)(d,{id:`separator-label`,children:_(`options.separator`)}),(0,C.jsxs)(c,{labelId:`separator-label`,id:`separator-select`,value:e,label:_(`options.separator`),onChange:v,"aria-label":_(`aria.separator`),children:[(0,C.jsx)(i,{value:`,`,children:y(`,`)}),(0,C.jsx)(i,{value:`;`,children:y(`;`)}),(0,C.jsx)(i,{value:`\\t`,children:y(`	`)})]})]}),(0,C.jsx)(t,{control:(0,C.jsx)(r,{checked:o,onChange:e=>m(e.target.checked),"aria-label":_(`options.includeHeader`)}),label:_(`options.includeHeader`),sx:{"& .MuiFormControlLabel-label":{color:`#000000`,fontSize:`0.875rem`}}}),(0,C.jsx)(t,{control:(0,C.jsx)(r,{checked:l,onChange:e=>h(e.target.checked),"aria-label":_(`options.trimEmptyColumns`)}),label:_(`options.trimEmptyColumns`),sx:{"& .MuiFormControlLabel-label":{color:`#000000`,fontSize:`0.875rem`}}}),(0,C.jsx)(t,{control:(0,C.jsx)(r,{checked:u,onChange:e=>g(e.target.checked),"aria-label":_(`options.pascalCaseHeaders`)}),label:_(`options.pascalCaseHeaders`),sx:{"& .MuiFormControlLabel-label":{color:`#000000`,fontSize:`0.875rem`}}})]})})}var T=`[
+  {
+    "id": 1,
+    "name": "Pratik",
+    "email": "pratik@example.com",
+    "profile": {
+      "role": "engineer",
+      "joined": "2017-04-12T08:00:00Z"
+    },
+    "tags": ["fullstack", "react", "dotnet", "azure", "devops", "ci/cd", "cloud"]
+  },
+  {
+    "id": 2,
+    "name": "Bob",
+    "email": "bob@example.com",
+    "profile": {
+      "role": "designer"
+    },
+    "tags": []
+  }
+]`,E=()=>{let{t:e}=f(),[t,n]=(0,S.useState)(T),[r,i]=(0,S.useState)([]),[a,o]=(0,S.useState)(``),[s,c]=(0,S.useState)(`,`),[u,d]=(0,S.useState)(!0),[E,D]=(0,S.useState)(!1),[O,k]=(0,S.useState)(!1);return(0,S.useEffect)(()=>{if(y(t)){i([]),o(``);return}let n=v(t);if(!n.success){i([{message:n.error||e(`errors.invalidJson`),line:n.line}]),o(``);return}let r=p(n.data);if(!r.success){i([{message:{"Array is empty":e(`errors.arrayEmpty`),"Array must contain only objects":e(`errors.arrayOnlyObjects`),"Data array is empty":e(`errors.dataArrayEmpty`),"Data array must contain only objects":e(`errors.dataArrayOnlyObjects`)}[r.error||``]||r.error||e(`errors.invalidInputType`)}]),o(``);return}i([]);let a={separator:s,includeHeader:u,trimEmptyColumns:E,pascalCaseHeaders:O};o(x(r.data||[],a))},[t,s,u,E,O,e]),(0,C.jsx)(g,{leftPanel:(0,C.jsx)(h,{title:e(`common.json`),value:t,onChange:n,language:`json`}),centerPanel:(0,C.jsx)(m,{}),rightPanel:(0,C.jsx)(h,{title:e(`common.csv`),value:a,language:`csv`,readOnly:!0}),bottomPanel:y(t)?null:(0,C.jsxs)(l,{sx:{p:2},children:[(0,C.jsx)(_,{errors:r}),(0,C.jsx)(l,{sx:{mb:2,display:`flex`,gap:2,alignItems:`center`},children:(0,C.jsx)(b,{csvData:a,jsonData:t,disabled:!a})}),(0,C.jsx)(w,{separator:s,includeHeader:u,trimEmptyColumns:E,pascalCaseHeaders:O,onSeparatorChange:c,onIncludeHeaderChange:d,onTrimEmptyColumnsChange:D,onPascalCaseHeadersChange:k})]})})};export{E as default};

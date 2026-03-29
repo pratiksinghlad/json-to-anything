@@ -1,0 +1,10 @@
+var e={delimiter:`,`,indentSize:2,includeLengthMarkers:!0};function t(e){return e===null||[`string`,`number`,`boolean`].includes(typeof e)}function n(e){return e===``?!0:/[,\t|\n\r"']|^\s|\s$/.test(e)||/^[0-9]/.test(e)||e===`true`||e===`false`||e===`null`}function r(e){return e===null?`null`:e===void 0?``:typeof e==`boolean`||typeof e==`number`?e.toString():typeof e==`string`?n(e)?`"${e.replace(/\\/g,`\\\\`).replace(/"/g,`\\"`)}"`:e:JSON.stringify(e)}function i(e){if(e.length===0||!e.every(e=>e&&typeof e==`object`&&!Array.isArray(e)))return!1;let t=Object.keys(e[0]).sort().join(`,`);return e.every(e=>Object.keys(e).sort().join(`,`)===t)}function a(e){return e.every(e=>Object.values(e).every(t))}function o(e,t,n){if(e.length===0)return`[]`;let i=Object.keys(e[0]),{delimiter:a,includeLengthMarkers:o}=t,s=[];o&&s.push(`${n}[${e.length}]`),s.push(`${n}${i.join(a)}`);for(let t of e){let e=i.map(e=>r(t[e]));s.push(`${n}${e.join(a)}`)}return s.join(`
+`)}function s(e,c,l){let u=` `.repeat(c.indentSize*(l+1));if(t(e))return r(e);if(Array.isArray(e)){if(e.length===0)return`[]`;if(i(e)&&a(e))return`
+`+o(e,c,u);let n=[];c.includeLengthMarkers&&n.push(`[${e.length}]`);for(let i of e)if(t(i))n.push(`${u}- ${r(i)}`);else{let e=s(i,c,l+1);e.startsWith(`
+`)?n.push(`${u}-${e}`):n.push(`${u}- ${e}`)}return`
+`+n.join(`
+`)}if(typeof e==`object`&&e){let i=e,a=Object.keys(i);if(a.length===0)return`{}`;let o=[];for(let e of a){let a=i[e],d=n(e)?`"${e}"`:e;if(t(a))o.push(`${u}${d}: ${r(a)}`);else{let e=s(a,c,l+1);e.startsWith(`
+`)?o.push(`${u}${d}:${e}`):o.push(`${u}${d}: ${e}`)}}return`
+`+o.join(`
+`)}return r(e)}function c(t,n={}){let r={...e,...n};try{let e;if(typeof t==`string`){if(t.trim()===``)return{success:!1,error:`Input is empty`};e=JSON.parse(t)}else e=t;let n=s(e,r,0);return{success:!0,output:n.startsWith(`
+`)?n.substring(1):n}}catch(e){return e instanceof SyntaxError?{success:!1,error:`Invalid JSON: `+e.message}:{success:!1,error:e instanceof Error?e.message:`Unknown error`}}}export{c as t};
