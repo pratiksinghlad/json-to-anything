@@ -47,6 +47,16 @@ export const menuItems: MenuItem[] = [
     path: "/json-to-toon",
   },
   {
+    key: "json-to-yaml",
+    labelKey: "menu.jsonToYaml",
+    path: "/json-to-yaml",
+  },
+  {
+    key: "json-to-toml",
+    labelKey: "menu.jsonToToml",
+    path: "/json-to-toml",
+  },
+  {
     key: "about",
     labelKey: "menu.about",
     path: "/about",

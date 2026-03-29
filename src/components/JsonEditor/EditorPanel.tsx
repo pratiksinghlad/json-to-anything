@@ -23,6 +23,7 @@ import { csvToJson } from "../../utils/csvToJson";
 import { xmlToJson } from "../../utils/xmlToJson";
 import { normalizeData } from "../../utils/normalizeData";
 import { getAllKeys, flattenObject } from "../../utils/flattenObject";
+import { globalThemeConfig } from "../../themeConfig";
 
 export interface EditorPanelProps {
   initialValue?: string;
@@ -121,7 +122,7 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
             <pre
               style={{
                 margin: 0,
-                fontFamily: '"Fira Code", "Fira Mono", monospace',
+                fontFamily: globalThemeConfig.FONT_FAMILY_MONO,
                 fontSize: "13px",
                 lineHeight: "1.5",
                 color: "#2c3e50",
@@ -216,25 +217,41 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
       return <Alert severity="warning">{errorMsg}</Alert>;
     }
 
-    // Text view – the gutter is rendered alongside (see JSX below)
     return (
-      <EditorComponent
-        value={currentCode}
-        onValueChange={updateCode}
-        highlight={(code: string) => highlight(code, language)}
-        readOnly={readOnly}
-        padding={EDITOR_PADDING}
-        style={{
-          fontFamily: '"Fira Code", "Fira Mono", monospace',
-          fontSize: EDITOR_FONT_SIZE,
-          lineHeight: `${EDITOR_LINE_HEIGHT}px`,
-          minHeight: "100%",
-          flex: 1,
-        }}
-        textareaClassName="editor-textarea"
-        textareaId={`editor-${language}`}
-        aria-label={t("editor.ariaLabel", { language })}
-      />
+      <>
+        <label 
+          htmlFor={`editor-${language}`} 
+          style={{ 
+            position: 'absolute', 
+            width: '1px', 
+            height: '1px', 
+            padding: 0, 
+            margin: '-1px', 
+            overflow: 'hidden', 
+            clip: 'rect(0, 0, 0, 0)', 
+            whiteSpace: 'nowrap', 
+            border: 0 
+          }}
+        >
+          {t("editor.ariaLabel", { language })}
+        </label>
+        <EditorComponent
+          value={currentCode}
+          onValueChange={updateCode}
+          highlight={(code: string) => highlight(code, language)}
+          readOnly={readOnly}
+          padding={EDITOR_PADDING}
+          style={{
+            fontFamily: globalThemeConfig.FONT_FAMILY_MONO,
+            fontSize: EDITOR_FONT_SIZE,
+            lineHeight: `${EDITOR_LINE_HEIGHT}px`,
+            minHeight: "100%",
+            flex: 1,
+          }}
+          textareaClassName="editor-textarea"
+          textareaId={`editor-${language}`}
+        />
+      </>
     );
   };
 

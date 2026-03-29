@@ -5,6 +5,7 @@ import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
 import EditorPanel from "../components/JsonEditor/EditorPanel";
 import CenterPanel from "../components/JsonEditor/CenterPanel";
 import { xmlToJson } from "../utils/xmlToJson";
+import { isBlankInput } from "../utils/isBlankInput";
 
 const DEFAULT_XML = `<?xml version="1.0" encoding="UTF-8"?>
 <root>
@@ -34,6 +35,12 @@ const XmlToJsonPage = () => {
   const [coerceTypes, setCoerceTypes] = useState(true);
 
   useEffect(() => {
+    if (isBlankInput(xmlInput)) {
+      setJsonOutput("");
+      setError(undefined);
+      return;
+    }
+
     const result = xmlToJson(xmlInput, {
       parseAttributes,
       explicitArray,

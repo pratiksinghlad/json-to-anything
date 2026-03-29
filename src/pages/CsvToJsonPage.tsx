@@ -15,6 +15,7 @@ import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
 import EditorPanel from "../components/JsonEditor/EditorPanel";
 import CenterPanel from "../components/JsonEditor/CenterPanel";
 import { csvToJson } from "../utils/csvToJson";
+import { isBlankInput } from "../utils/isBlankInput";
 
 const DEFAULT_CSV = `name,age,email,city
 John Doe,30,john@example.com,New York
@@ -33,6 +34,12 @@ const CsvToJsonPage = () => {
   const [outputType, setOutputType] = useState<OutputType>("array");
 
   useEffect(() => {
+    if (isBlankInput(csvInput)) {
+      setJsonOutput("");
+      setError(undefined);
+      return;
+    }
+
     const result = csvToJson(csvInput, {
       delimiter,
       hasHeader,

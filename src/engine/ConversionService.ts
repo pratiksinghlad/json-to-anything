@@ -77,8 +77,9 @@ export class ConversionService {
 
     // ----------------------------------------------------------------
     // ROUTE 1: Small payload → synchronous main-thread strategy
+    // (YAML and TOML exclusively use WASM which requires the worker)
     // ----------------------------------------------------------------
-    if (byteSize <= this.workerThreshold) {
+    if (byteSize <= this.workerThreshold && format !== "yaml" && format !== "toml") {
       const strategy = this.strategies[format];
       if (!strategy) {
         return {

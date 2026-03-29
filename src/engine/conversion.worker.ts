@@ -55,8 +55,8 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
     // Progress: parsing done (10%)
     post({ type: "progress", id, percent: 10 });
 
-    // 3. WASM path for json-pretty / json-minify on huge payloads
-    if (useWasm && (format === "json-pretty" || format === "json-minify")) {
+    // 3. WASM path for json-pretty / json-minify / yaml / toml on huge payloads
+    if (useWasm || format === "yaml" || format === "toml") {
       try {
         // Lazy-load WASM module (same lazy singleton as main thread)
         const { getWasmEngine } = await import("./wasmBridge");
@@ -68,6 +68,10 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
         if (format === "json-pretty") {
           const prettyOpts = options as { indent?: number };
           output = wasm.pretty_print_json(jsonString, prettyOpts?.indent ?? 2);
+        } else if (format === "yaml") {
+          output = wasm.json_to_yaml(jsonString);
+        } else if (format === "toml") {
+          output = wasm.json_to_toml(jsonString);
         } else {
           output = wasm.minify_json(jsonString);
         }
@@ -75,8 +79,16 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
         post({ type: "progress", id, percent: 100 });
         post({ type: "result", id, output });
         return;
-      } catch {
-        // WASM not available (not compiled yet) — fall through to JS strategy
+      } catch (err) {
+        if (format === "yaml" || format === "toml") {
+          post({ 
+            type: "error", 
+            id, 
+            message: `Format error or WASM failed: ${err instanceof Error ? err.message : String(err)}` 
+          });
+          return;
+        }
+        // WASM not available (not compiled yet) or error — fall through to JS strategy for others
       }
     }
 

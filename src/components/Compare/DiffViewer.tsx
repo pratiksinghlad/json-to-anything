@@ -2,6 +2,7 @@ import { useRef, useLayoutEffect } from "react";
 import { Box } from "@mui/material";
 import type { DiffLine } from "../../engine/diffTypes";
 import { EDITOR_FONT_SIZE, EDITOR_LINE_HEIGHT, EDITOR_PADDING, GUTTER_WIDTH } from "../JsonEditor/LineNumberGutter";
+import { globalThemeConfig } from "../../themeConfig";
 
 interface DiffViewerProps {
   lines: DiffLine[];
@@ -75,7 +76,7 @@ const DiffViewer: React.FC<DiffViewerProps> = ({ lines }) => {
         textAlign: "right",
         pr: "10px",
         userSelect: "none",
-        fontFamily: '"Fira Code", "Fira Mono", monospace',
+        fontFamily: globalThemeConfig.FONT_FAMILY_MONO,
         fontSize: `${EDITOR_FONT_SIZE}px`,
         display: "flex",
         alignItems: "center",
@@ -94,7 +95,7 @@ const DiffViewer: React.FC<DiffViewerProps> = ({ lines }) => {
         flexGrow: 1,
         pl: 2,
         backgroundColor: isAdded ? "#e6ffed" : isRemoved ? "#ffebe9" : "#ffffff",
-        fontFamily: '"Fira Code", "Fira Mono", monospace',
+        fontFamily: globalThemeConfig.FONT_FAMILY_MONO,
         fontSize: `${EDITOR_FONT_SIZE}px`,
         display: "flex",
         alignItems: "center",

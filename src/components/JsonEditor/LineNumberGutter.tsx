@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import { Box } from "@mui/material";
+import { globalThemeConfig } from "../../themeConfig";
 
 // Font metrics – must match the editor exactly
 export const EDITOR_FONT_SIZE = 14; // px
@@ -65,7 +66,7 @@ const LineNumberGutter: React.FC<LineNumberGutterProps> = ({ code, textareaRef }
             height: `${EDITOR_LINE_HEIGHT}px`,
             lineHeight: `${EDITOR_LINE_HEIGHT}px`,
             fontSize: `${EDITOR_FONT_SIZE}px`,
-            fontFamily: '"Fira Code", "Fira Mono", monospace',
+            fontFamily: globalThemeConfig.FONT_FAMILY_MONO,
             color: "#aaa",
             textAlign: "right",
             paddingRight: "10px",

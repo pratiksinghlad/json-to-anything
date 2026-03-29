@@ -8,6 +8,8 @@
     "validateJson": "JSON मान्य करें",
     "compare": "तुलना करें",
     "jsonToToon": "JSON से TOON",
+    "jsonToYaml": "JSON से YAML",
+    "jsonToToml": "JSON से TOML",
     "about": "के बारे में"
   },
   "language": {
@@ -103,6 +105,12 @@
       "tokens": "टोकन",
       "processing": "बड़ी फ़ाइल प्रोसेस हो रही है...",
       "privacyNote": "सारा परिवर्तन आपके ब्राउज़र में स्थानीय रूप से होता है।"
+    },
+    "jsonToYaml": {
+      "title": "JSON से YAML कन्वर्टर"
+    },
+    "jsonToToml": {
+      "title": "JSON से TOML कन्वर्टर"
     }
   },
   "options": {
@@ -118,7 +126,11 @@
     "downloadCsv": "CSV डाउनलोड करें",
     "downloadJson": "JSON डाउनलोड करें",
     "downloadToon": "TOON डाउनलोड करें",
+    "downloadYaml": "YAML डाउनलोड करें",
+    "downloadToml": "TOML डाउनलोड करें",
     "copyCsv": "CSV कॉपी करें",
+    "copyYaml": "YAML कॉपी करें",
+    "copyToml": "TOML कॉपी करें",
     "showRawData": "कच्चा डेटा दिखाएँ"
   },
   "preview": {

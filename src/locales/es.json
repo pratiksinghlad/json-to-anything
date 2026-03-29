@@ -8,6 +8,8 @@
     "validateJson": "Validar JSON",
     "compare": "Comparar",
     "jsonToToon": "JSON a TOON",
+    "jsonToYaml": "JSON a YAML",
+    "jsonToToml": "JSON a TOML",
     "about": "Acerca de"
   },
   "language": {
@@ -103,6 +105,12 @@
       "tokens": "tokens",
       "processing": "Procesando archivo grande...",
       "privacyNote": "Toda la conversión ocurre localmente en tu navegador."
+    },
+    "jsonToYaml": {
+      "title": "Convertidor de JSON a YAML"
+    },
+    "jsonToToml": {
+      "title": "Convertidor de JSON a TOML"
     }
   },
   "options": {
@@ -118,7 +126,11 @@
     "downloadCsv": "Descargar CSV",
     "downloadJson": "Descargar JSON",
     "downloadToon": "Descargar TOON",
+    "downloadYaml": "Descargar YAML",
+    "downloadToml": "Descargar TOML",
     "copyCsv": "Copiar CSV",
+    "copyYaml": "Copiar YAML",
+    "copyToml": "Copiar TOML",
     "showRawData": "Mostrar datos"
   },
   "preview": {

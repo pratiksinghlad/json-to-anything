@@ -3,6 +3,7 @@ import { useRef, useEffect, useState } from "react";
 import Editor from "react-simple-code-editor";
 import { highlightJson } from "../utils/highlight";
 import { useTranslation } from "react-i18next";
+import { globalThemeConfig } from "../themeConfig";
 
 interface JsonEditorProps {
   value: string;
@@ -133,7 +134,7 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
               textAlign: "right",
               color: "#757575",
               fontSize: 14,
-              fontFamily: '"Fira code", "Fira Mono", monospace',
+              fontFamily: globalThemeConfig.FONT_FAMILY_MONO,
               userSelect: "none",
               lineHeight: `${lineHeightPx}px`,
               pointerEvents: "none",
@@ -158,7 +159,7 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
             highlight={highlight}
             padding={16}
             style={{
-              fontFamily: '"Fira code", "Fira Mono", monospace',
+              fontFamily: globalThemeConfig.FONT_FAMILY_MONO,
               fontSize: 14,
               minHeight: `${lineNumbersHeight}px`,
               backgroundColor: "#ffffff",

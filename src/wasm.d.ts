@@ -8,4 +8,6 @@ declare module "/wasm/json_engine.js" {
   export default init;
   export function minify_json(input: string): string;
   export function pretty_print_json(input: string, indent: number): string;
+  export function json_to_yaml(input: string): string;
+  export function json_to_toml(input: string): string;
 }

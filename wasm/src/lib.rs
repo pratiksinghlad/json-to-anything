@@ -50,3 +50,29 @@ pub fn pretty_print_json(input: &str, indent: u32) -> Result<String, JsValue> {
     String::from_utf8(buf)
         .map_err(|e| JsValue::from_str(&format!("UTF-8 error: {}", e)))
 }
+
+/// Converts a JSON string to YAML.
+///
+/// # Errors
+/// Returns a JsValue error if the input is not valid JSON or if serialization fails.
+#[wasm_bindgen]
+pub fn json_to_yaml(input: &str) -> Result<String, JsValue> {
+    let value: Value = serde_json::from_str(input)
+        .map_err(|e| JsValue::from_str(&format!("Invalid JSON: {}", e)))?;
+
+    serde_yaml::to_string(&value)
+        .map_err(|e| JsValue::from_str(&format!("YAML serialisation error: {}", e)))
+}
+
+/// Converts a JSON string to TOML.
+///
+/// # Errors
+/// Returns a JsValue error if the input is not valid JSON, if it doesn't represent a table structure, or if serialization fails.
+#[wasm_bindgen]
+pub fn json_to_toml(input: &str) -> Result<String, JsValue> {
+    let value: Value = serde_json::from_str(input)
+        .map_err(|e| JsValue::from_str(&format!("Invalid JSON: {}", e)))?;
+
+    toml::to_string(&value)
+        .map_err(|e| JsValue::from_str(&format!("TOML serialisation error: {}", e)))
+}

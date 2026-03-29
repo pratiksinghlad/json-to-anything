@@ -13,6 +13,8 @@ const ValidateJsonPage = lazy(() => import("./pages/ValidateJsonPage"));
 const ComparePage = lazy(() => import("./pages/ComparePage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const JsonToToonPage = lazy(() => import("./pages/JsonToToonPage"));
+const JsonToYamlPage = lazy(() => import("./pages/JsonToYamlPage"));
+const JsonToTomlPage = lazy(() => import("./pages/JsonToTomlPage"));
 
 // Theme configuration matching the JSON to anything Dark/Light mix
 const theme = createTheme({
@@ -34,7 +36,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: globalThemeConfig.FONT_FAMILY_SANS,
     fontSize: 14,
   },
   components: {
@@ -102,6 +104,8 @@ function App() {
               <Route path="/validate" element={<ValidateJsonPage />} />
               <Route path="/compare" element={<ComparePage />} />
               <Route path="/json-to-toon" element={<JsonToToonPage />} />
+              <Route path="/json-to-yaml" element={<JsonToYamlPage />} />
+              <Route path="/json-to-toml" element={<JsonToTomlPage />} />
               <Route path="/about" element={<AboutPage />} />
             </Routes>
           </Suspense>
