@@ -6,7 +6,7 @@
     "xmlToJson": "XML से JSON",
     "beautifyJson": "JSON सुंदर बनाएं",
     "validateJson": "JSON मान्य करें",
-    "compare": "तुलना करें",
+    "compare": "Compare Text",
     "jsonToToon": "JSON से TOON",
     "jsonToYaml": "JSON से YAML",
     "jsonToToml": "JSON से TOML",
@@ -45,7 +45,7 @@
       "copyFormatted": "फ़ॉर्मेटेड कॉपी करें"
     },
     "compare": {
-      "title": "JSON तुलना",
+      "title": "Compare Text",
       "original": "मूल",
       "modified": "संशोधित",
       "compareBtn": "तुलना करें",

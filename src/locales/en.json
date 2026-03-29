@@ -6,7 +6,7 @@
     "xmlToJson": "XML to JSON",
     "beautifyJson": "Beautify JSON",
     "validateJson": "Validate JSON",
-    "compare": "Compare",
+    "compare": "Compare Text",
     "jsonToToon": "JSON to TOON",
     "jsonToYaml": "JSON to YAML",
     "jsonToToml": "JSON to TOML",
@@ -45,10 +45,10 @@
       "copyFormatted": "Copy Formatted"
     },
     "compare": {
-      "title": "Compare",
+      "title": "Compare Text",
       "original": "Original",
       "modified": "Modified",
-      "compareBtn": "Compare",
+      "compareBtn": "Compare Text",
       "resetBtn": "Edit",
       "additions": "additions",
       "deletions": "deletions",
