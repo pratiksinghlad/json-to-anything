@@ -14,29 +14,44 @@
  */
 
 import type { WorkerRequest, WorkerResponse } from "./types";
-import { CsvStrategy }       from "./strategies/CsvStrategy";
-import { XmlStrategy }       from "./strategies/XmlStrategy";
-import { ToonStrategy }      from "./strategies/ToonStrategy";
-import { JsonPrettyStrategy, JsonMinifyStrategy } from "./strategies/JsonPrettyStrategy";
-import { YamlStrategy }      from "./strategies/YamlStrategy";
-import { TomlStrategy }      from "./strategies/TomlStrategy";
+import type { ConversionStrategy } from "./ConversionStrategy";
 
 // -------------------------------------------------------------------------
 // Strategy registry — OCP: add new strategies here without touching the rest
 // -------------------------------------------------------------------------
-const STRATEGY_REGISTRY = {
-  csv:          new CsvStrategy(),
-  xml:          new XmlStrategy(),
-  toon:         new ToonStrategy(),
-  "json-pretty": new JsonPrettyStrategy(),
-  "json-minify": new JsonMinifyStrategy(),
-  yaml:         new YamlStrategy(),
-  toml:         new TomlStrategy(),
-} as const;
+// -------------------------------------------------------------------------
+// Strategy loader — dynamically imports to support code splitting
+// -------------------------------------------------------------------------
+const loadStrategy = async (format: string): Promise<ConversionStrategy | null> => {
+  switch (format) {
+    case "csv":
+      return new (await import("./strategies/CsvStrategy")).CsvStrategy();
+    case "xml":
+      return new (await import("./strategies/XmlStrategy")).XmlStrategy();
+    case "toon":
+      return new (await import("./strategies/ToonStrategy")).ToonStrategy();
+    case "json-pretty":
+      return new (await import("./strategies/JsonPrettyStrategy")).JsonPrettyStrategy();
+    case "json-minify":
+      return new (await import("./strategies/JsonPrettyStrategy")).JsonMinifyStrategy();
+    case "yaml":
+      return new (await import("./strategies/YamlStrategy")).YamlStrategy();
+    case "toml":
+      return new (await import("./strategies/TomlStrategy")).TomlStrategy();
+    default:
+      return null;
+  }
+};
 
 // -------------------------------------------------------------------------
 // Message handler
 // -------------------------------------------------------------------------
+// Polyfill global for libraries that expect it (like @iarna/toml in a worker)
+const workerScope = self as unknown as { global: typeof self };
+if (typeof self !== "undefined" && !workerScope.global) {
+  workerScope.global = self;
+}
+
 self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
   const { id, format, payloadBuffer, options, useWasm } = event.data;
 
@@ -90,7 +105,7 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
     }
 
     // 4. JS strategy path
-    const strategy = STRATEGY_REGISTRY[format as keyof typeof STRATEGY_REGISTRY];
+    const strategy = await loadStrategy(format);
     if (!strategy) {
       post({ type: "error", id, message: `Unknown format: ${format}` });
       return;
@@ -98,8 +113,7 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
 
     post({ type: "progress", id, percent: 50 });
     
-    //eslint-disable-next-line
-    const result = strategy.convert(parsedData, options as any);
+    const result = strategy.convert(parsedData, options as unknown);
 
     post({ type: "progress", id, percent: 100 });
 
