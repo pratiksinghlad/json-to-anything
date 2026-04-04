@@ -1,4 +1,4 @@
-import{a as e}from"./rolldown-runtime-B589uzA9.js";import{B as t,H as n,M as r,N as i,Q as a,U as o,et as s,ft as c,mt as l,y as u}from"./mui-vendor-BI8racdd.js";import{l as d}from"./react-vendor-DltAUd6l.js";import{i as f,n as p,r as m,t as h}from"./useJsonEditorAccessibility-BFROvSAF.js";import{t as g}from"./ValidationResults-DFseO2jX.js";import{t as _}from"./parseJson-DIS0zLKv.js";import{t as v}from"./isBlankInput-BFuadj8S.js";import{t as y}from"./jsonToXml-DZ_v89A1.js";var b=e(l(),1),x=c(),S=`{
+import{a as e}from"./rolldown-runtime-B589uzA9.js";import{B as t,H as n,M as r,N as i,Q as a,U as o,et as s,ft as c,mt as l,y as u}from"./mui-vendor-BI8racdd.js";import{l as d}from"./react-vendor-DltAUd6l.js";import{i as f,n as p,r as m,t as h}from"./useJsonEditorAccessibility-B3cpLX7Q.js";import{t as g}from"./ValidationResults-DFseO2jX.js";import{t as _}from"./parseJson-DIS0zLKv.js";import{t as v}from"./isBlankInput-BFuadj8S.js";import{t as y}from"./jsonToXml-DZ_v89A1.js";var b=e(l(),1),x=c(),S=`{
   "person": {
     "@_id": "1",
     "name": "John Doe",
