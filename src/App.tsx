@@ -96,11 +96,12 @@ function App() {
           {/* Main Content Area */}
           <Suspense fallback={<PageLoader />}>
             <Routes>
-              <Route path="/" element={<JsonToCsvPage />} />
+              <Route path="/" element={<BeautifyJsonPage />} />
+              <Route path="/beautify" element={<BeautifyJsonPage />} />
+              <Route path="/json-to-csv" element={<JsonToCsvPage />} />
               <Route path="/json-to-xml" element={<JsonToXmlPage />} />
               <Route path="/csv-to-json" element={<CsvToJsonPage />} />
               <Route path="/xml-to-json" element={<XmlToJsonPage />} />
-              <Route path="/beautify" element={<BeautifyJsonPage />} />
               <Route path="/validate" element={<ValidateJsonPage />} />
               <Route path="/compare" element={<ComparePage />} />
               <Route path="/json-to-toon" element={<JsonToToonPage />} />

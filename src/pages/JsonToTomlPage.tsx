@@ -9,6 +9,7 @@ import DownloadButtons from "../components/DownloadButtons";
 import { isBlankInput } from "../utils/isBlankInput";
 import type { ValidationError } from "../types/validationTypes";
 import { useConverter } from "../hooks/useConverter";
+import { useJsonEditorAccessibility } from "../hooks/useJsonEditorAccessibility";
 
 const DEFAULT_JSON = `{
   "server": {
@@ -22,15 +23,21 @@ const DEFAULT_JSON = `{
   "users": [
     {
       "id": 1,
-      "name": "Pratik",
+      "name": "Pratik Singh Lad",
       "email": "pratik@example.com",
       "role": "engineer"
     },
     {
       "id": 2,
-      "name": "Alice",
-      "email": "alice@example.com",
-      "role": "designer"
+      "name": "Linus Torvalds",
+      "email": "linus@example.com",
+      "role": "creator"
+    },
+    {
+      "id": 3,
+      "name": "Alan Turing",
+      "email": "alan@example.com",
+      "role": "pioneer"
     }
   ]
 }`;
@@ -40,6 +47,8 @@ const JsonToTomlPage = () => {
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
   const [tomlOutput, setTomlOutput] = useState("");
   const [errors, setErrors] = useState<ValidationError[]>([]);
+
+  const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
 
   const { convert, isProcessing } = useConverter();
 
@@ -88,6 +97,7 @@ const JsonToTomlPage = () => {
     <JsonEditorLayout
       leftPanel={
         <EditorPanel
+          ref={leftPanelRef}
           title={t("common.json")}
           value={jsonInput}
           onChange={setJsonInput}
@@ -96,7 +106,7 @@ const JsonToTomlPage = () => {
       }
       centerPanel={<CenterPanel />}
       rightPanel={
-        <EditorPanel title="TOML" value={tomlOutput} language="toml" readOnly />
+        <EditorPanel ref={rightPanelRef} title="TOML" value={tomlOutput} language="toml" readOnly />
       }
       bottomPanel={
         <Box sx={{ p: 2 }}>

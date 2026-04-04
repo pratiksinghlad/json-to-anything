@@ -16,6 +16,7 @@ import EditorPanel from "../components/JsonEditor/EditorPanel";
 import CenterPanel from "../components/JsonEditor/CenterPanel";
 import { csvToJson } from "../utils/csvToJson";
 import { isBlankInput } from "../utils/isBlankInput";
+import { useJsonEditorAccessibility } from "../hooks/useJsonEditorAccessibility";
 
 const DEFAULT_CSV = `name,age,email,city
 John Doe,30,john@example.com,New York
@@ -32,6 +33,8 @@ const CsvToJsonPage = () => {
   const [delimiter, setDelimiter] = useState(",");
   const [hasHeader, setHasHeader] = useState(true);
   const [outputType, setOutputType] = useState<OutputType>("array");
+
+  const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
 
   useEffect(() => {
     if (isBlankInput(csvInput)) {
@@ -71,6 +74,7 @@ const CsvToJsonPage = () => {
     <JsonEditorLayout
       leftPanel={
         <EditorPanel
+          ref={leftPanelRef}
           title={t("common.csv")}
           value={csvInput}
           onChange={setCsvInput}
@@ -79,7 +83,13 @@ const CsvToJsonPage = () => {
       }
       centerPanel={<CenterPanel />}
       rightPanel={
-        <EditorPanel title={t("common.json")} value={jsonOutput} language="json" readOnly={true} />
+        <EditorPanel
+          ref={rightPanelRef}
+          title={t("common.json")}
+          value={jsonOutput}
+          language="json"
+          readOnly={true}
+        />
       }
       bottomPanel={
         <Box sx={{ p: 2 }}>

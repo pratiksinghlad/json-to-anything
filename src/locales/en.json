@@ -168,7 +168,29 @@
     "copyToClipboard": "Copy to clipboard",
     "copied": "Copied!",
     "clear": "Clear",
-    "cleared": "Cleared!"
+    "cleared": "Cleared!",
+    "keyboardShortcuts": "Keyboard Shortcuts"
+  },
+  "shortcuts": {
+    "navigation": "Navigation",
+    "focusInput": "Focus Input Editor",
+    "focusOutput": "Focus Output Editor",
+    "toggleHelp": "Toggle Shortcuts Help",
+    "actions": "Actions",
+    "copyOutput": "Copy Output content",
+    "clearInput": "Clear Input content",
+    "viewModes": "Editor View Modes",
+    "textView": "Switch to Text View",
+    "treeView": "Switch to Tree View",
+    "tableView": "Switch to Table View",
+    "navCsv": "Switch to JSON to CSV",
+    "navXml": "Switch to JSON to XML",
+    "navBeautify": "Switch to Beautify JSON",
+    "navValidate": "Switch to Validate JSON",
+    "navYaml": "Switch to JSON to YAML",
+    "navToml": "Switch to JSON to TOML",
+    "navCompare": "Switch to Compare Text",
+    "pageSwitching": "Page Switching (Tabs)"
   },
   "errors": {
     "emptyInput": "Input is empty",

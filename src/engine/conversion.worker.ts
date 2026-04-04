@@ -18,6 +18,8 @@ import { CsvStrategy }       from "./strategies/CsvStrategy";
 import { XmlStrategy }       from "./strategies/XmlStrategy";
 import { ToonStrategy }      from "./strategies/ToonStrategy";
 import { JsonPrettyStrategy, JsonMinifyStrategy } from "./strategies/JsonPrettyStrategy";
+import { YamlStrategy }      from "./strategies/YamlStrategy";
+import { TomlStrategy }      from "./strategies/TomlStrategy";
 
 // -------------------------------------------------------------------------
 // Strategy registry — OCP: add new strategies here without touching the rest
@@ -28,6 +30,8 @@ const STRATEGY_REGISTRY = {
   toon:         new ToonStrategy(),
   "json-pretty": new JsonPrettyStrategy(),
   "json-minify": new JsonMinifyStrategy(),
+  yaml:         new YamlStrategy(),
+  toml:         new TomlStrategy(),
 } as const;
 
 // -------------------------------------------------------------------------
@@ -80,15 +84,8 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
         post({ type: "result", id, output });
         return;
       } catch (err) {
-        if (format === "yaml" || format === "toml") {
-          post({ 
-            type: "error", 
-            id, 
-            message: `Format error or WASM failed: ${err instanceof Error ? err.message : String(err)}` 
-          });
-          return;
-        }
-        // WASM not available (not compiled yet) or error — fall through to JS strategy for others
+        // WASM not available (not compiled yet) or error — fall through to JS strategy for all formats
+        console.warn(`WASM acceleration unavailable for ${format}, falling back to JS. Reason:`, err);
       }
     }
 

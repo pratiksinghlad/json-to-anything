@@ -10,6 +10,7 @@ import { validateJson } from "../utils/validateJson";
 import { parseJson } from "../utils/parseJson";
 import { isBlankInput } from "../utils/isBlankInput";
 import type { ValidationError } from "../types/validationTypes";
+import { useJsonEditorAccessibility } from "../hooks/useJsonEditorAccessibility";
 
 const DEFAULT_JSON = `{
   "name": "Alice Example",
@@ -46,6 +47,8 @@ const ValidateJsonPage = () => {
   const [schemaInput, setSchemaInput] = useState(DEFAULT_SCHEMA);
   const [isValid, setIsValid] = useState(false);
   const [errors, setErrors] = useState<ValidationError[]>([]);
+
+  const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
 
   useEffect(() => {
     if (isBlankInput(jsonInput) || isBlankInput(schemaInput)) {
@@ -95,6 +98,7 @@ const ValidateJsonPage = () => {
     <JsonEditorLayout
       leftPanel={
         <EditorPanel
+          ref={leftPanelRef}
           title={t("pages.validate.jsonData")}
           value={jsonInput}
           onChange={setJsonInput}
@@ -104,6 +108,7 @@ const ValidateJsonPage = () => {
       centerPanel={<CenterPanel />}
       rightPanel={
         <EditorPanel
+          ref={rightPanelRef}
           title={t("pages.validate.jsonSchema")}
           value={schemaInput}
           onChange={setSchemaInput}

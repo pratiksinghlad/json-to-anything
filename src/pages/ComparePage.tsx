@@ -9,6 +9,7 @@ import DiffViewer from "../components/Compare/DiffViewer";
 import DiffPaneHeader from "../components/Compare/DiffPaneHeader";
 import DiffStats from "../components/Compare/DiffStats";
 import { useDiff } from "../hooks/useDiff";
+import { useJsonEditorAccessibility } from "../hooks/useJsonEditorAccessibility";
 
 const ComparePage = () => {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ const ComparePage = () => {
   const [modifiedCode, setModifiedCode] = useState("");
   const [mode, setMode] = useState<"editing" | "comparing">("editing");
 
+  const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
   const { computeDiff, result, isComparing } = useDiff();
 
   const handleCompare = async () => {
@@ -68,6 +70,7 @@ const ComparePage = () => {
         <JsonEditorLayout
           leftPanel={
             <EditorPanel
+              ref={leftPanelRef}
               title={t("pages.compare.original")}
               value={originalCode}
               onChange={setOriginalCode}
@@ -77,6 +80,7 @@ const ComparePage = () => {
           centerPanel={centerPanel}
           rightPanel={
             <EditorPanel
+              ref={rightPanelRef}
               title={t("pages.compare.modified")}
               value={modifiedCode}
               onChange={setModifiedCode}

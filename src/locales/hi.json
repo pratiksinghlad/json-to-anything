@@ -164,7 +164,29 @@
     "copyToClipboard": "क्लिपबोर्ड पर कॉपी करें",
     "copied": "कॉपी हो गया!",
     "clear": "साफ़ करें",
-    "cleared": "साफ़ हो गया!"
+    "cleared": "साफ़ हो गया!",
+    "keyboardShortcuts": "कीबोर्ड शॉर्टकट्स"
+  },
+  "shortcuts": {
+    "navigation": "नेविगेशन",
+    "focusInput": "इनपुट संपादक फोकस करें",
+    "focusOutput": "आउटपुट संपादक फोकस करें",
+    "toggleHelp": "शॉर्टकट सहायता टॉगल करें",
+    "actions": "कार्रवाई",
+    "copyOutput": "आउटपुट सामग्री कॉपी करें",
+    "clearInput": "इनपुट सामग्री साफ़ करें",
+    "viewModes": "संपादक व्यू मोड",
+    "textView": "टेक्स्ट व्यू पर स्विच करें",
+    "treeView": "ट्री व्यू पर स्विच करें",
+    "tableView": "टेबल व्यू पर स्विच करें",
+    "navCsv": "JSON से CSV कन्वर्टर पर स्विच करें",
+    "navXml": "JSON से XML कन्वर्टर पर स्विच करें",
+    "navBeautify": "JSON सुंदर बनाने पर स्विच करें",
+    "navValidate": "JSON मान्य करने पर स्विच करें",
+    "navYaml": "JSON से YAML कन्वर्टर पर स्विच करें",
+    "navToml": "JSON से TOML कन्वर्टर पर स्विच करें",
+    "navCompare": "तुलना पृष्ठ पर स्विच करें",
+    "pageSwitching": "पृष्ठ स्विचिंग (टैब)"
   },
   "errors": {
     "emptyInput": "इनपुट खाली है",

@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useLayoutEffect } from "react";
+import { useState, useRef, useMemo, useLayoutEffect, forwardRef, useImperativeHandle, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Box,
@@ -24,6 +24,7 @@ import { xmlToJson } from "../../utils/xmlToJson";
 import { normalizeData } from "../../utils/normalizeData";
 import { getAllKeys, flattenObject } from "../../utils/flattenObject";
 import { globalThemeConfig } from "../../themeConfig";
+import { useKeyboardShortcuts } from "../../hooks/useKeyboardShortcuts";
 
 export interface EditorPanelProps {
   initialValue?: string;
@@ -34,17 +35,24 @@ export interface EditorPanelProps {
   readOnly?: boolean;
 }
 
+export interface EditorPanelHandle {
+  focus: () => void;
+  copy: () => void;
+  clear: () => void;
+  setViewMode: (mode: "text" | "tree" | "table") => void;
+}
+
 // @ts-ignore - Handle possible default export mismatch in ESM/React 19
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const EditorComponent = (Editor as any).default || Editor;
 
-const EditorPanel: React.FC<EditorPanelProps> = ({
+const EditorPanel = forwardRef<EditorPanelHandle, EditorPanelProps>(({
   initialValue = "{}",
   value,
   onChange,
   language = "json",
   readOnly = false,
-}) => {
+}, ref) => {
   const { t } = useTranslation();
   const [internalCode, setInternalCode] = useState(initialValue);
   const [viewMode, setViewMode] = useState<"text" | "tree" | "table">("text");
@@ -58,6 +66,64 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
 
   const currentCode = value !== undefined ? value : internalCode;
 
+  const updateCode = useCallback((newCode: string) => {
+    if (value === undefined) {
+      setInternalCode(newCode);
+    }
+    if (onChange) {
+      onChange(newCode);
+    }
+  }, [value, onChange]);
+
+  // Expose methods via ref
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      if (viewMode === "text") {
+        textareaRef.current?.focus();
+      } else {
+        contentRef.current?.focus();
+      }
+    },
+    copy: () => {
+      navigator.clipboard.writeText(currentCode);
+    },
+    clear: () => {
+      updateCode("");
+    },
+    setViewMode: (mode) => {
+      setViewMode(mode);
+    }
+  }), [currentCode, viewMode, updateCode]);
+
+  // Keyboard shortcuts for view modes (scoped to this panel)
+  const isPanelFocused = () => {
+    return (
+      contentRef.current?.contains(document.activeElement) ||
+      editorWrapperRef.current?.contains(document.activeElement)
+    );
+  };
+
+  useKeyboardShortcuts([
+    { 
+      key: "t", 
+      altKey: true, 
+      action: () => isPanelFocused() && setViewMode("text"), 
+      options: { preventDefault: true } 
+    },
+    { 
+      key: "e", 
+      altKey: true, 
+      action: () => isPanelFocused() && setViewMode("tree"), 
+      options: { preventDefault: true } 
+    },
+    { 
+      key: "b", 
+      altKey: true, 
+      action: () => isPanelFocused() && setViewMode("table"), 
+      options: { preventDefault: true } 
+    },
+  ], true);
+
   // Locate the textarea inside react-simple-code-editor after DOM commits.
   // useLayoutEffect runs synchronously after the DOM is painted, guaranteeing
   // the textarea exists before the gutter attaches its scroll listener.
@@ -68,14 +134,7 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
     textareaRef.current = wrapper.querySelector<HTMLTextAreaElement>("textarea");
   }, [viewMode]);
 
-  const updateCode = (newCode: string) => {
-    if (value === undefined) {
-      setInternalCode(newCode);
-    }
-    if (onChange) {
-      onChange(newCode);
-    }
-  };
+
 
   // Memoize parsed data to avoid re-parsing on every render
   const parsedData = useMemo(() => {
@@ -285,6 +344,8 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
         }}
       >
         <Box
+          role="tablist"
+          aria-label={t("editor.viewMode") || "View Mode"}
           sx={{
             display: "flex",
             backgroundColor: "rgba(255,255,255,0.1)",
@@ -300,6 +361,8 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
                 key={mode.value}
                 size="small"
                 onClick={() => setViewMode(m)}
+                role="tab"
+                aria-selected={isActive}
                 sx={{
                   minWidth: "60px",
                   p: "4px 12px",
@@ -378,6 +441,8 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
       </Box>
     </Box>
   );
-};
+});
+
+EditorPanel.displayName = "EditorPanel";
 
 export default EditorPanel;

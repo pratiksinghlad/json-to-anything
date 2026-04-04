@@ -7,9 +7,14 @@ export interface MenuItem {
 
 export const menuItems: MenuItem[] = [
   {
+    key: "beautify-json",
+    labelKey: "menu.beautifyJson",
+    path: "/",
+  },
+  {
     key: "json-to-csv",
     labelKey: "menu.jsonToCsv",
-    path: "/",
+    path: "/json-to-csv",
   },
   {
     key: "json-to-xml",
@@ -25,11 +30,6 @@ export const menuItems: MenuItem[] = [
     key: "xml-to-json",
     labelKey: "menu.xmlToJson",
     path: "/xml-to-json",
-  },
-  {
-    key: "beautify-json",
-    labelKey: "menu.beautifyJson",
-    path: "/beautify",
   },
   {
     key: "validate-json",

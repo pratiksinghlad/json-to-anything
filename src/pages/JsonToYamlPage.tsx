@@ -9,16 +9,24 @@ import DownloadButtons from "../components/DownloadButtons";
 import { isBlankInput } from "../utils/isBlankInput";
 import type { ValidationError } from "../types/validationTypes";
 import { useConverter } from "../hooks/useConverter";
+import { useJsonEditorAccessibility } from "../hooks/useJsonEditorAccessibility";
 
 const DEFAULT_JSON = `{
-  "person": {
-    "name": "Jane",
-    "age": 28,
-    "address": {
-      "city": "London",
-      "country": "UK"
+  "team": {
+    "leader": {
+      "name": "Pratik Singh Lad",
+      "role": "Engineering Lead"
     },
-    "skills": ["JavaScript", "Rust", "React"]
+    "members": [
+      {
+        "name": "Linus Torvalds",
+        "contributions": ["Kernel", "Git"]
+      },
+      {
+        "name": "Alan Turing",
+        "contributions": ["Computing", "Cryptography"]
+      }
+    ]
   }
 }`;
 
@@ -27,6 +35,8 @@ const JsonToYamlPage = () => {
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
   const [yamlOutput, setYamlOutput] = useState("");
   const [errors, setErrors] = useState<ValidationError[]>([]);
+
+  const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
 
   const { convert, isProcessing } = useConverter();
 
@@ -75,6 +85,7 @@ const JsonToYamlPage = () => {
     <JsonEditorLayout
       leftPanel={
         <EditorPanel
+          ref={leftPanelRef}
           title={t("common.json")}
           value={jsonInput}
           onChange={setJsonInput}
@@ -83,7 +94,7 @@ const JsonToYamlPage = () => {
       }
       centerPanel={<CenterPanel />}
       rightPanel={
-        <EditorPanel title="YAML" value={yamlOutput} language="yaml" readOnly />
+        <EditorPanel ref={rightPanelRef} title="YAML" value={yamlOutput} language="yaml" readOnly />
       }
       bottomPanel={
         <Box sx={{ p: 2 }}>

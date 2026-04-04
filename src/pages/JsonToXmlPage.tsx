@@ -19,6 +19,7 @@ import { jsonToXml } from "../utils/jsonToXml";
 import { parseJson } from "../utils/parseJson";
 import { isBlankInput } from "../utils/isBlankInput";
 import type { ValidationError } from "../types/validationTypes";
+import { useJsonEditorAccessibility } from "../hooks/useJsonEditorAccessibility";
 
 const DEFAULT_JSON = `{
   "person": {
@@ -44,6 +45,8 @@ const JsonToXmlPage = () => {
   const [attributePrefix, setAttributePrefix] = useState("@_");
   const [pretty, setPretty] = useState(true);
   const [indent, setIndent] = useState("2");
+
+  const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
 
   useEffect(() => {
     if (isBlankInput(jsonInput)) {
@@ -91,6 +94,7 @@ const JsonToXmlPage = () => {
     <JsonEditorLayout
       leftPanel={
         <EditorPanel
+          ref={leftPanelRef}
           title={t("common.json")}
           value={jsonInput}
           onChange={setJsonInput}
@@ -99,7 +103,13 @@ const JsonToXmlPage = () => {
       }
       centerPanel={<CenterPanel />}
       rightPanel={
-        <EditorPanel title={t("common.xml")} value={xmlOutput} language="xml" readOnly={true} />
+        <EditorPanel
+          ref={rightPanelRef}
+          title={t("common.xml")}
+          value={xmlOutput}
+          language="xml"
+          readOnly={true}
+        />
       }
       bottomPanel={
         <Box sx={{ p: 2 }}>

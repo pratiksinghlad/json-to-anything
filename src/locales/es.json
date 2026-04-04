@@ -164,7 +164,29 @@
     "copyToClipboard": "Copiar al portapapeles",
     "copied": "¡Copiado!",
     "clear": "Limpiar",
-    "cleared": "¡Limpiado!"
+    "cleared": "¡Limpiado!",
+    "keyboardShortcuts": "Atajos de Teclado"
+  },
+  "shortcuts": {
+    "navigation": "Navegación",
+    "focusInput": "Enfocar Editor de Entrada",
+    "focusOutput": "Enfocar Editor de Salida",
+    "toggleHelp": "Alternar Ayuda de Atajos",
+    "actions": "Acciones",
+    "copyOutput": "Copiar contenido de Salida",
+    "clearInput": "Limpiar contenido de Entrada",
+    "viewModes": "Modos de Vista del Editor",
+    "textView": "Cambiar a Vista de Texto",
+    "treeView": "Cambiar a Vista de Árbol",
+    "tableView": "Cambiar a Vista de Tabla",
+    "navCsv": "Cambiar a JSON a CSV",
+    "navXml": "Cambiar a JSON a XML",
+    "navBeautify": "Cambiar a Embellecer JSON",
+    "navValidate": "Cambiar a Validar JSON",
+    "navYaml": "Cambiar a JSON a YAML",
+    "navToml": "Cambiar a JSON a TOML",
+    "navCompare": "Cambiar a Comparar Texto",
+    "pageSwitching": "Cambio de página (pestañas)"
   },
   "errors": {
     "emptyInput": "La entrada está vacía",
