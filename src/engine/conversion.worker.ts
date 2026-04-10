@@ -100,7 +100,7 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
         return;
       } catch (err) {
         // WASM not available (not compiled yet) or error — fall through to JS strategy for all formats
-        console.warn(`WASM acceleration unavailable for ${format}, falling back to JS. Reason:`, err);
+        console.warn("WASM acceleration unavailable for %s, falling back to JS. Reason:", format, err);
       }
     }
 
