@@ -1,11 +1,40 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Drawer, IconButton, List } from "@mui/material";
-import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
-import { menuItems } from "../../menuData";
+import { Drawer, IconButton, List, Divider, ListItemIcon, ListItemText, MenuItem } from "@mui/material";
+import {
+  Menu as MenuIcon,
+  Close as CloseIcon,
+  AutoFixHigh,
+  TableChart,
+  Code,
+  SwapHoriz,
+  FactCheck,
+  DifferenceOutlined,
+  DataObject,
+  Description,
+  Settings,
+  AccountTree,
+  Info,
+} from "@mui/icons-material";
+import { headerMenuItems, moreMenuItems } from "../../menuData";
 import LanguageMenu from "./LanguageMenu";
 import styles from "./MobileMenu.module.scss";
+
+// Map iconName strings to MUI icon components (tree-shakable, no dynamic import)
+const IconMap: Record<string, React.ComponentType<{ fontSize?: "small" | "inherit" | "large" | "medium" }>> = {
+  AutoFixHigh,
+  TableChart,
+  Code,
+  SwapHoriz,
+  FactCheck,
+  DifferenceOutlined,
+  DataObject,
+  Description,
+  Settings,
+  AccountTree,
+  Info,
+};
 
 const MobileMenu = () => {
   const { t } = useTranslation();
@@ -47,8 +76,31 @@ const MobileMenu = () => {
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen]);
 
-  const currentMenuItem = menuItems.find((item) => item.path === location.pathname);
-  const pageTitle = currentMenuItem ? t(currentMenuItem.labelKey) : t("menu.jsonToCsv");
+  const allItems = [...headerMenuItems, ...moreMenuItems];
+  const currentMenuItem = allItems.find((item) => item.path === location.pathname);
+  const pageTitle = currentMenuItem ? t(currentMenuItem.labelKey) : t("menu.beautifyJson");
+
+  const renderMenuItem = (item: (typeof allItems)[0]) => {
+    const IconComponent = IconMap[item.iconName];
+    const isActive = location.pathname === item.path;
+    return (
+      <MenuItem
+        key={item.key}
+        selected={isActive}
+        onClick={() => handleNavigation(item.path)}
+        onKeyDown={(e) => handleKeyDown(e, item.path)}
+        aria-current={isActive ? "page" : undefined}
+        className={`${styles.drawer__item} ${isActive ? styles["drawer__item--active"] : ""}`}
+      >
+        {IconComponent && (
+          <ListItemIcon className={styles.drawer__icon}>
+            <IconComponent fontSize="small" />
+          </ListItemIcon>
+        )}
+        <ListItemText primary={t(item.labelKey)} />
+      </MenuItem>
+    );
+  };
 
   return (
     <>
@@ -91,21 +143,15 @@ const MobileMenu = () => {
           </div>
 
           <nav aria-label={t("aria.mainNavigation")}>
-            <List className={styles.drawer__list}>
-              {menuItems.map((item) => {
-                const isActive = location.pathname === item.path;
-                return (
-                  <button
-                    key={item.key}
-                    onClick={() => handleNavigation(item.path)}
-                    onKeyDown={(e) => handleKeyDown(e, item.path)}
-                    className={`${styles.drawer__item} ${isActive ? styles["drawer__item--active"] : ""}`}
-                    aria-current={isActive ? "page" : undefined}
-                  >
-                    <span className={styles.drawer__itemText}>{t(item.labelKey)}</span>
-                  </button>
-                );
-              })}
+            <List className={styles.drawer__list} disablePadding>
+              {/* Primary tools section */}
+              {headerMenuItems.map(renderMenuItem)}
+
+              <Divider className={styles.drawer__divider} />
+
+              {/* More tools section */}
+              <div className={styles.drawer__sectionLabel}>{t("menu.moreTools")}</div>
+              {moreMenuItems.map(renderMenuItem)}
             </List>
           </nav>
         </div>

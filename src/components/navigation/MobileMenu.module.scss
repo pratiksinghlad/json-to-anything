@@ -42,37 +42,48 @@
   }
 
   &__list {
-    padding: $spacing-md 0;
+    padding: $spacing-xs 0 !important;
+  }
+
+  &__divider {
+    margin: $spacing-xs 0 !important;
+    border-color: $surface-lighter !important;
+  }
+
+  &__sectionLabel {
+    padding: $spacing-sm $spacing-lg;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $text-secondary;
   }
 
   &__item {
-    padding: $spacing-md $spacing-lg;
-    color: $text-primary;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
+    padding: $spacing-sm $spacing-md !important;
+    color: $text-primary !important;
     @include transition(background-color, color);
-    cursor: pointer;
-    border: none;
-    width: 100%;
-    text-align: left;
-    font-size: 16px;
-    font-family: inherit;
-    background: transparent;
     @include focus-visible;
 
     &:hover {
-      background-color: $hover-bg;
+      background-color: $hover-bg !important;
     }
 
     &--active {
-      @include active-state;
-      border-left: 4px solid $primary-color;
-      padding-left: calc(#{$spacing-lg} - 4px);
+      background-color: $active-bg !important;
+      border-left: 3px solid $primary-color;
+      padding-left: calc(#{$spacing-md} - 3px) !important;
+
+      // Target the ListItemText primary text via MUI class
+      .MuiListItemText-primary {
+        color: $primary-color;
+        font-weight: 600;
+      }
     }
   }
 
-  &__itemText {
-    font-weight: inherit;
+  &__icon {
+    min-width: 36px !important;
+    color: $text-secondary;
   }
 }

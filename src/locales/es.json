@@ -10,7 +10,8 @@
     "jsonToToon": "JSON a TOON",
     "jsonToYaml": "JSON a YAML",
     "jsonToToml": "JSON a TOML",
-    "about": "Acerca de"
+    "about": "Acerca de",
+    "moreTools": "Más Herramientas"
   },
   "language": {
     "english": "Inglés",
