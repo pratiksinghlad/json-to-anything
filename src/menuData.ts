@@ -4,8 +4,8 @@
  *
  * To re-prioritize which tools appear in the header vs. the "More Tools"
  * dropdown, simply change the `placement` field:
- *   - 'header'  â†’ rendered as a direct button in the desktop header
- *   - 'more'    â†’ rendered inside the "More Tools" dropdown
+ *   - 'header'  → rendered as a direct button in the desktop header
+ *   - 'more'    → rendered inside the "More Tools" dropdown
  *
  * The mobile drawer always shows all items regardless of placement.
  */
@@ -22,7 +22,7 @@ export interface MenuItem {
 }
 
 export const menuItems: MenuItem[] = [
-  // â”€â”€ Primary Suite (always visible in desktop header) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Primary Suite (always visible in desktop header) ──────────────────────
   {
     key: "beautify-json",
     labelKey: "menu.beautifyJson",
@@ -65,7 +65,7 @@ export const menuItems: MenuItem[] = [
     iconName: "DifferenceOutlined",
     placement: "header",
   },
-   {
+  {
     key: "about",
     labelKey: "menu.about",
     path: "/about",
@@ -102,7 +102,7 @@ export const menuItems: MenuItem[] = [
   },
 ];
 
-/** Convenience selectors â€” derived from the canonical list above */
+/** Convenience selectors — derived from the canonical list above */
 export const headerMenuItems = menuItems.filter((i) => i.placement === "header");
 export const moreMenuItems = menuItems.filter((i) => i.placement === "more");
 
@@ -121,11 +121,11 @@ export const languageOptions: LanguageOption[] = [
   {
     code: "es",
     label: "Spanish",
-    nativeLabel: "EspaÃ±ol",
+    nativeLabel: "Español",
   },
   {
     code: "hi",
     label: "Hindi",
-    nativeLabel: "à¤¹à¤¿à¤¨à¥à¤¦à¥€",
+    nativeLabel: "हिन्दी",
   },
 ];
