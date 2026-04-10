@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useLayoutEffect } from "react";
+import { useState, useRef, useMemo, useLayoutEffect, forwardRef, useImperativeHandle, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Box,
@@ -17,11 +17,14 @@ import {
 import Editor from "react-simple-code-editor";
 import { highlight } from "../../utils/highlight";
 import CopyButton from "../CopyButton";
+import ClearButton from "../ClearButton";
 import LineNumberGutter, { EDITOR_FONT_SIZE, EDITOR_LINE_HEIGHT, EDITOR_PADDING } from "./LineNumberGutter";
 import { csvToJson } from "../../utils/csvToJson";
 import { xmlToJson } from "../../utils/xmlToJson";
 import { normalizeData } from "../../utils/normalizeData";
 import { getAllKeys, flattenObject } from "../../utils/flattenObject";
+import { globalThemeConfig } from "../../themeConfig";
+import { useKeyboardShortcuts } from "../../hooks/useKeyboardShortcuts";
 
 export interface EditorPanelProps {
   initialValue?: string;
@@ -32,13 +35,24 @@ export interface EditorPanelProps {
   readOnly?: boolean;
 }
 
-const EditorPanel: React.FC<EditorPanelProps> = ({
+export interface EditorPanelHandle {
+  focus: () => void;
+  copy: () => void;
+  clear: () => void;
+  setViewMode: (mode: "text" | "tree" | "table") => void;
+}
+
+// @ts-ignore - Handle possible default export mismatch in ESM/React 19
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const EditorComponent = (Editor as any).default || Editor;
+
+const EditorPanel = forwardRef<EditorPanelHandle, EditorPanelProps>(({
   initialValue = "{}",
   value,
   onChange,
   language = "json",
   readOnly = false,
-}) => {
+}, ref) => {
   const { t } = useTranslation();
   const [internalCode, setInternalCode] = useState(initialValue);
   const [viewMode, setViewMode] = useState<"text" | "tree" | "table">("text");
@@ -52,6 +66,64 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
 
   const currentCode = value !== undefined ? value : internalCode;
 
+  const updateCode = useCallback((newCode: string) => {
+    if (value === undefined) {
+      setInternalCode(newCode);
+    }
+    if (onChange) {
+      onChange(newCode);
+    }
+  }, [value, onChange]);
+
+  // Expose methods via ref
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      if (viewMode === "text") {
+        textareaRef.current?.focus();
+      } else {
+        contentRef.current?.focus();
+      }
+    },
+    copy: () => {
+      navigator.clipboard.writeText(currentCode);
+    },
+    clear: () => {
+      updateCode("");
+    },
+    setViewMode: (mode) => {
+      setViewMode(mode);
+    }
+  }), [currentCode, viewMode, updateCode]);
+
+  // Keyboard shortcuts for view modes (scoped to this panel)
+  const isPanelFocused = () => {
+    return (
+      contentRef.current?.contains(document.activeElement) ||
+      editorWrapperRef.current?.contains(document.activeElement)
+    );
+  };
+
+  useKeyboardShortcuts([
+    { 
+      key: "t", 
+      altKey: true, 
+      action: () => isPanelFocused() && setViewMode("text"), 
+      options: { preventDefault: true } 
+    },
+    { 
+      key: "e", 
+      altKey: true, 
+      action: () => isPanelFocused() && setViewMode("tree"), 
+      options: { preventDefault: true } 
+    },
+    { 
+      key: "b", 
+      altKey: true, 
+      action: () => isPanelFocused() && setViewMode("table"), 
+      options: { preventDefault: true } 
+    },
+  ], true);
+
   // Locate the textarea inside react-simple-code-editor after DOM commits.
   // useLayoutEffect runs synchronously after the DOM is painted, guaranteeing
   // the textarea exists before the gutter attaches its scroll listener.
@@ -62,14 +134,7 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
     textareaRef.current = wrapper.querySelector<HTMLTextAreaElement>("textarea");
   }, [viewMode]);
 
-  const updateCode = (newCode: string) => {
-    if (value === undefined) {
-      setInternalCode(newCode);
-    }
-    if (onChange) {
-      onChange(newCode);
-    }
-  };
+
 
   // Memoize parsed data to avoid re-parsing on every render
   const parsedData = useMemo(() => {
@@ -116,7 +181,7 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
             <pre
               style={{
                 margin: 0,
-                fontFamily: '"Fira Code", "Fira Mono", monospace',
+                fontFamily: globalThemeConfig.FONT_FAMILY_MONO,
                 fontSize: "13px",
                 lineHeight: "1.5",
                 color: "#2c3e50",
@@ -211,25 +276,41 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
       return <Alert severity="warning">{errorMsg}</Alert>;
     }
 
-    // Text view – the gutter is rendered alongside (see JSX below)
     return (
-      <Editor
-        value={currentCode}
-        onValueChange={updateCode}
-        highlight={(code) => highlight(code, language)}
-        readOnly={readOnly}
-        padding={EDITOR_PADDING}
-        style={{
-          fontFamily: '"Fira Code", "Fira Mono", monospace',
-          fontSize: EDITOR_FONT_SIZE,
-          lineHeight: `${EDITOR_LINE_HEIGHT}px`,
-          minHeight: "100%",
-          flex: 1,
-        }}
-        textareaClassName="editor-textarea"
-        textareaId={`editor-${language}`}
-        aria-label={t("editor.ariaLabel", { language })}
-      />
+      <>
+        <label 
+          htmlFor={`editor-${language}`} 
+          style={{ 
+            position: 'absolute', 
+            width: '1px', 
+            height: '1px', 
+            padding: 0, 
+            margin: '-1px', 
+            overflow: 'hidden', 
+            clip: 'rect(0, 0, 0, 0)', 
+            whiteSpace: 'nowrap', 
+            border: 0 
+          }}
+        >
+          {t("editor.ariaLabel", { language })}
+        </label>
+        <EditorComponent
+          value={currentCode}
+          onValueChange={updateCode}
+          highlight={(code: string) => highlight(code, language)}
+          readOnly={readOnly}
+          padding={EDITOR_PADDING}
+          style={{
+            fontFamily: globalThemeConfig.FONT_FAMILY_MONO,
+            fontSize: EDITOR_FONT_SIZE,
+            lineHeight: `${EDITOR_LINE_HEIGHT}px`,
+            minHeight: "100%",
+            flex: 1,
+          }}
+          textareaClassName="editor-textarea"
+          textareaId={`editor-${language}`}
+        />
+      </>
     );
   };
 
@@ -263,6 +344,8 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
         }}
       >
         <Box
+          role="tablist"
+          aria-label={t("editor.viewMode") || "View Mode"}
           sx={{
             display: "flex",
             backgroundColor: "rgba(255,255,255,0.1)",
@@ -278,6 +361,8 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
                 key={mode.value}
                 size="small"
                 onClick={() => setViewMode(m)}
+                role="tab"
+                aria-selected={isActive}
                 sx={{
                   minWidth: "60px",
                   p: "4px 12px",
@@ -304,6 +389,10 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
           sx={{ width: "1px", height: "20px", backgroundColor: "rgba(255,255,255,0.2)", mx: 0.5 }}
         />
         <Box sx={{ flexGrow: 1 }} />
+        <ClearButton 
+          onClear={() => updateCode("")} 
+          disabled={!currentCode || currentCode.trim() === ""} 
+        />
         <CopyButton value={currentCode} />
       </Box>
 
@@ -352,6 +441,8 @@ const EditorPanel: React.FC<EditorPanelProps> = ({
       </Box>
     </Box>
   );
-};
+});
+
+EditorPanel.displayName = "EditorPanel";
 
 export default EditorPanel;

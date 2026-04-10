@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
-import { menuItems } from "../../menuData";
+import { headerMenuItems } from "../../menuData";
 import LanguageMenu from "./LanguageMenu";
+import MoreToolsMenu from "./MoreToolsMenu";
 import styles from "./DesktopMenu.module.scss";
 
 interface DesktopMenuProps {
@@ -27,7 +28,7 @@ const DesktopMenu = ({ vertical = false }: DesktopMenuProps) => {
   return (
     <header className={`${styles.desktopMenu} ${vertical ? styles["desktopMenu--vertical"] : ""}`}>
       <nav aria-label={t("aria.mainNavigation")} className={styles.desktopMenu__nav}>
-        {menuItems.map((item) => {
+        {headerMenuItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
             <button
@@ -41,6 +42,7 @@ const DesktopMenu = ({ vertical = false }: DesktopMenuProps) => {
             </button>
           );
         })}
+        <MoreToolsMenu />
       </nav>
       <div className={styles.desktopMenu__languageWrapper}>
         <LanguageMenu />

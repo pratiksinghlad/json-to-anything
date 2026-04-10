@@ -6,9 +6,12 @@
     "xmlToJson": "XML a JSON",
     "beautifyJson": "Embellecer JSON",
     "validateJson": "Validar JSON",
-    "compare": "Comparar",
+    "compare": "Comparar Text",
     "jsonToToon": "JSON a TOON",
-    "about": "Acerca de"
+    "jsonToYaml": "JSON a YAML",
+    "jsonToToml": "JSON a TOML",
+    "about": "Acerca de",
+    "moreTools": "Más Herramientas"
   },
   "language": {
     "english": "Inglés",
@@ -46,7 +49,7 @@
       "title": "Comparar JSON",
       "original": "Original",
       "modified": "Modificado",
-      "compareBtn": "Comparar",
+      "compareBtn": "Comparar Text",
       "resetBtn": "Editar",
       "additions": "adiciones",
       "deletions": "eliminaciones",
@@ -103,6 +106,12 @@
       "tokens": "tokens",
       "processing": "Procesando archivo grande...",
       "privacyNote": "Toda la conversión ocurre localmente en tu navegador."
+    },
+    "jsonToYaml": {
+      "title": "Convertidor de JSON a YAML"
+    },
+    "jsonToToml": {
+      "title": "Convertidor de JSON a TOML"
     }
   },
   "options": {
@@ -118,7 +127,11 @@
     "downloadCsv": "Descargar CSV",
     "downloadJson": "Descargar JSON",
     "downloadToon": "Descargar TOON",
+    "downloadYaml": "Descargar YAML",
+    "downloadToml": "Descargar TOML",
     "copyCsv": "Copiar CSV",
+    "copyYaml": "Copiar YAML",
+    "copyToml": "Copiar TOML",
     "showRawData": "Mostrar datos"
   },
   "preview": {
@@ -150,7 +163,31 @@
     "toon": "TOON",
     "tablePreview": "Vista previa de la tabla",
     "copyToClipboard": "Copiar al portapapeles",
-    "copied": "¡Copiado!"
+    "copied": "¡Copiado!",
+    "clear": "Limpiar",
+    "cleared": "¡Limpiado!",
+    "keyboardShortcuts": "Atajos de Teclado"
+  },
+  "shortcuts": {
+    "navigation": "Navegación",
+    "focusInput": "Enfocar Editor de Entrada",
+    "focusOutput": "Enfocar Editor de Salida",
+    "toggleHelp": "Alternar Ayuda de Atajos",
+    "actions": "Acciones",
+    "copyOutput": "Copiar contenido de Salida",
+    "clearInput": "Limpiar contenido de Entrada",
+    "viewModes": "Modos de Vista del Editor",
+    "textView": "Cambiar a Vista de Texto",
+    "treeView": "Cambiar a Vista de Árbol",
+    "tableView": "Cambiar a Vista de Tabla",
+    "navCsv": "Cambiar a JSON a CSV",
+    "navXml": "Cambiar a JSON a XML",
+    "navBeautify": "Cambiar a Embellecer JSON",
+    "navValidate": "Cambiar a Validar JSON",
+    "navYaml": "Cambiar a JSON a YAML",
+    "navToml": "Cambiar a JSON a TOML",
+    "navCompare": "Cambiar a Comparar Texto",
+    "pageSwitching": "Cambio de página (pestañas)"
   },
   "errors": {
     "emptyInput": "La entrada está vacía",

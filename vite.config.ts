@@ -58,7 +58,7 @@ export default defineConfig({
   },
 
   optimizeDeps: {
-    include: ["react", "react-dom", "@mui/material", "@emotion/react", "@emotion/styled"],
+    include: ["react", "react-dom", "@mui/material", "@mui/icons-material", "@emotion/react", "@emotion/styled"],
     // Exclude WASM module from pre-bundling — it is lazy-loaded at runtime
     exclude: ["json_engine"],
   },
@@ -87,7 +87,30 @@ export default defineConfig({
             if (id.includes("i18next")) {
               return "i18n-vendor";
             }
-            return "vendor";
+            if (id.includes("prismjs")) {
+              return "prism-vendor";
+            }
+            if (id.includes("ajv")) {
+              return "ajv-vendor";
+            }
+            if (id.includes("gpt-tokenizer")) {
+              return "tokenizer-vendor";
+            }
+            if (id.includes("papaparse")) {
+              return "csv-vendor";
+            }
+            if (id.includes("fast-xml-parser")) {
+              return "xml-vendor";
+            }
+            if (id.includes("diff")) {
+              return "diff-vendor";
+            }
+            if (id.includes("@fontsource")) {
+              return "font-vendor";
+            }
+            // Do NOT include a catch-all. 
+            // Letting Rollup handle the rest automatically ensures smart chunking
+            // perfectly aligned with the lazy-loaded React routes.
           }
         },
         chunkFileNames: "assets/js/[name]-[hash].js",
@@ -95,7 +118,7 @@ export default defineConfig({
         assetFileNames: "assets/[ext]/[name]-[hash].[ext]",
       },
     },
-    chunkSizeWarningLimit: 600,
+    chunkSizeWarningLimit: 2500,
     minify: true,
     cssCodeSplit: true,
     sourcemap: false,

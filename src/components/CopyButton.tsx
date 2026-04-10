@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { IconButton, Tooltip, Zoom } from "@mui/material";
-import { ContentCopy as CopyIcon, Check as CheckIcon } from "@mui/icons-material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CheckIcon from "@mui/icons-material/Check";
 import { useTranslation } from "react-i18next";
 
 interface CopyButtonProps {
@@ -49,7 +50,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({ value, size = "small", color = 
         {copied ? (
           <CheckIcon fontSize="small" sx={{ color: "#4caf50" }} />
         ) : (
-          <CopyIcon fontSize="small" />
+          <ContentCopyIcon fontSize="small" />
         )}
       </IconButton>
     </Tooltip>

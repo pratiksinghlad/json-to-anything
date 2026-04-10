@@ -24,7 +24,9 @@ import ValidationResults from "../components/ValidationResults";
 import { parseJson } from "../utils/parseJson";
 import { jsonToToon } from "../utils/jsonToToon";
 import { countTokens, calculateSavings, formatNumber } from "../utils/tokenizer";
+import { isBlankInput } from "../utils/isBlankInput";
 import type { ValidationError } from "../types/validationTypes";
+import { useJsonEditorAccessibility } from "../hooks/useJsonEditorAccessibility";
 
 const DEFAULT_JSON = `[
   {
@@ -66,6 +68,8 @@ const JsonToToonPage = () => {
   const [jsonTokens, setJsonTokens] = useState(0);
   const [toonTokens, setToonTokens] = useState(0);
 
+  const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
+
   // Memoized TOON conversion options
   const toonOptions = useMemo(
     () => ({
@@ -100,6 +104,15 @@ const JsonToToonPage = () => {
 
   // Convert JSON to TOON and calculate tokens
   const processConversion = useCallback(() => {
+    if (isBlankInput(jsonInput)) {
+      setErrors([]);
+      setToonOutput("");
+      setJsonTokens(0);
+      setToonTokens(0);
+      setIsProcessing(false);
+      return;
+    }
+
     // Validate JSON first
     const parseResult = parseJson(jsonInput);
     if (!parseResult.success) {
@@ -260,6 +273,7 @@ const JsonToToonPage = () => {
       <JsonEditorLayout
         leftPanel={
           <EditorPanel
+            ref={leftPanelRef}
             title={t("common.json")}
             value={jsonInput}
             onChange={setJsonInput}
@@ -269,6 +283,7 @@ const JsonToToonPage = () => {
         centerPanel={<CenterPanel />}
         rightPanel={
           <EditorPanel
+            ref={rightPanelRef}
             title={t("common.toon")}
             value={toonOutput}
             language="plaintext"

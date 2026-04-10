@@ -11,8 +11,10 @@ import ValidationResults from "../components/ValidationResults";
 import { parseJson } from "../utils/parseJson";
 import { normalizeData } from "../utils/normalizeData";
 import { jsonToCsv } from "../utils/jsonToCsv";
+import { isBlankInput } from "../utils/isBlankInput";
 import type { CsvOptions } from "../utils/jsonToCsv";
 import type { ValidationError } from "../types/validationTypes";
+import { useJsonEditorAccessibility } from "../hooks/useJsonEditorAccessibility";
 
 const DEFAULT_JSON = `[
   {
@@ -46,7 +48,15 @@ const JsonToCsvPage = () => {
   const [trimEmptyColumns, setTrimEmptyColumns] = useState(false);
   const [pascalCaseHeaders, setPascalCaseHeaders] = useState(false);
 
+  const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
+
   useEffect(() => {
+    if (isBlankInput(jsonInput)) {
+      setErrors([]);
+      setCsvData("");
+      return;
+    }
+
     // Parse and validate JSON
     const parseResult = parseJson(jsonInput);
     if (!parseResult.success) {
@@ -101,6 +111,7 @@ const JsonToCsvPage = () => {
     <JsonEditorLayout
       leftPanel={
         <EditorPanel
+          ref={leftPanelRef}
           title={t("common.json")}
           value={jsonInput}
           onChange={setJsonInput}
@@ -109,10 +120,16 @@ const JsonToCsvPage = () => {
       }
       centerPanel={<CenterPanel />}
       rightPanel={
-        <EditorPanel title={t("common.csv")} value={csvData} language="csv" readOnly={true} />
+        <EditorPanel
+          ref={rightPanelRef}
+          title={t("common.csv")}
+          value={csvData}
+          language="csv"
+          readOnly={true}
+        />
       }
       bottomPanel={
-        jsonInput ? (
+        !isBlankInput(jsonInput) ? (
           <Box sx={{ p: 2 }}>
             <ValidationResults errors={errors} />
             <Box sx={{ mb: 2, display: "flex", gap: 2, alignItems: "center" }}>

@@ -7,7 +7,7 @@
 // ---------------------------------------------------------------------------
 // Supported output formats
 // ---------------------------------------------------------------------------
-export type ConversionFormat = "csv" | "xml" | "toon" | "json-pretty" | "json-minify";
+export type ConversionFormat = "csv" | "xml" | "toon" | "json-pretty" | "json-minify" | "yaml" | "toml";
 
 // ---------------------------------------------------------------------------
 // Format-specific options — extend here when adding new strategies
@@ -40,6 +40,14 @@ export interface JsonPrettyOptions {
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface JsonMinifyOptions {}
 
+export interface YamlConversionOptions {
+  indent?: number;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface TomlConversionOptions {}
+
+
 /** Union of all strategy options — maps format → options type */
 export type ConversionOptions<F extends ConversionFormat = ConversionFormat> =
   F extends "csv" ? CsvConversionOptions :
@@ -47,6 +55,8 @@ export type ConversionOptions<F extends ConversionFormat = ConversionFormat> =
   F extends "toon" ? ToonConversionOptions :
   F extends "json-pretty" ? JsonPrettyOptions :
   F extends "json-minify" ? JsonMinifyOptions :
+  F extends "yaml" ? YamlConversionOptions :
+  F extends "toml" ? TomlConversionOptions :
   never;
 
 // ---------------------------------------------------------------------------

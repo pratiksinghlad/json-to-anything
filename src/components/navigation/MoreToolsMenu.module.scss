@@ -1,0 +1,77 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.moreTools {
+  position: relative;
+
+  &__trigger {
+    padding: $spacing-sm $spacing-lg;
+    color: $text-primary;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: $radius-pill;
+    @include transition(background-color, color);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    @include focus-visible;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    &:hover {
+      background-color: $hover-bg;
+    }
+
+    &--active {
+      @include active-state;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  &__arrow {
+    @include transition(transform);
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__paper {
+    min-width: 220px;
+    border-radius: $radius-md !important;
+    border: 1px solid $surface-lighter;
+    margin-top: 4px;
+    overflow: hidden;
+  }
+
+  &__list {
+    padding: $spacing-xs 0 !important;
+  }
+
+  &__item {
+    padding: $spacing-sm $spacing-md !important;
+    font-size: 15px !important;
+    @include transition(background-color, color);
+    @include focus-visible;
+
+    &:hover {
+      background-color: $hover-bg !important;
+    }
+
+    &--active {
+      background-color: $active-bg !important;
+      color: $primary-color !important;
+      font-weight: 600 !important;
+
+      .moreTools__icon {
+        color: $primary-color !important;
+      }
+    }
+  }
+
+  &__icon {
+    min-width: 36px !important;
+    color: $text-secondary;
+  }
+}

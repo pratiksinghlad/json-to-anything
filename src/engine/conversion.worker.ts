@@ -14,25 +14,44 @@
  */
 
 import type { WorkerRequest, WorkerResponse } from "./types";
-import { CsvStrategy }       from "./strategies/CsvStrategy";
-import { XmlStrategy }       from "./strategies/XmlStrategy";
-import { ToonStrategy }      from "./strategies/ToonStrategy";
-import { JsonPrettyStrategy, JsonMinifyStrategy } from "./strategies/JsonPrettyStrategy";
+import type { ConversionStrategy } from "./ConversionStrategy";
 
 // -------------------------------------------------------------------------
 // Strategy registry — OCP: add new strategies here without touching the rest
 // -------------------------------------------------------------------------
-const STRATEGY_REGISTRY = {
-  csv:          new CsvStrategy(),
-  xml:          new XmlStrategy(),
-  toon:         new ToonStrategy(),
-  "json-pretty": new JsonPrettyStrategy(),
-  "json-minify": new JsonMinifyStrategy(),
-} as const;
+// -------------------------------------------------------------------------
+// Strategy loader — dynamically imports to support code splitting
+// -------------------------------------------------------------------------
+const loadStrategy = async (format: string): Promise<ConversionStrategy | null> => {
+  switch (format) {
+    case "csv":
+      return new (await import("./strategies/CsvStrategy")).CsvStrategy();
+    case "xml":
+      return new (await import("./strategies/XmlStrategy")).XmlStrategy();
+    case "toon":
+      return new (await import("./strategies/ToonStrategy")).ToonStrategy();
+    case "json-pretty":
+      return new (await import("./strategies/JsonPrettyStrategy")).JsonPrettyStrategy();
+    case "json-minify":
+      return new (await import("./strategies/JsonPrettyStrategy")).JsonMinifyStrategy();
+    case "yaml":
+      return new (await import("./strategies/YamlStrategy")).YamlStrategy();
+    case "toml":
+      return new (await import("./strategies/TomlStrategy")).TomlStrategy();
+    default:
+      return null;
+  }
+};
 
 // -------------------------------------------------------------------------
 // Message handler
 // -------------------------------------------------------------------------
+// Polyfill global for libraries that expect it (like @iarna/toml in a worker)
+const workerScope = self as unknown as { global: typeof self };
+if (typeof self !== "undefined" && !workerScope.global) {
+  workerScope.global = self;
+}
+
 self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
   const { id, format, payloadBuffer, options, useWasm } = event.data;
 
@@ -55,8 +74,8 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
     // Progress: parsing done (10%)
     post({ type: "progress", id, percent: 10 });
 
-    // 3. WASM path for json-pretty / json-minify on huge payloads
-    if (useWasm && (format === "json-pretty" || format === "json-minify")) {
+    // 3. WASM path for json-pretty / json-minify / yaml / toml on huge payloads
+    if (useWasm || format === "yaml" || format === "toml") {
       try {
         // Lazy-load WASM module (same lazy singleton as main thread)
         const { getWasmEngine } = await import("./wasmBridge");
@@ -68,6 +87,10 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
         if (format === "json-pretty") {
           const prettyOpts = options as { indent?: number };
           output = wasm.pretty_print_json(jsonString, prettyOpts?.indent ?? 2);
+        } else if (format === "yaml") {
+          output = wasm.json_to_yaml(jsonString);
+        } else if (format === "toml") {
+          output = wasm.json_to_toml(jsonString);
         } else {
           output = wasm.minify_json(jsonString);
         }
@@ -75,13 +98,14 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
         post({ type: "progress", id, percent: 100 });
         post({ type: "result", id, output });
         return;
-      } catch {
-        // WASM not available (not compiled yet) — fall through to JS strategy
+      } catch (err) {
+        // WASM not available (not compiled yet) or error — fall through to JS strategy for all formats
+        console.warn("WASM acceleration unavailable for %s, falling back to JS. Reason:", format, err);
       }
     }
 
     // 4. JS strategy path
-    const strategy = STRATEGY_REGISTRY[format as keyof typeof STRATEGY_REGISTRY];
+    const strategy = await loadStrategy(format);
     if (!strategy) {
       post({ type: "error", id, message: `Unknown format: ${format}` });
       return;
@@ -89,8 +113,7 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
 
     post({ type: "progress", id, percent: 50 });
     
-    //eslint-disable-next-line
-    const result = strategy.convert(parsedData, options as any);
+    const result = strategy.convert(parsedData, options as unknown);
 
     post({ type: "progress", id, percent: 100 });
 

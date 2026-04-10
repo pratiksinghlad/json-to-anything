@@ -5,6 +5,8 @@ import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
 import EditorPanel from "../components/JsonEditor/EditorPanel";
 import CenterPanel from "../components/JsonEditor/CenterPanel";
 import { xmlToJson } from "../utils/xmlToJson";
+import { isBlankInput } from "../utils/isBlankInput";
+import { useJsonEditorAccessibility } from "../hooks/useJsonEditorAccessibility";
 
 const DEFAULT_XML = `<?xml version="1.0" encoding="UTF-8"?>
 <root>
@@ -33,7 +35,15 @@ const XmlToJsonPage = () => {
   const [explicitArray, setExplicitArray] = useState(false);
   const [coerceTypes, setCoerceTypes] = useState(true);
 
+  const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
+
   useEffect(() => {
+    if (isBlankInput(xmlInput)) {
+      setJsonOutput("");
+      setError(undefined);
+      return;
+    }
+
     const result = xmlToJson(xmlInput, {
       parseAttributes,
       explicitArray,
@@ -53,6 +63,7 @@ const XmlToJsonPage = () => {
     <JsonEditorLayout
       leftPanel={
         <EditorPanel
+          ref={leftPanelRef}
           title={t("common.xml")}
           value={xmlInput}
           onChange={setXmlInput}
@@ -61,7 +72,13 @@ const XmlToJsonPage = () => {
       }
       centerPanel={<CenterPanel />}
       rightPanel={
-        <EditorPanel title={t("common.json")} value={jsonOutput} language="json" readOnly={true} />
+        <EditorPanel
+          ref={rightPanelRef}
+          title={t("common.json")}
+          value={jsonOutput}
+          language="json"
+          readOnly={true}
+        />
       }
       bottomPanel={
         <Box sx={{ p: 2 }}>

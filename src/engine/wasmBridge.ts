@@ -11,6 +11,8 @@
 export interface WasmJsonEngine {
   minify_json(input: string): string;
   pretty_print_json(input: string, indent: number): string;
+  json_to_yaml(input: string): string;
+  json_to_toml(input: string): string;
 }
 
 let _module: WasmJsonEngine | null = null;

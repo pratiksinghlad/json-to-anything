@@ -23,6 +23,10 @@ export const globalThemeConfig = {
   TEXT_SECONDARY: "#000000",
   TEXT_DISABLED: "#666666",
 
+  // Typography
+  FONT_FAMILY_SANS: '"Roboto", "Helvetica Neue", "Arial", sans-serif',
+  FONT_FAMILY_MONO: 'monospace',
+
   // States
   HOVER_BG: "rgba(255, 255, 255, 0.08)",
   ACTIVE_BG: "rgba(25, 118, 210, 0.12)",

@@ -20,14 +20,43 @@ const JsonEditorLayout: React.FC<JsonEditorLayoutProps> = ({
     <Box
       sx={{ display: "flex", flexDirection: "column", height: "100vh", backgroundColor: "#fff" }}
     >
+      {/* Skip to Main Content Link */}
+      <Box
+        component="a"
+        href="#main-editor"
+        sx={{
+          position: "absolute",
+          top: "-100px",
+          left: 0,
+          background: "primary.main",
+          color: "white",
+          padding: "8px 16px",
+          zIndex: 9999,
+          transition: "top 0.2s",
+          textDecoration: "none",
+          fontWeight: "bold",
+          "&:focus": {
+            top: 0,
+          },
+        }}
+      >
+        Skip to editor
+      </Box>
+
       <Header />
 
       {/* Main Workspace Area */}
-      <Box sx={{ display: "flex", flexGrow: 1, overflow: "hidden", flexDirection: "column" }}>
+      <Box 
+        component="main" 
+        id="main-editor"
+        sx={{ display: "flex", flexGrow: 1, overflow: "hidden", flexDirection: "column" }}
+      >
         {/* Split Pane Area */}
         <Box sx={{ display: "flex", flexGrow: 1, overflow: "hidden", minHeight: 0 }}>
           {/* Left Panel */}
           <Box
+            component="section"
+            aria-label="Input Editor"
             sx={{
               flex: 1,
               display: "flex",
@@ -44,6 +73,8 @@ const JsonEditorLayout: React.FC<JsonEditorLayoutProps> = ({
 
           {/* Right Panel */}
           <Box
+            component="section"
+            aria-label="Output Preview/Editor"
             sx={{
               flex: 1,
               display: "flex",
@@ -58,7 +89,11 @@ const JsonEditorLayout: React.FC<JsonEditorLayoutProps> = ({
 
         {/* Bottom Panel (e.g. Table Preview) */}
         {bottomPanel && (
-          <Box sx={{ borderTop: "1px solid #ddd", maxHeight: "40vh", overflow: "auto" }}>
+          <Box 
+            component="section"
+            aria-label="Preview and Results"
+            sx={{ borderTop: "1px solid #ddd", maxHeight: "40vh", overflow: "auto" }}
+          >
             {bottomPanel}
           </Box>
         )}

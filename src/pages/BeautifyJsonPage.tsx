@@ -8,7 +8,9 @@ import CenterPanel from "../components/JsonEditor/CenterPanel";
 import ValidationResults from "../components/ValidationResults";
 import { parseJson } from "../utils/parseJson";
 import { formatJson } from "../utils/formatJson";
+import { isBlankInput } from "../utils/isBlankInput";
 import type { ValidationError } from "../types/validationTypes";
+import { useJsonEditorAccessibility } from "../hooks/useJsonEditorAccessibility";
 
 const DEFAULT_JSON = `{"name":"John","age":30,"city":"New York","hobbies":["reading","gaming"],"address":{"street":"123 Main St","zip":"10001"}}`;
 
@@ -23,7 +25,15 @@ const BeautifyJsonPage = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
+  const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
+
   useEffect(() => {
+    if (isBlankInput(jsonInput)) {
+      setErrors([]);
+      setFormattedOutput("");
+      return;
+    }
+
     // Validate JSON first to get structured error info
     const parseResult = parseJson(jsonInput);
     if (!parseResult.success) {
@@ -72,6 +82,7 @@ const BeautifyJsonPage = () => {
       <JsonEditorLayout
         leftPanel={
           <EditorPanel
+            ref={leftPanelRef}
             title={t("common.json")}
             value={jsonInput}
             onChange={setJsonInput}
@@ -81,6 +92,7 @@ const BeautifyJsonPage = () => {
         centerPanel={<CenterPanel />}
         rightPanel={
           <EditorPanel
+            ref={rightPanelRef}
             title={t("pages.beautify.title")}
             value={formattedOutput}
             language="json"

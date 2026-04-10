@@ -6,9 +6,12 @@
     "xmlToJson": "XML to JSON",
     "beautifyJson": "Beautify JSON",
     "validateJson": "Validate JSON",
-    "compare": "Compare",
+    "compare": "Compare Text",
     "jsonToToon": "JSON to TOON",
-    "about": "About"
+    "jsonToYaml": "JSON to YAML",
+    "jsonToToml": "JSON to TOML",
+    "about": "About",
+    "moreTools": "More Tools"
   },
   "language": {
     "english": "English",
@@ -43,10 +46,10 @@
       "copyFormatted": "Copy Formatted"
     },
     "compare": {
-      "title": "Compare",
+      "title": "Compare Text",
       "original": "Original",
       "modified": "Modified",
-      "compareBtn": "Compare",
+      "compareBtn": "Compare Text",
       "resetBtn": "Edit",
       "additions": "additions",
       "deletions": "deletions",
@@ -103,6 +106,12 @@
       "tokens": "tokens",
       "processing": "Processing large file...",
       "privacyNote": "All conversion happens locally in your browser."
+    },
+    "jsonToYaml": {
+      "title": "JSON to YAML Converter"
+    },
+    "jsonToToml": {
+      "title": "JSON to TOML Converter"
     }
   },
   "options": {
@@ -118,7 +127,11 @@
     "downloadCsv": "Download CSV",
     "downloadJson": "Download JSON",
     "downloadToon": "Download TOON",
+    "downloadYaml": "Download YAML",
+    "downloadToml": "Download TOML",
     "copyCsv": "Copy CSV",
+    "copyYaml": "Copy YAML",
+    "copyToml": "Copy TOML",
     "showRawData": "Show raw data"
   },
   "preview": {
@@ -154,7 +167,31 @@
     "toon": "TOON",
     "tablePreview": "Table Preview",
     "copyToClipboard": "Copy to clipboard",
-    "copied": "Copied!"
+    "copied": "Copied!",
+    "clear": "Clear",
+    "cleared": "Cleared!",
+    "keyboardShortcuts": "Keyboard Shortcuts"
+  },
+  "shortcuts": {
+    "navigation": "Navigation",
+    "focusInput": "Focus Input Editor",
+    "focusOutput": "Focus Output Editor",
+    "toggleHelp": "Toggle Shortcuts Help",
+    "actions": "Actions",
+    "copyOutput": "Copy Output content",
+    "clearInput": "Clear Input content",
+    "viewModes": "Editor View Modes",
+    "textView": "Switch to Text View",
+    "treeView": "Switch to Tree View",
+    "tableView": "Switch to Table View",
+    "navCsv": "Switch to JSON to CSV",
+    "navXml": "Switch to JSON to XML",
+    "navBeautify": "Switch to Beautify JSON",
+    "navValidate": "Switch to Validate JSON",
+    "navYaml": "Switch to JSON to YAML",
+    "navToml": "Switch to JSON to TOML",
+    "navCompare": "Switch to Compare Text",
+    "pageSwitching": "Page Switching (Tabs)"
   },
   "errors": {
     "emptyInput": "Input is empty",
