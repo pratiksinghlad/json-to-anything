@@ -1,0 +1,21 @@
+import{a as e}from"./rolldown-runtime-B589uzA9.js";import{G as t,H as n,K as r,N as i,O as a,P as o,_t as s,ft as c,it as l,k as u,yt as d}from"./mui-vendor-DFtBpTA8.js";import{l as f}from"./react-vendor-CpWF0ttU.js";import{i as p,n as m,o as h,r as g,t as _}from"./useJsonEditorAccessibility-B0hcjdz-.js";import{t as v}from"./ValidationResults-gzFOZdp4.js";import{t as y}from"./parseJson-BV02aLOs.js";import{t as b}from"./isBlankInput-D2CVMpyH.js";import{n as x,t as S}from"./jsonToCsv-DDj4Rwpo.js";var C=e(d(),1),w=s();function T({separator:e,includeHeader:s,trimEmptyColumns:l,pascalCaseHeaders:d,onSeparatorChange:p,onIncludeHeaderChange:m,onTrimEmptyColumnsChange:h,onPascalCaseHeadersChange:g}){let{t:_}=f(),v=e=>{p(e.target.value)},y=e=>{switch(e){case`,`:return _(`options.separatorComma`);case`;`:return _(`options.separatorSemicolon`);case`	`:return _(`options.separatorTab`);default:return e}};return(0,w.jsx)(c,{elevation:0,sx:{p:2.5,mb:2,border:`1px solid`,borderColor:`divider`,borderRadius:`12px`,backgroundColor:`#ffffff`,boxShadow:`0 2px 8px rgba(0,0,0,0.05)`},children:(0,w.jsxs)(u,{direction:{xs:`column`,sm:`row`},spacing:3,alignItems:`center`,children:[(0,w.jsxs)(r,{size:`small`,sx:{minWidth:150,"& .MuiOutlinedInput-root":{backgroundColor:`#ffffff`,"& fieldset":{borderColor:`divider`},"&:hover fieldset":{borderColor:`primary.main`},"&.Mui-focused fieldset":{borderColor:`primary.main`}}},children:[(0,w.jsx)(n,{id:`separator-label`,children:_(`options.separator`)}),(0,w.jsxs)(i,{labelId:`separator-label`,id:`separator-select`,value:e,label:_(`options.separator`),onChange:v,"aria-label":_(`aria.separator`),children:[(0,w.jsx)(o,{value:`,`,children:y(`,`)}),(0,w.jsx)(o,{value:`;`,children:y(`;`)}),(0,w.jsx)(o,{value:`\\t`,children:y(`	`)})]})]}),(0,w.jsx)(t,{control:(0,w.jsx)(a,{checked:s,onChange:e=>m(e.target.checked),"aria-label":_(`options.includeHeader`)}),label:_(`options.includeHeader`),sx:{"& .MuiFormControlLabel-label":{color:`#000000`,fontSize:`0.875rem`}}}),(0,w.jsx)(t,{control:(0,w.jsx)(a,{checked:l,onChange:e=>h(e.target.checked),"aria-label":_(`options.trimEmptyColumns`)}),label:_(`options.trimEmptyColumns`),sx:{"& .MuiFormControlLabel-label":{color:`#000000`,fontSize:`0.875rem`}}}),(0,w.jsx)(t,{control:(0,w.jsx)(a,{checked:d,onChange:e=>g(e.target.checked),"aria-label":_(`options.pascalCaseHeaders`)}),label:_(`options.pascalCaseHeaders`),sx:{"& .MuiFormControlLabel-label":{color:`#000000`,fontSize:`0.875rem`}}})]})})}var E=`[
+  {
+    "id": 1,
+    "name": "Pratik",
+    "email": "pratik@example.com",
+    "profile": {
+      "role": "engineer",
+      "joined": "2017-04-12T08:00:00Z"
+    },
+    "tags": ["fullstack", "react", "dotnet", "azure", "devops", "ci/cd", "cloud"]
+  },
+  {
+    "id": 2,
+    "name": "Bob",
+    "email": "bob@example.com",
+    "profile": {
+      "role": "designer"
+    },
+    "tags": []
+  }
+]`,D=()=>{let{t:e}=f(),[t,n]=(0,C.useState)(E),[r,i]=(0,C.useState)([]),[a,o]=(0,C.useState)(``),[s,c]=(0,C.useState)(`,`),[u,d]=(0,C.useState)(!0),[D,O]=(0,C.useState)(!1),[k,A]=(0,C.useState)(!1),{leftPanelRef:j,rightPanelRef:M}=_();return(0,C.useEffect)(()=>{if(b(t)){i([]),o(``);return}let n=y(t);if(!n.success){i([{message:n.error||e(`errors.invalidJson`),line:n.line}]),o(``);return}let r=h(n.data);if(!r.success){i([{message:{"Array is empty":e(`errors.arrayEmpty`),"Array must contain only objects":e(`errors.arrayOnlyObjects`),"Data array is empty":e(`errors.dataArrayEmpty`),"Data array must contain only objects":e(`errors.dataArrayOnlyObjects`)}[r.error||``]||r.error||e(`errors.invalidInputType`)}]),o(``);return}i([]);let a={separator:s,includeHeader:u,trimEmptyColumns:D,pascalCaseHeaders:k};o(S(r.data||[],a))},[t,s,u,D,k,e]),(0,w.jsx)(m,{leftPanel:(0,w.jsx)(p,{ref:j,title:e(`common.json`),value:t,onChange:n,language:`json`}),centerPanel:(0,w.jsx)(g,{}),rightPanel:(0,w.jsx)(p,{ref:M,title:e(`common.csv`),value:a,language:`csv`,readOnly:!0}),bottomPanel:b(t)?null:(0,w.jsxs)(l,{sx:{p:2},children:[(0,w.jsx)(v,{errors:r}),(0,w.jsx)(l,{sx:{mb:2,display:`flex`,gap:2,alignItems:`center`},children:(0,w.jsx)(x,{csvData:a,jsonData:t,disabled:!a})}),(0,w.jsx)(T,{separator:s,includeHeader:u,trimEmptyColumns:D,pascalCaseHeaders:k,onSeparatorChange:c,onIncludeHeaderChange:d,onTrimEmptyColumnsChange:O,onPascalCaseHeadersChange:A})]})})};export{D as default};
