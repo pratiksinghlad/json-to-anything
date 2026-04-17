@@ -1,6 +1,15 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      /**
+       * Bulletproof polyfill for 'global' in the browser.
+       * Some libraries (like @iarna/toml) expect this to exist at top-level evaluation.
+       */
+      if (typeof global === 'undefined') {
+        window.global = window;
+      }
+    </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/json.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,7 +19,7 @@
       content="Convert JSON to CSV, XML, and more instantly in your browser. Simple, fast, and secure JSON to CSV converter with no server uploads."
     />
     <link rel="canonical" href="https://pratiksinghlad.github.io/json-to-anything/" />
-    <link rel="manifest" href="/json-to-anything/manifest.json" />
+    <link rel="manifest" href="./manifest.json" />
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://pratiksinghlad.github.io/json-to-anything/" />

@@ -46,11 +46,6 @@ const loadStrategy = async (format: string): Promise<ConversionStrategy | null> 
 // -------------------------------------------------------------------------
 // Message handler
 // -------------------------------------------------------------------------
-// Polyfill global for libraries that expect it (like @iarna/toml in a worker)
-const workerScope = self as unknown as { global: typeof self };
-if (typeof self !== "undefined" && !workerScope.global) {
-  workerScope.global = self;
-}
 
 self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
   const { id, format, payloadBuffer, options, useWasm } = event.data;
@@ -74,8 +69,10 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
     // Progress: parsing done (10%)
     post({ type: "progress", id, percent: 10 });
 
-    // 3. WASM path for json-pretty / json-minify / yaml / toml on huge payloads
-    if (useWasm || format === "yaml" || format === "toml") {
+    // 3. WASM path — only when explicitly requested.
+    //    Do NOT force yaml/toml here: the wasm-bindgen output references `window`
+    //    at module level which crashes the worker before the catch can fire.
+    if (useWasm) {
       try {
         // Lazy-load WASM module (same lazy singleton as main thread)
         const { getWasmEngine } = await import("./wasmBridge");
@@ -99,7 +96,7 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
         post({ type: "result", id, output });
         return;
       } catch (err) {
-        // WASM not available (not compiled yet) or error — fall through to JS strategy for all formats
+        // WASM not available or error — fall through to JS strategy
         console.warn("WASM acceleration unavailable for %s, falling back to JS. Reason:", format, err);
       }
     }

@@ -2,19 +2,13 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, HashRouter, Routes, Route } from "react-router-dom";
 import { CssBaseline, ThemeProvider, createTheme, Box, CircularProgress } from "@mui/material";
 import { globalThemeConfig } from "./themeConfig";
+import BidirectionalConverterPage from "./pages/BidirectionalConverterPage";
 
 // Lazy load page components for code splitting and better performance
-const JsonToCsvPage = lazy(() => import("./pages/JsonToCsvPage"));
-const JsonToXmlPage = lazy(() => import("./pages/JsonToXmlPage"));
-const CsvToJsonPage = lazy(() => import("./pages/CsvToJsonPage"));
-const XmlToJsonPage = lazy(() => import("./pages/XmlToJsonPage"));
 const BeautifyJsonPage = lazy(() => import("./pages/BeautifyJsonPage"));
 const ValidateJsonPage = lazy(() => import("./pages/ValidateJsonPage"));
 const ComparePage = lazy(() => import("./pages/ComparePage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
-const JsonToToonPage = lazy(() => import("./pages/JsonToToonPage"));
-const JsonToYamlPage = lazy(() => import("./pages/JsonToYamlPage"));
-const JsonToTomlPage = lazy(() => import("./pages/JsonToTomlPage"));
 
 // Theme configuration matching the JSON to anything Dark/Light mix
 const theme = createTheme({
@@ -98,15 +92,24 @@ function App() {
             <Routes>
               <Route path="/" element={<BeautifyJsonPage />} />
               <Route path="/beautify" element={<BeautifyJsonPage />} />
-              <Route path="/json-to-csv" element={<JsonToCsvPage />} />
-              <Route path="/json-to-xml" element={<JsonToXmlPage />} />
-              <Route path="/csv-to-json" element={<CsvToJsonPage />} />
-              <Route path="/xml-to-json" element={<XmlToJsonPage />} />
+              
+              {/* Bidirectional Conversions */}
+              <Route path="/json-to-csv" element={<BidirectionalConverterPage key="csv" primaryFormat="json" secondaryFormat="csv" initialDirection="forward" />} />
+              <Route path="/csv-to-json" element={<BidirectionalConverterPage key="csv" primaryFormat="json" secondaryFormat="csv" initialDirection="reverse" />} />
+              
+              <Route path="/json-to-xml" element={<BidirectionalConverterPage key="xml" primaryFormat="json" secondaryFormat="xml" initialDirection="forward" />} />
+              <Route path="/xml-to-json" element={<BidirectionalConverterPage key="xml" primaryFormat="json" secondaryFormat="xml" initialDirection="reverse" />} />
+              
+              <Route path="/json-to-yaml" element={<BidirectionalConverterPage key="yaml" primaryFormat="json" secondaryFormat="yaml" initialDirection="forward" />} />
+              <Route path="/yaml-to-json" element={<BidirectionalConverterPage key="yaml" primaryFormat="json" secondaryFormat="yaml" initialDirection="reverse" />} />
+              
+              <Route path="/json-to-toml" element={<BidirectionalConverterPage key="toml" primaryFormat="json" secondaryFormat="toml" initialDirection="forward" />} />
+              <Route path="/toml-to-json" element={<BidirectionalConverterPage key="toml" primaryFormat="json" secondaryFormat="toml" initialDirection="reverse" />} />
+              
+              <Route path="/json-to-toon" element={<BidirectionalConverterPage key="toon" primaryFormat="json" secondaryFormat="toon" initialDirection="forward" />} />
+
               <Route path="/validate" element={<ValidateJsonPage />} />
               <Route path="/compare" element={<ComparePage />} />
-              <Route path="/json-to-toon" element={<JsonToToonPage />} />
-              <Route path="/json-to-yaml" element={<JsonToYamlPage />} />
-              <Route path="/json-to-toml" element={<JsonToTomlPage />} />
               <Route path="/about" element={<AboutPage />} />
             </Routes>
           </Suspense>

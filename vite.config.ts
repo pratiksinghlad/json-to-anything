@@ -9,6 +9,11 @@ const isTauri = !!process.env.TAURI_ENV_PLATFORM;
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  define: {
+    // `globalThis` works in main thread, web workers, Node, and Deno.
+    // Never use `window` here — it breaks web workers.
+    global: 'globalThis',
+  },
   plugins: [
     react(),
     svgr(),

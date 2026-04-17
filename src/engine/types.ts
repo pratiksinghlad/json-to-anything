@@ -7,7 +7,7 @@
 // ---------------------------------------------------------------------------
 // Supported output formats
 // ---------------------------------------------------------------------------
-export type ConversionFormat = "csv" | "xml" | "toon" | "json-pretty" | "json-minify" | "yaml" | "toml";
+export type ConversionFormat = "csv" | "xml" | "toon" | "json-pretty" | "json-minify" | "yaml" | "toml" | "csv-to-json" | "xml-to-json" | "yaml-to-json" | "toml-to-json";
 
 // ---------------------------------------------------------------------------
 // Format-specific options — extend here when adding new strategies
@@ -47,6 +47,21 @@ export interface YamlConversionOptions {
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TomlConversionOptions {}
 
+export interface CsvToJsonOptions {
+  delimiter?: string;
+  hasHeader?: boolean;
+  outputType?: "array" | "lines";
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface XmlToJsonOptions {}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface YamlToJsonOptions {}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface TomlToJsonOptions {}
+
 
 /** Union of all strategy options — maps format → options type */
 export type ConversionOptions<F extends ConversionFormat = ConversionFormat> =
@@ -57,6 +72,10 @@ export type ConversionOptions<F extends ConversionFormat = ConversionFormat> =
   F extends "json-minify" ? JsonMinifyOptions :
   F extends "yaml" ? YamlConversionOptions :
   F extends "toml" ? TomlConversionOptions :
+  F extends "csv-to-json" ? CsvToJsonOptions :
+  F extends "xml-to-json" ? XmlToJsonOptions :
+  F extends "yaml-to-json" ? YamlToJsonOptions :
+  F extends "toml-to-json" ? TomlToJsonOptions :
   never;
 
 // ---------------------------------------------------------------------------

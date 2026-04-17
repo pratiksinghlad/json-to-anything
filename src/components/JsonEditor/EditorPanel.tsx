@@ -33,6 +33,7 @@ export interface EditorPanelProps {
   title?: string;
   language?: string; // e.g., "json", "csv", "xml"
   readOnly?: boolean;
+  formatLabel?: string;
 }
 
 export interface EditorPanelHandle {
@@ -52,6 +53,7 @@ const EditorPanel = forwardRef<EditorPanelHandle, EditorPanelProps>(({
   onChange,
   language = "json",
   readOnly = false,
+  formatLabel,
 }, ref) => {
   const { t } = useTranslation();
   const [internalCode, setInternalCode] = useState(initialValue);
@@ -388,6 +390,21 @@ const EditorPanel = forwardRef<EditorPanelHandle, EditorPanelProps>(({
         <Box
           sx={{ width: "1px", height: "20px", backgroundColor: "rgba(255,255,255,0.2)", mx: 0.5 }}
         />
+        
+        {formatLabel && (
+          <Typography
+            variant="button"
+            sx={{
+              color: "rgba(255,255,255,0.85)",
+              fontWeight: "bold",
+              letterSpacing: "0.5px",
+              ml: 1,
+            }}
+          >
+            {formatLabel}
+          </Typography>
+        )}
+
         <Box sx={{ flexGrow: 1 }} />
         <ClearButton 
           onClear={() => updateCode("")} 

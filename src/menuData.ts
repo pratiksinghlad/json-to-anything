@@ -32,22 +32,15 @@ export const menuItems: MenuItem[] = [
   },
   {
     key: "json-to-csv",
-    labelKey: "menu.jsonToCsv",
+    labelKey: "menu.jsonToCsv", // Now mapped to JSON ↔ CSV
     path: "/json-to-csv",
-    iconName: "TableChart",
+    iconName: "SwapHoriz",
     placement: "header",
   },
   {
     key: "json-to-xml",
-    labelKey: "menu.jsonToXml",
+    labelKey: "menu.jsonToXml", // Now mapped to JSON ↔ XML
     path: "/json-to-xml",
-    iconName: "Code",
-    placement: "header",
-  },
-  {
-    key: "csv-to-json",
-    labelKey: "menu.csvToJson",
-    path: "/csv-to-json",
     iconName: "SwapHoriz",
     placement: "header",
   },
@@ -73,24 +66,17 @@ export const menuItems: MenuItem[] = [
     placement: "header",
   },
   {
-    key: "xml-to-json",
-    labelKey: "menu.xmlToJson",
-    path: "/xml-to-json",
-    iconName: "DataObject",
-    placement: "more",
-  },
-  {
     key: "json-to-yaml",
-    labelKey: "menu.jsonToYaml",
+    labelKey: "menu.jsonToYaml", // Now mapped to JSON ↔ YAML
     path: "/json-to-yaml",
-    iconName: "Description",
+    iconName: "SwapHoriz",
     placement: "more",
   },
   {
     key: "json-to-toml",
-    labelKey: "menu.jsonToToml",
+    labelKey: "menu.jsonToToml", // Now mapped to JSON ↔ TOML
     path: "/json-to-toml",
-    iconName: "Settings",
+    iconName: "SwapHoriz",
     placement: "more",
   },
   {
