@@ -1,6 +1,6 @@
 import type { ConversionStrategy } from "../ConversionStrategy";
 import type { TomlToJsonOptions, ConversionResult } from "../types";
-import toml from "@iarna/toml";
+import { parse } from "smol-toml";
 
 export class TomlToJsonStrategy implements ConversionStrategy<TomlToJsonOptions> {
   readonly format = "toml-to-json" as const;
@@ -11,7 +11,7 @@ export class TomlToJsonStrategy implements ConversionStrategy<TomlToJsonOptions>
         return { ok: false, error: "TOML to JSON conversion requires string input." };
       }
 
-      const parsed = toml.parse(data);
+      const parsed = parse(data);
 
       return { 
         ok: true, 

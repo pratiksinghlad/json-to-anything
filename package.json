@@ -45,6 +45,7 @@
     "react-router-dom": "^7.9.5",
     "react-simple-code-editor": "^0.14.1",
     "sass": "^1.93.3",
+    "smol-toml": "^1.6.1",
     "vite-plugin-checker": "^0.11.0",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-svgr": "^4.5.0"
