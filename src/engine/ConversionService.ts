@@ -63,23 +63,31 @@ export class ConversionService {
     const bytes     = encoder.encode(jsonString);
     const byteSize  = bytes.byteLength;
 
+    const isReverse = format.endsWith("-to-json");
+
     // --- Parse once (main thread, string is already in memory) ---
-    let parsedData: unknown;
-    try {
-      parsedData = JSON.parse(jsonString);
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : String(e);
-      return {
-        result: { ok: false, error: `Invalid JSON: ${msg}` },
-        cancel: () => {/* no-op */},
-      };
+    // If it's a reverse conversion, we don't parse it as JSON, we pass the raw string
+    let parsedData: unknown = jsonString;
+    
+    if (!isReverse) {
+      try {
+        parsedData = JSON.parse(jsonString);
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        return {
+          result: { ok: false, error: `Invalid JSON: ${msg}` },
+          cancel: () => {/* no-op */},
+        };
+      }
     }
 
     // ----------------------------------------------------------------
     // ROUTE 1: Small payload → synchronous main-thread strategy
     // (YAML and TOML exclusively use WASM which requires the worker)
     // ----------------------------------------------------------------
-    if (byteSize <= this.workerThreshold && format !== "yaml" && format !== "toml") {
+    // Note: We bypass worker for ALL reverse conversions for now, 
+    // since they are mostly implemented using standard node modules
+    if ((byteSize <= this.workerThreshold && format !== "yaml" && format !== "toml") || isReverse) {
       const strategy = this.strategies[format];
       if (!strategy) {
         return {

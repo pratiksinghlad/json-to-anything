@@ -18,6 +18,13 @@ import { CsvStrategy }         from "../engine/strategies/CsvStrategy";
 import { XmlStrategy }         from "../engine/strategies/XmlStrategy";
 import { ToonStrategy }        from "../engine/strategies/ToonStrategy";
 import { JsonPrettyStrategy, JsonMinifyStrategy } from "../engine/strategies/JsonPrettyStrategy";
+import { YamlStrategy }        from "../engine/strategies/YamlStrategy";
+import { TomlStrategy }        from "../engine/strategies/TomlStrategy";
+import { CsvToJsonStrategy }   from "../engine/strategies/CsvToJsonStrategy";
+import { XmlToJsonStrategy }   from "../engine/strategies/XmlToJsonStrategy";
+import { YamlToJsonStrategy }  from "../engine/strategies/YamlToJsonStrategy";
+import { TomlToJsonStrategy }  from "../engine/strategies/TomlToJsonStrategy";
+
 
 import type {
   ConversionFormat,
@@ -27,11 +34,17 @@ import type {
 
 // Built-in strategy registry — add new strategies here to auto-register them
 const DEFAULT_STRATEGIES = {
-  csv:          new CsvStrategy(),
-  xml:          new XmlStrategy(),
-  toon:         new ToonStrategy(),
-  "json-pretty": new JsonPrettyStrategy(),
-  "json-minify": new JsonMinifyStrategy(),
+  csv:             new CsvStrategy(),
+  xml:             new XmlStrategy(),
+  toon:            new ToonStrategy(),
+  "json-pretty":   new JsonPrettyStrategy(),
+  "json-minify":   new JsonMinifyStrategy(),
+  yaml:            new YamlStrategy(),
+  toml:            new TomlStrategy(),
+  "csv-to-json":   new CsvToJsonStrategy(),
+  "xml-to-json":   new XmlToJsonStrategy(),
+  "yaml-to-json":  new YamlToJsonStrategy(),
+  "toml-to-json":  new TomlToJsonStrategy(),
 } as const;
 
 export interface UseConverterReturn {

@@ -1,15 +1,15 @@
 {
   "menu": {
-    "jsonToCsv": "JSON to CSV",
-    "jsonToXml": "JSON to XML",
+    "jsonToCsv": "JSON ↔ CSV",
+    "jsonToXml": "JSON ↔ XML",
     "csvToJson": "CSV to JSON",
     "xmlToJson": "XML to JSON",
     "beautifyJson": "Beautify JSON",
     "validateJson": "Validate JSON",
     "compare": "Compare Text",
     "jsonToToon": "JSON to TOON",
-    "jsonToYaml": "JSON to YAML",
-    "jsonToToml": "JSON to TOML",
+    "jsonToYaml": "JSON ↔ YAML",
+    "jsonToToml": "JSON ↔ TOML",
     "about": "About",
     "moreTools": "More Tools"
   },

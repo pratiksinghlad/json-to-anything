@@ -9,6 +9,9 @@ const isTauri = !!process.env.TAURI_ENV_PLATFORM;
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  define: {
+    global: 'window',
+  },
   plugins: [
     react(),
     svgr(),

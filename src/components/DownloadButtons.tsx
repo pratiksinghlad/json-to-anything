@@ -16,8 +16,10 @@ interface DownloadButtonsProps {
   toonData?: string;
   yamlData?: string;
   tomlData?: string;
+  xmlData?: string;
   disabled?: boolean;
 }
+
 
 export default function DownloadButtons({
   csvData,
@@ -25,6 +27,7 @@ export default function DownloadButtons({
   toonData,
   yamlData,
   tomlData,
+  xmlData,
   disabled = false,
 }: DownloadButtonsProps) {
   const { t } = useTranslation();
@@ -94,6 +97,13 @@ export default function DownloadButtons({
     showSnackbar(t('snackbar.jsonDownloaded')); // Reuse
   };
 
+  const handleDownloadXml = () => {
+    if (!xmlData) return;
+    const filename = `data-${getTimestamp()}.xml`;
+    downloadFile(xmlData, filename, 'application/xml;charset=utf-8;');
+    showSnackbar(t('snackbar.jsonDownloaded')); // Reuse
+  };
+
   const handleCopy = async (data: string, type: string) => {
     if (!data) return;
     try {
@@ -156,6 +166,18 @@ export default function DownloadButtons({
           </Button>
         )}
 
+        {xmlData !== undefined && (
+          <Button
+            variant="contained"
+            startIcon={<DownloadIcon />}
+            onClick={handleDownloadXml}
+            disabled={disabled}
+            sx={primaryContainedButtonSx}
+          >
+            {"Download XML"}
+          </Button>
+        )}
+
         {toonData !== undefined && (
           <Button
             variant="contained"
@@ -215,6 +237,18 @@ export default function DownloadButtons({
             sx={primaryOutlinedButtonSx}
           >
             {t('buttons.copyToml')}
+          </Button>
+        )}
+
+        {xmlData !== undefined && (
+          <Button
+            variant="outlined"
+            startIcon={<ContentCopyIcon />}
+            onClick={() => handleCopy(xmlData, 'xml')}
+            disabled={disabled}
+            sx={primaryOutlinedButtonSx}
+          >
+            {"Copy XML"}
           </Button>
         )}
 
