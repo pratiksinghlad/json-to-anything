@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import {
   AppBar,
   Toolbar,
@@ -28,6 +28,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { headerMenuItems, moreMenuItems } from "../../menuData";
+import type { MenuItem as MenuItemType } from "../../menuData";
 import LanguageMenu from "../LanguageMenu";
 import KeyboardShortcutsDialog from "../KeyboardShortcutsDialog";
 import { useKeyboardShortcuts } from "../../hooks/useKeyboardShortcuts";
@@ -43,7 +44,17 @@ const Header = () => {
   const [moreOpen, setMoreOpen] = useState(false);
   const moreAnchorRef = useRef<HTMLButtonElement>(null);
 
-  const hasActiveMoreItem = moreMenuItems.some((item) => item.path === location.pathname);
+  const hasActiveMoreItem = useMemo(
+    () => moreMenuItems.some((item) => item.path === location.pathname),
+    [location.pathname],
+  );
+
+  const primaryHeaderItems = useMemo(
+    () => headerMenuItems.filter((item: MenuItemType) => item.key !== "about"),
+    [],
+  );
+
+  const aboutItem = useMemo(() => headerMenuItems.find((item: MenuItemType) => item.key === "about"), []);
 
   useKeyboardShortcuts([
     {
@@ -173,8 +184,8 @@ const Header = () => {
         {/* Desktop Navigation — Primary tools + More Tools dropdown */}
         {!isMobile && (
           <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
-            {/* Primary 6 tools always visible */}
-            {headerMenuItems.map((item) => (
+            {/* Primary tools (except About) */}
+            {primaryHeaderItems.map((item) => (
               <Button
                 key={item.key}
                 color="inherit"
@@ -289,6 +300,29 @@ const Header = () => {
                 </Grow>
               )}
             </Popper>
+
+            {/* About tool moved to the end, after More Tools */}
+            {aboutItem && (
+              <Button
+                key={aboutItem.key}
+                color="inherit"
+                onClick={() => handleNavigation(aboutItem.path)}
+                sx={{
+                  textTransform: "none",
+                  fontSize: "0.85rem",
+                  opacity: location.pathname === aboutItem.path ? 1 : 0.7,
+                  borderBottom: location.pathname === aboutItem.path ? "2px solid #fff" : "none",
+                  borderRadius: 0,
+                  px: 1,
+                  minWidth: "auto",
+                  "&:hover": {
+                    opacity: 1,
+                  },
+                }}
+              >
+                {t(aboutItem.labelKey)}
+              </Button>
+            )}
           </Box>
         )}
 
@@ -338,9 +372,9 @@ const Header = () => {
             </IconButton>
           </Box>
 
-          {/* Primary tools */}
+          {/* Primary tools (except About) */}
           <List dense>
-            {headerMenuItems.map((item) => (
+            {primaryHeaderItems.map((item) => (
               <ListItem key={item.key} disablePadding>
                 <ListItemButton
                   onClick={() => handleNavigation(item.path)}
@@ -389,6 +423,27 @@ const Header = () => {
               </ListItem>
             ))}
           </List>
+
+          {/* About tool at the end */}
+          {aboutItem && (
+            <>
+              <Divider sx={{ borderColor: "rgba(255,255,255,0.15)", mx: 2 }} />
+              <List dense>
+                <ListItem key={aboutItem.key} disablePadding>
+                  <ListItemButton
+                    onClick={() => handleNavigation(aboutItem.path)}
+                    selected={location.pathname === aboutItem.path}
+                    sx={{
+                      "&.Mui-selected": { bgcolor: "rgba(255,255,255,0.15)" },
+                      "&:hover": { bgcolor: "rgba(255,255,255,0.05)" },
+                    }}
+                  >
+                    <ListItemText primary={t(aboutItem.labelKey)} primaryTypographyProps={{ fontSize: "0.9rem" }} />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            </>
+          )}
         </Drawer>
       </Toolbar>
       <KeyboardShortcutsDialog open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />

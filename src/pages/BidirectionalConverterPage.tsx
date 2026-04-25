@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Box, Typography, LinearProgress } from "@mui/material";
 import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
 import EditorPanel from "../components/JsonEditor/EditorPanel";
@@ -9,6 +9,7 @@ import { isBlankInput } from "../utils/isBlankInput";
 import type { ValidationError } from "../types/validationTypes";
 import { useConverter } from "../hooks/useConverter";
 import { useJsonEditorAccessibility } from "../hooks/useJsonEditorAccessibility";
+import { useJsonBeautifier } from "../hooks/useJsonBeautifier";
 import type { ConversionFormat } from "../engine/types";
 
 // We import options for all types if needed, or pass them dynamically.
@@ -16,6 +17,7 @@ import type { ConversionFormat } from "../engine/types";
 // or simply provide a clean UI for the generic ones.
 import OptionsBar from "../components/OptionsBar";
 import { parseJson } from "../utils/parseJson";
+import { formatJson } from "../utils/formatJson";
 import { normalizeData } from "../utils/normalizeData";
 
 interface BidirectionalConverterPageProps {
@@ -62,8 +64,11 @@ export default function BidirectionalConverterPage({
   const [secondaryInput, setSecondaryInput] = useState(() => getDefaultContent(secondaryFormat));
   
   // Output states
-  const [primaryOutput, setPrimaryOutput] = useState(""); // output for reverse
+  const [primaryOutput, setPrimaryOutput] = useState(""); // output for reverse (raw JSON)
   const [secondaryOutput, setSecondaryOutput] = useState(""); // output for forward
+
+  // Auto-beautify the reverse-direction JSON output using the same logic as BeautifyJsonPage
+  const { formattedOutput: beautifiedPrimaryOutput } = useJsonBeautifier(primaryOutput);
 
   // Error state
   const [errors, setErrors] = useState<ValidationError[]>([]);
@@ -76,6 +81,21 @@ export default function BidirectionalConverterPage({
 
   const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
   const { convert, isProcessing } = useConverter();
+
+  // Auto-beautify the JSON input (forward direction) when valid JSON is entered/pasted.
+  // A ref tracks the last value we formatted so we never re-format our own output,
+  // preventing an infinite render loop while still reacting to every user change.
+  const lastFormattedInputRef = useRef<string>("");
+  useEffect(() => {
+    if (direction !== "forward" || isBlankInput(primaryInput)) return;
+    if (primaryInput === lastFormattedInputRef.current) return;
+
+    const result = formatJson(primaryInput, { indent: 2 });
+    if (result.ok && result.output !== primaryInput) {
+      lastFormattedInputRef.current = result.output;
+      setPrimaryInput(result.output);
+    }
+  }, [primaryInput, direction]);
 
   // Active inputs
   const activeInput = direction === "forward" ? primaryInput : secondaryInput;
@@ -161,7 +181,8 @@ export default function BidirectionalConverterPage({
   const setLeftValue = direction === "forward" ? setPrimaryInput : setSecondaryInput;
 
   const rightLabel = direction === "forward" ? secondaryLabel : primaryLabel;
-  const rightValue = direction === "forward" ? secondaryOutput : primaryOutput;
+  // Use the auto-beautified output when JSON is on the right (reverse direction)
+  const rightValue = direction === "forward" ? secondaryOutput : beautifiedPrimaryOutput;
   const rightLanguage = direction === "forward" ? secondaryFormat : primaryFormat;
 
   const handleToggleDirection = () => {

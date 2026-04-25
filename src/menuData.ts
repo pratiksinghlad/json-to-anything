@@ -59,13 +59,6 @@ export const menuItems: MenuItem[] = [
     placement: "header",
   },
   {
-    key: "about",
-    labelKey: "menu.about",
-    path: "/about",
-    iconName: "Info",
-    placement: "header",
-  },
-  {
     key: "json-to-yaml",
     labelKey: "menu.jsonToYaml", // Now mapped to JSON ↔ YAML
     path: "/json-to-yaml",
@@ -85,6 +78,13 @@ export const menuItems: MenuItem[] = [
     path: "/json-to-toon",
     iconName: "AccountTree",
     placement: "more",
+  },
+  {
+    key: "about",
+    labelKey: "menu.about",
+    path: "/about",
+    iconName: "Info",
+    placement: "header",
   },
 ];
 
