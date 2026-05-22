@@ -107,6 +107,8 @@ function App() {
               <Route path="/toml-to-json" element={<BidirectionalConverterPage key="toml" primaryFormat="json" secondaryFormat="toml" initialDirection="reverse" />} />
               
               <Route path="/json-to-toon" element={<BidirectionalConverterPage key="toon" primaryFormat="json" secondaryFormat="toon" initialDirection="forward" />} />
+              <Route path="/json-to-graphql" element={<BidirectionalConverterPage key="graphql" primaryFormat="json" secondaryFormat="graphql" initialDirection="forward" />} />
+              <Route path="/json-to-markdown" element={<BidirectionalConverterPage key="markdown" primaryFormat="json" secondaryFormat="markdown" initialDirection="forward" />} />
 
               <Route path="/validate" element={<ValidateJsonPage />} />
               <Route path="/compare" element={<ComparePage />} />

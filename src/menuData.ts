@@ -80,6 +80,20 @@ export const menuItems: MenuItem[] = [
     placement: "more",
   },
   {
+    key: "json-to-graphql",
+    labelKey: "menu.jsonToGraphql",
+    path: "/json-to-graphql",
+    iconName: "AccountTree",
+    placement: "more",
+  },
+  {
+    key: "json-to-markdown",
+    labelKey: "menu.jsonToMarkdown",
+    path: "/json-to-markdown",
+    iconName: "TableChart",
+    placement: "more",
+  },
+  {
     key: "about",
     labelKey: "menu.about",
     path: "/about",

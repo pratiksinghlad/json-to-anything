@@ -66,6 +66,8 @@ export const highlight = (code: string, language: string): string => {
     case 'markup':
     case 'html':
       return highlightXml(code);
+    case 'graphql':
+    case 'markdown':
     case 'csv':
     default:
       return highlightCsv(code);

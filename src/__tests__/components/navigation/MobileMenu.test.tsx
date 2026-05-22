@@ -20,6 +20,12 @@ vi.mock("react-i18next", async () => {
           "menu.validateJson": "Validate JSON",
           "menu.compare": "Compare",
           "menu.about": "About",
+          "menu.moreTools": "More Tools",
+          "menu.jsonToYaml": "JSON to YAML",
+          "menu.jsonToToml": "JSON to TOML",
+          "menu.jsonToToon": "JSON to TOON",
+          "menu.jsonToGraphql": "JSON to GraphQL",
+          "menu.jsonToMarkdown": "JSON to Markdown",
           "aria.openMenu": "Open navigation menu",
           "aria.closeMenu": "Close navigation menu",
           "aria.mainNavigation": "Main navigation",
@@ -91,11 +97,14 @@ describe("MobileMenu", () => {
     const nav = screen.getByRole("navigation");
     expect(nav).toHaveTextContent("JSON to CSV");
     expect(nav).toHaveTextContent("JSON to XML");
-    expect(nav).toHaveTextContent("CSV to JSON");
-    expect(nav).toHaveTextContent("XML to JSON");
     expect(nav).toHaveTextContent("Beautify JSON");
     expect(nav).toHaveTextContent("Validate JSON");
     expect(nav).toHaveTextContent("Compare");
+    expect(nav).toHaveTextContent("JSON to YAML");
+    expect(nav).toHaveTextContent("JSON to TOML");
+    expect(nav).toHaveTextContent("JSON to TOON");
+    expect(nav).toHaveTextContent("JSON to GraphQL");
+    expect(nav).toHaveTextContent("JSON to Markdown");
     expect(nav).toHaveTextContent("About");
   });
 
@@ -124,10 +133,11 @@ describe("MobileMenu", () => {
     const hamburger = screen.getByLabelText("Open navigation menu");
     fireEvent.click(hamburger);
 
-    const jsonToCsvButton = screen.getAllByText("JSON to CSV").find((el) => 
-      el.tagName === "SPAN" && el.closest("button")
-    );
-    expect(jsonToCsvButton?.closest("button")).toHaveAttribute("aria-current", "page");
+    const beautifyItem = screen
+      .getAllByText("Beautify JSON")
+      .find((el) => el.tagName === "SPAN")
+      ?.closest('[role="menuitem"]');
+    expect(beautifyItem).toHaveAttribute("aria-current", "page");
   });
 
   it("has correct aria attributes for accessibility", () => {

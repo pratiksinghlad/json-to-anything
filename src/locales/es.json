@@ -8,6 +8,8 @@
     "validateJson": "Validar JSON",
     "compare": "Comparar Text",
     "jsonToToon": "JSON a TOON",
+    "jsonToGraphql": "JSON a GraphQL",
+    "jsonToMarkdown": "JSON a Markdown",
     "jsonToYaml": "JSON a YAML",
     "jsonToToml": "JSON a TOML",
     "about": "Acerca de",
@@ -112,6 +114,12 @@
     },
     "jsonToToml": {
       "title": "Convertidor de JSON a TOML"
+    },
+    "jsonToGraphql": {
+      "title": "Convertidor de JSON a GraphQL"
+    },
+    "jsonToMarkdown": {
+      "title": "Convertidor de JSON a Tabla Markdown"
     }
   },
   "options": {
@@ -121,7 +129,13 @@
     "separatorTab": "Tabulación",
     "includeHeader": "Incluir encabezado",
     "trimEmptyColumns": "Recortar columnas vacías",
-    "pascalCaseHeaders": "Encabezados en Pascal case"
+    "pascalCaseHeaders": "Encabezados en Pascal case",
+    "tableOutputFormat": "Formato de salida de tabla",
+    "markdownTable": "Tabla Markdown",
+    "htmlTable": "Tabla HTML",
+    "graphqlRootType": "Tipo raíz",
+    "includeGraphqlInputs": "Incluir tipos de entrada",
+    "includeGraphqlInterfaces": "Incluir interfaces"
   },
   "buttons": {
     "downloadCsv": "Descargar CSV",
@@ -129,10 +143,16 @@
     "downloadToon": "Descargar TOON",
     "downloadYaml": "Descargar YAML",
     "downloadToml": "Descargar TOML",
+    "downloadGraphql": "Descargar GraphQL",
+    "downloadMarkdown": "Descargar Markdown",
+    "downloadHtml": "Descargar HTML",
     "copyCsv": "Copiar CSV",
     "copyYaml": "Copiar YAML",
     "copyToml": "Copiar TOML",
-    "showRawData": "Mostrar datos"
+    "copyGraphql": "Copiar GraphQL",
+    "copyMarkdown": "Copiar Markdown",
+    "copyHtml": "Copiar HTML",
+    "showRawData": "Mostrar datos sin procesar"
   },
   "preview": {
     "title": "Vista previa",
@@ -142,6 +162,9 @@
     "csvDownloaded": "CSV descargado correctamente",
     "jsonDownloaded": "JSON descargado correctamente",
     "toonDownloaded": "TOON descargado correctamente",
+    "graphqlDownloaded": "Esquema GraphQL descargado correctamente",
+    "markdownDownloaded": "Tabla Markdown descargada correctamente",
+    "htmlDownloaded": "Tabla HTML descargada correctamente",
     "csvCopied": "CSV copiado al portapapeles",
     "jsonCopied": "JSON copiado al portapapeles",
     "copyFailed": "Error al copiar al portapapeles"

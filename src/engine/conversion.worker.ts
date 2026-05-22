@@ -38,6 +38,10 @@ const loadStrategy = async (format: string): Promise<ConversionStrategy | null> 
       return new (await import("./strategies/YamlStrategy")).YamlStrategy();
     case "toml":
       return new (await import("./strategies/TomlStrategy")).TomlStrategy();
+    case "graphql":
+      return new (await import("./strategies/GraphqlStrategy")).GraphqlStrategy();
+    case "markdown":
+      return new (await import("./strategies/MarkdownStrategy")).MarkdownStrategy();
     default:
       return null;
   }

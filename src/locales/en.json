@@ -8,6 +8,8 @@
     "validateJson": "Validate JSON",
     "compare": "Compare Text",
     "jsonToToon": "JSON to TOON",
+    "jsonToGraphql": "JSON ↔ GraphQL",
+    "jsonToMarkdown": "JSON ↔ Markdown",
     "jsonToYaml": "JSON ↔ YAML",
     "jsonToToml": "JSON ↔ TOML",
     "about": "About",
@@ -112,6 +114,12 @@
     },
     "jsonToToml": {
       "title": "JSON to TOML Converter"
+    },
+    "jsonToGraphql": {
+      "title": "JSON to GraphQL Converter"
+    },
+    "jsonToMarkdown": {
+      "title": "JSON to Markdown Table Converter"
     }
   },
   "options": {
@@ -121,7 +129,13 @@
     "separatorTab": "Tab",
     "includeHeader": "Include header",
     "trimEmptyColumns": "Trim empty columns",
-    "pascalCaseHeaders": "Pascal case headers"
+    "pascalCaseHeaders": "Pascal case headers",
+    "tableOutputFormat": "Table Output",
+    "markdownTable": "Markdown Table",
+    "htmlTable": "HTML Table",
+    "graphqlRootType": "Root Type",
+    "includeGraphqlInputs": "Include input types",
+    "includeGraphqlInterfaces": "Include interfaces"
   },
   "buttons": {
     "downloadCsv": "Download CSV",
@@ -129,9 +143,15 @@
     "downloadToon": "Download TOON",
     "downloadYaml": "Download YAML",
     "downloadToml": "Download TOML",
+    "downloadGraphql": "Download GraphQL",
+    "downloadMarkdown": "Download Markdown",
+    "downloadHtml": "Download HTML",
     "copyCsv": "Copy CSV",
     "copyYaml": "Copy YAML",
     "copyToml": "Copy TOML",
+    "copyGraphql": "Copy GraphQL",
+    "copyMarkdown": "Copy Markdown",
+    "copyHtml": "Copy HTML",
     "showRawData": "Show raw data"
   },
   "preview": {
@@ -142,6 +162,9 @@
     "csvDownloaded": "CSV downloaded successfully",
     "jsonDownloaded": "JSON downloaded successfully",
     "toonDownloaded": "TOON downloaded successfully",
+    "graphqlDownloaded": "GraphQL schema downloaded successfully",
+    "markdownDownloaded": "Markdown table downloaded successfully",
+    "htmlDownloaded": "HTML table downloaded successfully",
     "csvCopied": "CSV copied to clipboard",
     "jsonCopied": "JSON copied to clipboard",
     "copyFailed": "Failed to copy to clipboard"

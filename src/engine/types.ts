@@ -7,7 +7,20 @@
 // ---------------------------------------------------------------------------
 // Supported output formats
 // ---------------------------------------------------------------------------
-export type ConversionFormat = "csv" | "xml" | "toon" | "json-pretty" | "json-minify" | "yaml" | "toml" | "csv-to-json" | "xml-to-json" | "yaml-to-json" | "toml-to-json";
+export type ConversionFormat =
+  | "csv"
+  | "xml"
+  | "toon"
+  | "graphql"
+  | "markdown"
+  | "json-pretty"
+  | "json-minify"
+  | "yaml"
+  | "toml"
+  | "csv-to-json"
+  | "xml-to-json"
+  | "yaml-to-json"
+  | "toml-to-json";
 
 // ---------------------------------------------------------------------------
 // Format-specific options — extend here when adding new strategies
@@ -31,6 +44,16 @@ export interface ToonConversionOptions {
   delimiter?: "," | "\t" | "|";
   indentSize?: number;
   includeLengthMarkers?: boolean;
+}
+
+export interface GraphqlConversionOptions {
+  rootTypeName?: string;
+  includeInputTypes?: boolean;
+  includeInterfaces?: boolean;
+}
+
+export interface MarkdownConversionOptions {
+  outputFormat?: "markdown" | "html";
 }
 
 export interface JsonPrettyOptions {
@@ -68,6 +91,8 @@ export type ConversionOptions<F extends ConversionFormat = ConversionFormat> =
   F extends "csv" ? CsvConversionOptions :
   F extends "xml" ? XmlConversionOptions :
   F extends "toon" ? ToonConversionOptions :
+  F extends "graphql" ? GraphqlConversionOptions :
+  F extends "markdown" ? MarkdownConversionOptions :
   F extends "json-pretty" ? JsonPrettyOptions :
   F extends "json-minify" ? JsonMinifyOptions :
   F extends "yaml" ? YamlConversionOptions :
