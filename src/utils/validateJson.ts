@@ -124,16 +124,22 @@ export function validateJson(
       return { valid: true };
     }
 
-    const errors: ValidationError[] = (validate.errors || []).map((err: ErrorObject) => {
-      const path = err.instancePath || "";
-      const line = options?.jsonString ? findLineNumberInJson(options.jsonString, path) : undefined;
-      
-      return {
-        path: path,
-        message: err.message || "Unknown validation error",
-        line: line,
-      };
-    });
+    const errors: ValidationError[] = (validate.errors || [])
+      .map((err: ErrorObject) => {
+        const path = err.instancePath || "";
+        const line = options?.jsonString ? findLineNumberInJson(options.jsonString, path) : undefined;
+
+        return {
+          path: path,
+          message: err.message || "Unknown validation error",
+          line: line,
+        };
+      })
+      .sort((first, second) => {
+        if (first.path && !second.path) return -1;
+        if (!first.path && second.path) return 1;
+        return (first.line ?? Number.MAX_SAFE_INTEGER) - (second.line ?? Number.MAX_SAFE_INTEGER);
+      });
 
     return { valid: false, errors };
   } catch (e) {

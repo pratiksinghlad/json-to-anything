@@ -16,6 +16,7 @@ import {
   Settings,
   AccountTree,
   Info,
+  AutoAwesome,
 } from "@mui/icons-material";
 import { headerMenuItems, moreMenuItems } from "../../menuData";
 import LanguageMenu from "./LanguageMenu";
@@ -34,6 +35,7 @@ const IconMap: Record<string, React.ComponentType<{ fontSize?: "small" | "inheri
   Settings,
   AccountTree,
   Info,
+  AutoAwesome,
 };
 
 const MobileMenu = () => {

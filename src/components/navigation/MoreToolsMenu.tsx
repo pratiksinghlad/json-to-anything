@@ -8,6 +8,7 @@ import {
   Description,
   Settings,
   AccountTree,
+  TableChart,
   Info,
 } from "@mui/icons-material";
 import { moreMenuItems } from "../../menuData";
@@ -19,6 +20,7 @@ const IconMap: Record<string, React.ComponentType<{ fontSize?: "small" | "inheri
   Description,
   Settings,
   AccountTree,
+  TableChart,
   Info,
 };
 

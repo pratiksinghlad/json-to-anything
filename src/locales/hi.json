@@ -8,6 +8,8 @@
     "validateJson": "JSON मान्य करें",
     "compare": "Compare Text",
     "jsonToToon": "JSON से TOON",
+    "jsonToGraphql": "JSON से GraphQL",
+    "jsonToMarkdown": "JSON से Markdown",
     "jsonToYaml": "JSON से YAML",
     "jsonToToml": "JSON से TOML",
     "about": "के बारे में",
@@ -112,6 +114,12 @@
     },
     "jsonToToml": {
       "title": "JSON से TOML कन्वर्टर"
+    },
+    "jsonToGraphql": {
+      "title": "JSON से GraphQL कन्वर्टर"
+    },
+    "jsonToMarkdown": {
+      "title": "JSON से Markdown टेबल कन्वर्टर"
     }
   },
   "options": {
@@ -121,7 +129,13 @@
     "separatorTab": "टैब",
     "includeHeader": "हेडर शामिल करें",
     "trimEmptyColumns": "खाली कॉलम हटाएँ",
-    "pascalCaseHeaders": "पास्कल केस हेडर"
+    "pascalCaseHeaders": "पास्कल केस हेडर",
+    "tableOutputFormat": "टेबल आउटपुट",
+    "markdownTable": "Markdown टेबल",
+    "htmlTable": "HTML टेबल",
+    "graphqlRootType": "रूट टाइप",
+    "includeGraphqlInputs": "इनपुट टाइप शामिल करें",
+    "includeGraphqlInterfaces": "इंटरफेस शामिल करें"
   },
   "buttons": {
     "downloadCsv": "CSV डाउनलोड करें",
@@ -129,9 +143,15 @@
     "downloadToon": "TOON डाउनलोड करें",
     "downloadYaml": "YAML डाउनलोड करें",
     "downloadToml": "TOML डाउनलोड करें",
+    "downloadGraphql": "GraphQL डाउनलोड करें",
+    "downloadMarkdown": "Markdown डाउनलोड करें",
+    "downloadHtml": "HTML डाउनलोड करें",
     "copyCsv": "CSV कॉपी करें",
     "copyYaml": "YAML कॉपी करें",
     "copyToml": "TOML कॉपी करें",
+    "copyGraphql": "GraphQL कॉपी करें",
+    "copyMarkdown": "Markdown कॉपी करें",
+    "copyHtml": "HTML कॉपी करें",
     "showRawData": "कच्चा डेटा दिखाएँ"
   },
   "preview": {
@@ -142,6 +162,9 @@
     "csvDownloaded": "CSV सफलतापूर्वक डाउनलोड हुआ",
     "jsonDownloaded": "JSON सफलतापूर्वक डाउनलोड हुआ",
     "toonDownloaded": "TOON सफलतापूर्वक डाउनलोड हुआ",
+    "graphqlDownloaded": "GraphQL स्कीमा सफलतापूर्वक डाउनलोड हुआ",
+    "markdownDownloaded": "Markdown टेबल सफलतापूर्वक डाउनलोड हुई",
+    "htmlDownloaded": "HTML टेबल सफलतापूर्वक डाउनलोड हुई",
     "csvCopied": "CSV क्लिपबोर्ड पर कॉपी हुआ",
     "jsonCopied": "JSON क्लिपबोर्ड पर कॉपी हुआ",
     "copyFailed": "क्लिपबोर्ड पर कॉपी करने में विफल"

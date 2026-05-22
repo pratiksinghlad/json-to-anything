@@ -12,6 +12,8 @@ export type {
   CsvConversionOptions,
   XmlConversionOptions,
   ToonConversionOptions,
+  GraphqlConversionOptions,
+  MarkdownConversionOptions,
   JsonPrettyOptions,
   JsonMinifyOptions,
   WorkerRequest,
@@ -30,4 +32,6 @@ export { getWasmEngine, isWasmLoaded } from "./wasmBridge";
 export { CsvStrategy }           from "./strategies/CsvStrategy";
 export { XmlStrategy }           from "./strategies/XmlStrategy";
 export { ToonStrategy }          from "./strategies/ToonStrategy";
+export { GraphqlStrategy }       from "./strategies/GraphqlStrategy";
+export { MarkdownStrategy }      from "./strategies/MarkdownStrategy";
 export { JsonPrettyStrategy, JsonMinifyStrategy } from "./strategies/JsonPrettyStrategy";

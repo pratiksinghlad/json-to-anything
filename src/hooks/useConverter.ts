@@ -20,6 +20,8 @@ import { ToonStrategy }        from "../engine/strategies/ToonStrategy";
 import { JsonPrettyStrategy, JsonMinifyStrategy } from "../engine/strategies/JsonPrettyStrategy";
 import { YamlStrategy }        from "../engine/strategies/YamlStrategy";
 import { TomlStrategy }        from "../engine/strategies/TomlStrategy";
+import { GraphqlStrategy }     from "../engine/strategies/GraphqlStrategy";
+import { MarkdownStrategy }    from "../engine/strategies/MarkdownStrategy";
 import { CsvToJsonStrategy }   from "../engine/strategies/CsvToJsonStrategy";
 import { XmlToJsonStrategy }   from "../engine/strategies/XmlToJsonStrategy";
 import { YamlToJsonStrategy }  from "../engine/strategies/YamlToJsonStrategy";
@@ -41,6 +43,8 @@ const DEFAULT_STRATEGIES = {
   "json-minify":   new JsonMinifyStrategy(),
   yaml:            new YamlStrategy(),
   toml:            new TomlStrategy(),
+  graphql:         new GraphqlStrategy(),
+  markdown:        new MarkdownStrategy(),
   "csv-to-json":   new CsvToJsonStrategy(),
   "xml-to-json":   new XmlToJsonStrategy(),
   "yaml-to-json":  new YamlToJsonStrategy(),

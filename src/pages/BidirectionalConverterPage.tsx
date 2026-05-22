@@ -1,5 +1,20 @@
-import { useState, useEffect } from "react";
-import { Box, Typography, LinearProgress } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
+import {
+  Box,
+  Typography,
+  LinearProgress,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Stack,
+  Switch,
+  TextField,
+} from "@mui/material";
+import type { SelectChangeEvent } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
 import EditorPanel from "../components/JsonEditor/EditorPanel";
 import CenterPanel from "../components/JsonEditor/CenterPanel";
@@ -9,13 +24,16 @@ import { isBlankInput } from "../utils/isBlankInput";
 import type { ValidationError } from "../types/validationTypes";
 import { useConverter } from "../hooks/useConverter";
 import { useJsonEditorAccessibility } from "../hooks/useJsonEditorAccessibility";
+import { useJsonBeautifier } from "../hooks/useJsonBeautifier";
 import type { ConversionFormat } from "../engine/types";
+import type { JsonTableOutputFormat } from "../utils/jsonToMarkdown";
 
 // We import options for all types if needed, or pass them dynamically.
 // For now we'll handle CSV specific options as an inline component just for CSV, 
 // or simply provide a clean UI for the generic ones.
 import OptionsBar from "../components/OptionsBar";
 import { parseJson } from "../utils/parseJson";
+import { formatJson } from "../utils/formatJson";
 import { normalizeData } from "../utils/normalizeData";
 
 interface BidirectionalConverterPageProps {
@@ -36,8 +54,33 @@ const getDefaultContent = (format: string) => {
     case "xml": return `<root>\n  <sample>data</sample>\n  <items>1</items>\n  <items>2</items>\n  <items>3</items>\n</root>`;
     case "yaml": return `sample: data\nitems:\n  - 1\n  - 2\n  - 3`;
     case "toml": return `sample = "data"\nitems = [1, 2, 3]`;
+    case "graphql": return `type Root {\n  sample: String!\n  items: [Int!]!\n}`;
+    case "markdown": return `| sample | items |\n| --- | --- |\n| data | [1,2,3] |`;
     default: return ``;
   }
+};
+
+const supportsReverseConversion = (format: string) =>
+  ["csv", "xml", "yaml", "toml"].includes(format);
+
+const getOutputLanguage = (format: string, markdownOutputFormat: JsonTableOutputFormat) => {
+  if (format === "markdown") {
+    return markdownOutputFormat === "html" ? "html" : "markdown";
+  }
+
+  return format;
+};
+
+const getDownloadDataProps = (
+  format: string,
+  value: string,
+  markdownOutputFormat: JsonTableOutputFormat,
+) => {
+  if (format === "markdown") {
+    return markdownOutputFormat === "html" ? { htmlData: value } : { markdownData: value };
+  }
+
+  return { [`${format}Data`]: value };
 };
 
 export default function BidirectionalConverterPage({
@@ -45,6 +88,8 @@ export default function BidirectionalConverterPage({
   secondaryFormat,
   initialDirection = "forward"
 }: BidirectionalConverterPageProps) {
+  const { t } = useTranslation();
+  const supportsReverse = supportsReverseConversion(secondaryFormat);
   
   // State for direction: "forward" (JSON -> Format) | "reverse" (Format -> JSON)
   const [direction, setDirection] = useState<"forward" | "reverse">(initialDirection);
@@ -62,8 +107,11 @@ export default function BidirectionalConverterPage({
   const [secondaryInput, setSecondaryInput] = useState(() => getDefaultContent(secondaryFormat));
   
   // Output states
-  const [primaryOutput, setPrimaryOutput] = useState(""); // output for reverse
+  const [primaryOutput, setPrimaryOutput] = useState(""); // output for reverse (raw JSON)
   const [secondaryOutput, setSecondaryOutput] = useState(""); // output for forward
+
+  // Auto-beautify the reverse-direction JSON output using the same logic as BeautifyJsonPage
+  const { formattedOutput: beautifiedPrimaryOutput } = useJsonBeautifier(primaryOutput);
 
   // Error state
   const [errors, setErrors] = useState<ValidationError[]>([]);
@@ -73,9 +121,29 @@ export default function BidirectionalConverterPage({
   const [includeHeader, setIncludeHeader] = useState(true);
   const [trimEmptyColumns, setTrimEmptyColumns] = useState(false);
   const [pascalCaseHeaders, setPascalCaseHeaders] = useState(false);
+  const [markdownOutputFormat, setMarkdownOutputFormat] =
+    useState<JsonTableOutputFormat>("markdown");
+  const [graphqlRootTypeName, setGraphqlRootTypeName] = useState("Root");
+  const [includeGraphqlInputs, setIncludeGraphqlInputs] = useState(true);
+  const [includeGraphqlInterfaces, setIncludeGraphqlInterfaces] = useState(true);
 
   const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
   const { convert, isProcessing } = useConverter();
+
+  // Auto-beautify the JSON input (forward direction) when valid JSON is entered/pasted.
+  // A ref tracks the last value we formatted so we never re-format our own output,
+  // preventing an infinite render loop while still reacting to every user change.
+  const lastFormattedInputRef = useRef<string>("");
+  useEffect(() => {
+    if (direction !== "forward" || isBlankInput(primaryInput)) return;
+    if (primaryInput === lastFormattedInputRef.current) return;
+
+    const result = formatJson(primaryInput, { indent: 2 });
+    if (result.ok && result.output !== primaryInput) {
+      lastFormattedInputRef.current = result.output;
+      setPrimaryInput(result.output);
+    }
+  }, [primaryInput, direction]);
 
   // Active inputs
   const activeInput = direction === "forward" ? primaryInput : secondaryInput;
@@ -116,6 +184,14 @@ export default function BidirectionalConverterPage({
             }
             return;
           }
+        } else if (secondaryFormat === "markdown") {
+          currentOptions = { outputFormat: markdownOutputFormat };
+        } else if (secondaryFormat === "graphql") {
+          currentOptions = {
+            rootTypeName: graphqlRootTypeName,
+            includeInputTypes: includeGraphqlInputs,
+            includeInterfaces: includeGraphqlInterfaces,
+          };
         }
       } else {
         // Reverse direction specific options
@@ -149,7 +225,21 @@ export default function BidirectionalConverterPage({
     doConvert();
 
     return () => { isCancelled = true; };
-  }, [activeInput, direction, secondaryFormat, targetFormatStr, convert, separator, includeHeader, trimEmptyColumns, pascalCaseHeaders]);
+  }, [
+    activeInput,
+    direction,
+    secondaryFormat,
+    targetFormatStr,
+    convert,
+    separator,
+    includeHeader,
+    trimEmptyColumns,
+    pascalCaseHeaders,
+    markdownOutputFormat,
+    graphqlRootTypeName,
+    includeGraphqlInputs,
+    includeGraphqlInterfaces,
+  ]);
 
   // Derived labels
   const primaryLabel = primaryFormat.toUpperCase();
@@ -160,11 +250,22 @@ export default function BidirectionalConverterPage({
   const leftLanguage = direction === "forward" ? primaryFormat : secondaryFormat;
   const setLeftValue = direction === "forward" ? setPrimaryInput : setSecondaryInput;
 
-  const rightLabel = direction === "forward" ? secondaryLabel : primaryLabel;
-  const rightValue = direction === "forward" ? secondaryOutput : primaryOutput;
-  const rightLanguage = direction === "forward" ? secondaryFormat : primaryFormat;
+  const rightLabel =
+    direction === "forward" && secondaryFormat === "markdown"
+      ? markdownOutputFormat.toUpperCase()
+      : direction === "forward"
+        ? secondaryLabel
+        : primaryLabel;
+  // Use the auto-beautified output when JSON is on the right (reverse direction)
+  const rightValue = direction === "forward" ? secondaryOutput : beautifiedPrimaryOutput;
+  const rightLanguage =
+    direction === "forward"
+      ? getOutputLanguage(secondaryFormat, markdownOutputFormat)
+      : primaryFormat;
 
   const handleToggleDirection = () => {
+    if (!supportsReverse) return;
+
     const newDirection = direction === "forward" ? "reverse" : "forward";
     
     // Transfer current output to new input for continuity
@@ -192,7 +293,7 @@ export default function BidirectionalConverterPage({
             language={leftLanguage}
           />
         }
-        centerPanel={<CenterPanel onSwap={handleToggleDirection} />}
+        centerPanel={<CenterPanel onSwap={supportsReverse ? handleToggleDirection : undefined} />}
         rightPanel={
           <EditorPanel
             ref={rightPanelRef}
@@ -217,9 +318,11 @@ export default function BidirectionalConverterPage({
             <ValidationResults errors={errors} />
             
             <Box sx={{ mt: 2, display: "flex", gap: 2, alignItems: "center", flexWrap: "wrap", mb: 2 }}>
-              <DownloadButtons 
-                {...{ [direction === "forward" ? `${secondaryFormat}Data` : `${primaryFormat}Data`]: rightValue }} 
-                jsonData={direction === "forward" ? primaryInput : secondaryInput} 
+              <DownloadButtons
+                {...(direction === "forward"
+                  ? getDownloadDataProps(secondaryFormat, rightValue, markdownOutputFormat)
+                  : { jsonData: rightValue })}
+                jsonData={direction === "forward" ? primaryInput : rightValue}
                 disabled={!rightValue} 
               />
             </Box>
@@ -235,6 +338,79 @@ export default function BidirectionalConverterPage({
                 onTrimEmptyColumnsChange={setTrimEmptyColumns}
                 onPascalCaseHeadersChange={setPascalCaseHeaders}
               />
+            )}
+
+            {secondaryFormat === "markdown" && direction === "forward" && !isBlankInput(activeInput) && (
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 2.5,
+                  mb: 2,
+                  border: "1px solid",
+                  borderColor: "divider",
+                  borderRadius: "12px",
+                  backgroundColor: "#ffffff",
+                }}
+              >
+                <FormControl size="small" sx={{ minWidth: 220 }}>
+                  <InputLabel id="table-output-format-label">
+                    {t("options.tableOutputFormat")}
+                  </InputLabel>
+                  <Select
+                    labelId="table-output-format-label"
+                    value={markdownOutputFormat}
+                    label={t("options.tableOutputFormat")}
+                    onChange={(event: SelectChangeEvent) =>
+                      setMarkdownOutputFormat(event.target.value as JsonTableOutputFormat)
+                    }
+                  >
+                    <MenuItem value="markdown">{t("options.markdownTable")}</MenuItem>
+                    <MenuItem value="html">{t("options.htmlTable")}</MenuItem>
+                  </Select>
+                </FormControl>
+              </Paper>
+            )}
+
+            {secondaryFormat === "graphql" && direction === "forward" && !isBlankInput(activeInput) && (
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 2.5,
+                  mb: 2,
+                  border: "1px solid",
+                  borderColor: "divider",
+                  borderRadius: "12px",
+                  backgroundColor: "#ffffff",
+                }}
+              >
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={3} alignItems="center">
+                  <TextField
+                    size="small"
+                    label={t("options.graphqlRootType")}
+                    value={graphqlRootTypeName}
+                    onChange={(event) => setGraphqlRootTypeName(event.target.value)}
+                    sx={{ minWidth: 180 }}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={includeGraphqlInputs}
+                        onChange={(event) => setIncludeGraphqlInputs(event.target.checked)}
+                      />
+                    }
+                    label={t("options.includeGraphqlInputs")}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={includeGraphqlInterfaces}
+                        onChange={(event) => setIncludeGraphqlInterfaces(event.target.checked)}
+                      />
+                    }
+                    label={t("options.includeGraphqlInterfaces")}
+                  />
+                </Stack>
+              </Paper>
             )}
           </Box>
         }

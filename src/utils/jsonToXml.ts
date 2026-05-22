@@ -52,8 +52,16 @@ export function jsonToXml(inputJson: unknown, options?: JsonToXmlOptions): JsonT
       dataToConvert = { [actualRootName]: { item: inputJson } };
     } else if (typeof inputJson === "object" && inputJson !== null) {
       const keys = Object.keys(inputJson);
-      
-      if (keys.length === 1 && !rootNameInput) {
+
+      const inputRecord = inputJson as Record<string, unknown>;
+      const singleValue = keys.length === 1 ? inputRecord[keys[0]] : undefined;
+      const canUseSingleKeyAsRoot =
+        keys.length === 1 &&
+        !rootNameInput &&
+        singleValue !== null &&
+        typeof singleValue === "object";
+
+      if (canUseSingleKeyAsRoot) {
         // If there's only one key and no explicit rootName desired, use that key as root
         dataToConvert = inputJson;
       } else if (rootNameInput) {
@@ -77,7 +85,8 @@ export function jsonToXml(inputJson: unknown, options?: JsonToXmlOptions): JsonT
 
     // Add XML declaration if requested and not already present
     if (includeDeclaration && !xmlOutput.trim().startsWith("<?xml")) {
-      xmlOutput = `<?xml version="1.0" encoding="UTF-8" ?>\n${xmlOutput}`;
+      const declarationSeparator = pretty ? "\n" : "";
+      xmlOutput = `<?xml version="1.0" encoding="UTF-8" ?>${declarationSeparator}${xmlOutput}`;
     }
 
     return { ok: true, output: xmlOutput };

@@ -17,6 +17,9 @@ interface DownloadButtonsProps {
   yamlData?: string;
   tomlData?: string;
   xmlData?: string;
+  graphqlData?: string;
+  markdownData?: string;
+  htmlData?: string;
   disabled?: boolean;
 }
 
@@ -28,6 +31,9 @@ export default function DownloadButtons({
   yamlData,
   tomlData,
   xmlData,
+  graphqlData,
+  markdownData,
+  htmlData,
   disabled = false,
 }: DownloadButtonsProps) {
   const { t } = useTranslation();
@@ -104,6 +110,27 @@ export default function DownloadButtons({
     showSnackbar(t('snackbar.jsonDownloaded')); // Reuse
   };
 
+  const handleDownloadGraphql = () => {
+    if (!graphqlData) return;
+    const filename = `schema-${getTimestamp()}.graphql`;
+    downloadFile(graphqlData, filename, 'application/graphql;charset=utf-8;');
+    showSnackbar(t('snackbar.graphqlDownloaded'));
+  };
+
+  const handleDownloadMarkdown = () => {
+    if (!markdownData) return;
+    const filename = `table-${getTimestamp()}.md`;
+    downloadFile(markdownData, filename, 'text/markdown;charset=utf-8;');
+    showSnackbar(t('snackbar.markdownDownloaded'));
+  };
+
+  const handleDownloadHtml = () => {
+    if (!htmlData) return;
+    const filename = `table-${getTimestamp()}.html`;
+    downloadFile(htmlData, filename, 'text/html;charset=utf-8;');
+    showSnackbar(t('snackbar.htmlDownloaded'));
+  };
+
   const handleCopy = async (data: string, type: string) => {
     if (!data) return;
     try {
@@ -178,6 +205,42 @@ export default function DownloadButtons({
           </Button>
         )}
 
+        {graphqlData !== undefined && (
+          <Button
+            variant="contained"
+            startIcon={<DownloadIcon />}
+            onClick={handleDownloadGraphql}
+            disabled={disabled}
+            sx={primaryContainedButtonSx}
+          >
+            {t('buttons.downloadGraphql')}
+          </Button>
+        )}
+
+        {markdownData !== undefined && (
+          <Button
+            variant="contained"
+            startIcon={<DownloadIcon />}
+            onClick={handleDownloadMarkdown}
+            disabled={disabled}
+            sx={primaryContainedButtonSx}
+          >
+            {t('buttons.downloadMarkdown')}
+          </Button>
+        )}
+
+        {htmlData !== undefined && (
+          <Button
+            variant="contained"
+            startIcon={<DownloadIcon />}
+            onClick={handleDownloadHtml}
+            disabled={disabled}
+            sx={primaryContainedButtonSx}
+          >
+            {t('buttons.downloadHtml')}
+          </Button>
+        )}
+
         {toonData !== undefined && (
           <Button
             variant="contained"
@@ -249,6 +312,42 @@ export default function DownloadButtons({
             sx={primaryOutlinedButtonSx}
           >
             {"Copy XML"}
+          </Button>
+        )}
+
+        {graphqlData !== undefined && (
+          <Button
+            variant="outlined"
+            startIcon={<ContentCopyIcon />}
+            onClick={() => handleCopy(graphqlData, 'graphql')}
+            disabled={disabled}
+            sx={primaryOutlinedButtonSx}
+          >
+            {t('buttons.copyGraphql')}
+          </Button>
+        )}
+
+        {markdownData !== undefined && (
+          <Button
+            variant="outlined"
+            startIcon={<ContentCopyIcon />}
+            onClick={() => handleCopy(markdownData, 'markdown')}
+            disabled={disabled}
+            sx={primaryOutlinedButtonSx}
+          >
+            {t('buttons.copyMarkdown')}
+          </Button>
+        )}
+
+        {htmlData !== undefined && (
+          <Button
+            variant="outlined"
+            startIcon={<ContentCopyIcon />}
+            onClick={() => handleCopy(htmlData, 'html')}
+            disabled={disabled}
+            sx={primaryOutlinedButtonSx}
+          >
+            {t('buttons.copyHtml')}
           </Button>
         )}
 
