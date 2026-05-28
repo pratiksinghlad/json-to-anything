@@ -35,10 +35,10 @@ export function useDiff(): UseDiffReturn {
   const cancelRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
+    const worker = workerRef.current;
     return () => {
-      if (workerRef.current) {
-        workerRef.current.terminate();
-        workerRef.current = null;
+      if (worker) {
+        worker.terminate();
       }
     };
   }, []);

@@ -1,4 +1,5 @@
-import { useState, useRef, useMemo, useLayoutEffect, forwardRef, useImperativeHandle, useCallback } from "react";
+import { useState, useRef, useMemo, useLayoutEffect, useImperativeHandle, useCallback } from "react";
+import type { Ref } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Box,
@@ -26,7 +27,20 @@ import { getAllKeys, flattenObject } from "../../utils/flattenObject";
 import { globalThemeConfig } from "../../themeConfig";
 import { useKeyboardShortcuts } from "../../hooks/useKeyboardShortcuts";
 
+const visuallyHiddenSx = {
+  position: "absolute",
+  width: "1px",
+  height: "1px",
+  padding: 0,
+  margin: "-1px",
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  border: 0,
+} as const;
+
 export interface EditorPanelProps {
+  ref?: Ref<EditorPanelHandle>;
   initialValue?: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -47,14 +61,16 @@ export interface EditorPanelHandle {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const EditorComponent = (Editor as any).default || Editor;
 
-const EditorPanel = forwardRef<EditorPanelHandle, EditorPanelProps>(({
+// oxlint-disable-next-line react-doctor/no-giant-component -- Editor mode orchestration is kept together to preserve keyboard/ref behavior.
+const EditorPanel = ({
+  ref,
   initialValue = "{}",
   value,
   onChange,
   language = "json",
   readOnly = false,
   formatLabel,
-}, ref) => {
+}: EditorPanelProps) => {
   const { t } = useTranslation();
   const [internalCode, setInternalCode] = useState(initialValue);
   const [viewMode, setViewMode] = useState<"text" | "tree" | "table">("text");
@@ -175,7 +191,7 @@ const EditorPanel = forwardRef<EditorPanelHandle, EditorPanelProps>(({
     }
   };
 
-  const renderContent = () => {
+  const editorContent = useMemo(() => {
     if (viewMode === "tree") {
       if (parsedData) {
         return (
@@ -231,10 +247,11 @@ const EditorPanel = forwardRef<EditorPanelHandle, EditorPanelProps>(({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {displayData.map((row, i) => {
+                {displayData.map((row) => {
                   const flattened = flattenObject(row);
+                  const rowKey = columns.map((column) => String(flattened[column] ?? "")).join("|");
                   return (
-                    <TableRow key={i} hover>
+                    <TableRow key={rowKey} hover>
                       {columns.map((column) => {
                         const cellValue = flattened[column];
                         const displayValue =
@@ -280,22 +297,13 @@ const EditorPanel = forwardRef<EditorPanelHandle, EditorPanelProps>(({
 
     return (
       <>
-        <label 
-          htmlFor={`editor-${language}`} 
-          style={{ 
-            position: 'absolute', 
-            width: '1px', 
-            height: '1px', 
-            padding: 0, 
-            margin: '-1px', 
-            overflow: 'hidden', 
-            clip: 'rect(0, 0, 0, 0)', 
-            whiteSpace: 'nowrap', 
-            border: 0 
-          }}
+        <Box
+          component="label"
+          htmlFor={`editor-${language}`}
+          sx={visuallyHiddenSx}
         >
           {t("editor.ariaLabel", { language })}
-        </label>
+        </Box>
         <EditorComponent
           value={currentCode}
           onValueChange={updateCode}
@@ -314,7 +322,7 @@ const EditorPanel = forwardRef<EditorPanelHandle, EditorPanelProps>(({
         />
       </>
     );
-  };
+  }, [currentCode, language, parsedData, readOnly, t, updateCode, viewMode]);
 
   const viewModes = [
     { label: t("editor.textView"), value: "text" },
@@ -453,12 +461,12 @@ const EditorPanel = forwardRef<EditorPanelHandle, EditorPanelProps>(({
             },
           }}
         >
-          {renderContent()}
+          {editorContent}
         </Box>
       </Box>
     </Box>
   );
-});
+};
 
 EditorPanel.displayName = "EditorPanel";
 

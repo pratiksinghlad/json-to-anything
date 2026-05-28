@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 export interface ShortcutOptions {
   preventDefault?: boolean;
@@ -30,49 +30,46 @@ export const useKeyboardShortcuts = (shortcuts: ShortcutConfig[], enabled = true
     shortcutsRef.current = shortcuts;
   }, [shortcuts]);
 
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    const isInputActive =
-      document.activeElement instanceof HTMLInputElement ||
-      document.activeElement instanceof HTMLTextAreaElement ||
-      document.activeElement?.getAttribute("contenteditable") === "true" ||
-      document.activeElement?.classList.contains("editor-textarea");
-
-    for (const shortcut of shortcutsRef.current) {
-      if (
-        event.key.toLowerCase() === shortcut.key.toLowerCase() &&
-        !!event.ctrlKey === !!shortcut.ctrlKey &&
-        !!event.altKey === !!shortcut.altKey &&
-        !!event.shiftKey === !!shortcut.shiftKey &&
-        !!event.metaKey === !!shortcut.metaKey
-      ) {
-        // Handle input ignoring
-        const shouldIgnoreInput = 
-          shortcut.options?.ignoreInput ?? 
-          (shortcut.altKey ? false : true); // Default: don't ignore if Alt is pressed
-
-        if (isInputActive && shouldIgnoreInput) {
-          continue;
-        }
-
-        if (shortcut.options?.preventDefault) {
-          event.preventDefault();
-        }
-        if (shortcut.options?.stopPropagation) {
-          event.stopPropagation();
-        }
-
-        shortcut.action(event);
-        break;
-      }
-    }
-  }, []);
-
   useEffect(() => {
     if (!enabled) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const isInputActive =
+        document.activeElement instanceof HTMLInputElement ||
+        document.activeElement instanceof HTMLTextAreaElement ||
+        document.activeElement?.getAttribute("contenteditable") === "true" ||
+        document.activeElement?.classList.contains("editor-textarea");
+
+      for (const shortcut of shortcutsRef.current) {
+        if (
+          event.key.toLowerCase() === shortcut.key.toLowerCase() &&
+          !!event.ctrlKey === !!shortcut.ctrlKey &&
+          !!event.altKey === !!shortcut.altKey &&
+          !!event.shiftKey === !!shortcut.shiftKey &&
+          !!event.metaKey === !!shortcut.metaKey
+        ) {
+          const shouldIgnoreInput = shortcut.options?.ignoreInput ?? !shortcut.altKey;
+
+          if (isInputActive && shouldIgnoreInput) {
+            continue;
+          }
+
+          if (shortcut.options?.preventDefault) {
+            event.preventDefault();
+          }
+          if (shortcut.options?.stopPropagation) {
+            event.stopPropagation();
+          }
+
+          shortcut.action(event);
+          break;
+        }
+      }
+    };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [enabled, handleKeyDown]);
+  }, [enabled]);
 };

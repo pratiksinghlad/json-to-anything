@@ -33,9 +33,11 @@ import LanguageMenu from "../LanguageMenu";
 import KeyboardShortcutsDialog from "../KeyboardShortcutsDialog";
 import { useKeyboardShortcuts } from "../../hooks/useKeyboardShortcuts";
 
+// oxlint-disable-next-line react-doctor/no-giant-component -- Header owns responsive shell state; menu leaf components are already split in navigation/.
 const Header = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const routerLocation = useLocation();
+  const pathname = routerLocation.pathname;
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -45,8 +47,8 @@ const Header = () => {
   const moreAnchorRef = useRef<HTMLButtonElement>(null);
 
   const hasActiveMoreItem = useMemo(
-    () => moreMenuItems.some((item) => item.path === location.pathname),
-    [location.pathname],
+    () => moreMenuItems.some((item) => item.path === pathname),
+    [pathname],
   );
 
   const primaryHeaderItems = useMemo(
@@ -193,8 +195,8 @@ const Header = () => {
                 sx={{
                   textTransform: "none",
                   fontSize: "0.85rem",
-                  opacity: location.pathname === item.path ? 1 : 0.7,
-                  borderBottom: location.pathname === item.path ? "2px solid #fff" : "none",
+                  opacity: pathname === item.path ? 1 : 0.7,
+                  borderBottom: pathname === item.path ? "2px solid #fff" : "none",
                   borderRadius: 0,
                   px: 1,
                   minWidth: "auto",
@@ -242,11 +244,10 @@ const Header = () => {
             <Popper
               open={moreOpen}
               anchorEl={moreAnchorRef.current}
-              role={undefined}
               placement="bottom-start"
               transition
               disablePortal={false}
-              style={{ zIndex: 1300 }}
+              style={{ zIndex: 20 }}
             >
               {({ TransitionProps, placement }) => (
                 <Grow
@@ -274,7 +275,7 @@ const Header = () => {
                         dense
                       >
                         {moreMenuItems.map((item) => {
-                          const isActive = location.pathname === item.path;
+                          const isActive = pathname === item.path;
                           return (
                             <MenuItem
                               key={item.key}
@@ -310,8 +311,8 @@ const Header = () => {
                 sx={{
                   textTransform: "none",
                   fontSize: "0.85rem",
-                  opacity: location.pathname === aboutItem.path ? 1 : 0.7,
-                  borderBottom: location.pathname === aboutItem.path ? "2px solid #fff" : "none",
+                  opacity: pathname === aboutItem.path ? 1 : 0.7,
+                  borderBottom: pathname === aboutItem.path ? "2px solid #fff" : "none",
                   borderRadius: 0,
                   px: 1,
                   minWidth: "auto",
@@ -378,7 +379,7 @@ const Header = () => {
               <ListItem key={item.key} disablePadding>
                 <ListItemButton
                   onClick={() => handleNavigation(item.path)}
-                  selected={location.pathname === item.path}
+                  selected={pathname === item.path}
                   sx={{
                     "&.Mui-selected": { bgcolor: "rgba(255,255,255,0.15)" },
                     "&:hover": { bgcolor: "rgba(255,255,255,0.05)" },
@@ -412,7 +413,7 @@ const Header = () => {
               <ListItem key={item.key} disablePadding>
                 <ListItemButton
                   onClick={() => handleNavigation(item.path)}
-                  selected={location.pathname === item.path}
+                  selected={pathname === item.path}
                   sx={{
                     "&.Mui-selected": { bgcolor: "rgba(255,255,255,0.15)" },
                     "&:hover": { bgcolor: "rgba(255,255,255,0.05)" },
@@ -432,7 +433,7 @@ const Header = () => {
                 <ListItem key={aboutItem.key} disablePadding>
                   <ListItemButton
                     onClick={() => handleNavigation(aboutItem.path)}
-                    selected={location.pathname === aboutItem.path}
+                    selected={pathname === aboutItem.path}
                     sx={{
                       "&.Mui-selected": { bgcolor: "rgba(255,255,255,0.15)" },
                       "&:hover": { bgcolor: "rgba(255,255,255,0.05)" },

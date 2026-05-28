@@ -7,7 +7,7 @@
  * Follows DRY / SRP: all "parse then format" logic lives here once.
  */
 
-import { useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { parseJson } from "../utils/parseJson";
 import { formatJson } from "../utils/formatJson";
@@ -35,39 +35,34 @@ export interface UseJsonBeautifierReturn {
 export function useJsonBeautifier(jsonInput: string): UseJsonBeautifierReturn {
   const { t } = useTranslation();
 
-  const [formattedOutput, setFormattedOutput] = useState("");
-  const [errors, setErrors] = useState<ValidationError[]>([]);
   const [indent, setIndent] = useState<IndentOption>("2");
 
-  useEffect(() => {
+  const { formattedOutput, errors } = useMemo(() => {
     if (isBlankInput(jsonInput)) {
-      setErrors([]);
-      setFormattedOutput("");
-      return;
+      return { formattedOutput: "", errors: [] };
     }
 
     const parseResult = parseJson(jsonInput);
     if (!parseResult.success) {
-      setErrors([
-        {
-          message: parseResult.error ?? t("errors.invalidJson"),
-          line: parseResult.line,
-        },
-      ]);
-      setFormattedOutput("");
-      return;
+      return {
+        formattedOutput: "",
+        errors: [
+          {
+            message: parseResult.error ?? t("errors.invalidJson"),
+            line: parseResult.line,
+          },
+        ] satisfies ValidationError[],
+      };
     }
 
     const indentValue = indent === "tab" ? "tab" : (parseInt(indent, 10) as number | "tab");
     const result = formatJson(jsonInput, { indent: indentValue });
 
     if (result.ok) {
-      setFormattedOutput(result.output);
-      setErrors([]);
-    } else {
-      setFormattedOutput("");
-      setErrors([{ message: result.error }]);
+      return { formattedOutput: result.output, errors: [] };
     }
+
+    return { formattedOutput: "", errors: [{ message: result.error }] };
   }, [jsonInput, indent, t]);
 
   return { formattedOutput, errors, indent, setIndent };

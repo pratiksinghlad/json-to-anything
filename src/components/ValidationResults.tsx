@@ -47,30 +47,23 @@ const ValidationResults = ({ errors }: ValidationResultsProps) => {
         >
           {errors.map((err, index) => (
             <ListItem
-              key={index}
+              key={`${err.path ?? ""}-${err.line ?? ""}-${err.message}`}
               sx={{
                 borderBottom:
                   index < errors.length - 1 ? "1px solid rgba(211, 47, 47, 0.1)" : "none",
               }}
             >
               <ListItemText
-                primary={
-                  <Typography variant="body2" sx={{ color: "error.main", fontWeight: 500 }}>
-                    {err.line && (
-                      <Box component="span" sx={{ mr: 1, fontWeight: "bold" }}>
-                        [{t("pages.validate.line")} {err.line}]
-                      </Box>
-                    )}
-                    {err.message}
-                  </Typography>
-                }
-                secondary={
-                  err.path ? (
-                    <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                      {t("pages.validate.path")}: <strong>{err.path}</strong>
-                    </Typography>
-                  ) : null
-                }
+                primaryTypographyProps={{
+                  variant: "body2",
+                  sx: { color: "error.main", fontWeight: 500 },
+                }}
+                primary={`${err.line ? `[${t("pages.validate.line")} ${err.line}] ` : ""}${err.message}`}
+                secondary={err.path ? `${t("pages.validate.path")}: ${err.path}` : null}
+                secondaryTypographyProps={{
+                  variant: "caption",
+                  sx: { color: "text.secondary" },
+                }}
               />
             </ListItem>
           ))}

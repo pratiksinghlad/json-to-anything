@@ -74,6 +74,7 @@ const MoreToolsMenu = () => {
   return (
     <div className={styles.moreTools}>
       <button
+        type="button"
         ref={anchorRef}
         id="more-tools-button"
         aria-controls={open ? "more-tools-menu" : undefined}
@@ -92,11 +93,10 @@ const MoreToolsMenu = () => {
       <Popper
         open={open}
         anchorEl={anchorRef.current}
-        role={undefined}
         placement="bottom-start"
         transition
         disablePortal={false}
-        style={{ zIndex: 1200 }}
+        style={{ zIndex: 20 }}
       >
         {({ TransitionProps, placement }) => (
           <Grow

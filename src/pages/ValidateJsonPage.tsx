@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, Typography, Chip } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -45,53 +45,46 @@ const ValidateJsonPage = () => {
   const { t } = useTranslation();
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
   const [schemaInput, setSchemaInput] = useState(DEFAULT_SCHEMA);
-  const [isValid, setIsValid] = useState(false);
-  const [errors, setErrors] = useState<ValidationError[]>([]);
-
   const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
 
-  useEffect(() => {
+  const { isValid, errors } = useMemo(() => {
     if (isBlankInput(jsonInput) || isBlankInput(schemaInput)) {
-      setIsValid(false);
-      setErrors([]);
-      return;
+      return { isValid: false, errors: [] };
     }
 
-    // Parse JSON input
     const jsonParseResult = parseJson(jsonInput);
     if (!jsonParseResult.success) {
-      setIsValid(false);
-      setErrors([
-        {
-          path: "",
-          message: `${t("pages.validate.invalidJson")}: ${jsonParseResult.error}`,
-          line: jsonParseResult.line,
-        },
-      ]);
-      return;
+      return {
+        isValid: false,
+        errors: [
+          {
+            path: "",
+            message: `${t("pages.validate.invalidJson")}: ${jsonParseResult.error}`,
+            line: jsonParseResult.line,
+          },
+        ] satisfies ValidationError[],
+      };
     }
 
-    // Parse schema
     const schemaParseResult = parseJson(schemaInput);
     if (!schemaParseResult.success) {
-      setIsValid(false);
-      setErrors([
-        {
-          path: "",
-          message: `${t("pages.validate.invalidSchema")}: ${schemaParseResult.error}`,
-          line: schemaParseResult.line,
-        },
-      ]);
-      return;
+      return {
+        isValid: false,
+        errors: [
+          {
+            path: "",
+            message: `${t("pages.validate.invalidSchema")}: ${schemaParseResult.error}`,
+            line: schemaParseResult.line,
+          },
+        ] satisfies ValidationError[],
+      };
     }
 
-    // Validate JSON against schema
     const result = validateJson(jsonParseResult.data, schemaParseResult.data, {
       jsonString: jsonInput,
     });
 
-    setIsValid(result.valid);
-    setErrors(result.errors ?? []);
+    return { isValid: result.valid, errors: result.errors ?? [] };
   }, [jsonInput, schemaInput, t]);
 
   return (

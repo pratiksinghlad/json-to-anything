@@ -94,17 +94,17 @@ function App() {
               <Route path="/beautify" element={<BeautifyJsonPage />} />
               
               {/* Bidirectional Conversions */}
-              <Route path="/json-to-csv" element={<BidirectionalConverterPage key="csv" primaryFormat="json" secondaryFormat="csv" initialDirection="forward" />} />
-              <Route path="/csv-to-json" element={<BidirectionalConverterPage key="csv" primaryFormat="json" secondaryFormat="csv" initialDirection="reverse" />} />
+              <Route path="/json-to-csv" element={<BidirectionalConverterPage key="csv-forward" primaryFormat="json" secondaryFormat="csv" initialDirection="forward" />} />
+              <Route path="/csv-to-json" element={<BidirectionalConverterPage key="csv-reverse" primaryFormat="json" secondaryFormat="csv" initialDirection="reverse" />} />
               
-              <Route path="/json-to-xml" element={<BidirectionalConverterPage key="xml" primaryFormat="json" secondaryFormat="xml" initialDirection="forward" />} />
-              <Route path="/xml-to-json" element={<BidirectionalConverterPage key="xml" primaryFormat="json" secondaryFormat="xml" initialDirection="reverse" />} />
+              <Route path="/json-to-xml" element={<BidirectionalConverterPage key="xml-forward" primaryFormat="json" secondaryFormat="xml" initialDirection="forward" />} />
+              <Route path="/xml-to-json" element={<BidirectionalConverterPage key="xml-reverse" primaryFormat="json" secondaryFormat="xml" initialDirection="reverse" />} />
               
-              <Route path="/json-to-yaml" element={<BidirectionalConverterPage key="yaml" primaryFormat="json" secondaryFormat="yaml" initialDirection="forward" />} />
-              <Route path="/yaml-to-json" element={<BidirectionalConverterPage key="yaml" primaryFormat="json" secondaryFormat="yaml" initialDirection="reverse" />} />
+              <Route path="/json-to-yaml" element={<BidirectionalConverterPage key="yaml-forward" primaryFormat="json" secondaryFormat="yaml" initialDirection="forward" />} />
+              <Route path="/yaml-to-json" element={<BidirectionalConverterPage key="yaml-reverse" primaryFormat="json" secondaryFormat="yaml" initialDirection="reverse" />} />
               
-              <Route path="/json-to-toml" element={<BidirectionalConverterPage key="toml" primaryFormat="json" secondaryFormat="toml" initialDirection="forward" />} />
-              <Route path="/toml-to-json" element={<BidirectionalConverterPage key="toml" primaryFormat="json" secondaryFormat="toml" initialDirection="reverse" />} />
+              <Route path="/json-to-toml" element={<BidirectionalConverterPage key="toml-forward" primaryFormat="json" secondaryFormat="toml" initialDirection="forward" />} />
+              <Route path="/toml-to-json" element={<BidirectionalConverterPage key="toml-reverse" primaryFormat="json" secondaryFormat="toml" initialDirection="reverse" />} />
               
               <Route path="/json-to-toon" element={<BidirectionalConverterPage key="toon" primaryFormat="json" secondaryFormat="toon" initialDirection="forward" />} />
               <Route path="/json-to-graphql" element={<BidirectionalConverterPage key="graphql" primaryFormat="json" secondaryFormat="graphql" initialDirection="forward" />} />

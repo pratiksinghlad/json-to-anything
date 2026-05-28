@@ -31,10 +31,9 @@ export async function getWasmEngine(): Promise<WasmJsonEngine> {
     try {
       // Dynamic import: Vite/bundler resolves this at runtime.
       // The path is relative to the public directory root.
-      const WASM_PATH = "/wasm/json_engine.js";
       const wasmModule = await import(
         /* @vite-ignore */
-        WASM_PATH
+        "/wasm/json_engine.js"
       ) as Record<string, unknown>;
 
       // wasm-bindgen emits a default export with an init() function

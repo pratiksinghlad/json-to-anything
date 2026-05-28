@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useCallback, useReducer } from "react";
 import {
   Box,
   Typography,
@@ -42,6 +42,99 @@ interface BidirectionalConverterPageProps {
   initialDirection?: "forward" | "reverse";
 }
 
+interface ConverterState {
+  direction: "forward" | "reverse";
+  primaryInput: string;
+  secondaryInput: string;
+  primaryOutput: string;
+  secondaryOutput: string;
+  errors: ValidationError[];
+}
+
+interface FormatOptionsState {
+  separator: "," | ";" | "\t";
+  includeHeader: boolean;
+  trimEmptyColumns: boolean;
+  pascalCaseHeaders: boolean;
+  markdownOutputFormat: JsonTableOutputFormat;
+  graphqlRootTypeName: string;
+  includeGraphqlInputs: boolean;
+  includeGraphqlInterfaces: boolean;
+}
+
+type ConverterAction =
+  | { type: "setDirection"; direction: "forward" | "reverse" }
+  | { type: "setPrimaryInput"; value: string }
+  | { type: "setSecondaryInput"; value: string }
+  | { type: "setPrimaryOutput"; value: string }
+  | { type: "setSecondaryOutput"; value: string }
+  | { type: "setErrors"; errors: ValidationError[] }
+  | { type: "clearActiveOutput"; direction: "forward" | "reverse" }
+  | { type: "setConversionResult"; direction: "forward" | "reverse"; output: string; errors: ValidationError[] };
+
+const converterReducer = (state: ConverterState, action: ConverterAction): ConverterState => {
+  switch (action.type) {
+    case "setDirection":
+      return { ...state, direction: action.direction, errors: [] };
+    case "setPrimaryInput":
+      return { ...state, primaryInput: action.value };
+    case "setSecondaryInput":
+      return { ...state, secondaryInput: action.value };
+    case "setPrimaryOutput":
+      return { ...state, primaryOutput: action.value };
+    case "setSecondaryOutput":
+      return { ...state, secondaryOutput: action.value };
+    case "setErrors":
+      return { ...state, errors: action.errors };
+    case "clearActiveOutput":
+      return action.direction === "forward"
+        ? { ...state, secondaryOutput: "", errors: [] }
+        : { ...state, primaryOutput: "", errors: [] };
+    case "setConversionResult":
+      return action.direction === "forward"
+        ? { ...state, secondaryOutput: action.output, errors: action.errors }
+        : { ...state, primaryOutput: action.output, errors: action.errors };
+    default:
+      return state;
+  }
+};
+
+type FormatOptionsAction =
+  | { type: "setSeparator"; value: "," | ";" | "\t" }
+  | { type: "setIncludeHeader"; value: boolean }
+  | { type: "setTrimEmptyColumns"; value: boolean }
+  | { type: "setPascalCaseHeaders"; value: boolean }
+  | { type: "setMarkdownOutputFormat"; value: JsonTableOutputFormat }
+  | { type: "setGraphqlRootTypeName"; value: string }
+  | { type: "setIncludeGraphqlInputs"; value: boolean }
+  | { type: "setIncludeGraphqlInterfaces"; value: boolean };
+
+const formatOptionsReducer = (
+  state: FormatOptionsState,
+  action: FormatOptionsAction,
+): FormatOptionsState => {
+  switch (action.type) {
+    case "setSeparator":
+      return { ...state, separator: action.value };
+    case "setIncludeHeader":
+      return { ...state, includeHeader: action.value };
+    case "setTrimEmptyColumns":
+      return { ...state, trimEmptyColumns: action.value };
+    case "setPascalCaseHeaders":
+      return { ...state, pascalCaseHeaders: action.value };
+    case "setMarkdownOutputFormat":
+      return { ...state, markdownOutputFormat: action.value };
+    case "setGraphqlRootTypeName":
+      return { ...state, graphqlRootTypeName: action.value };
+    case "setIncludeGraphqlInputs":
+      return { ...state, includeGraphqlInputs: action.value };
+    case "setIncludeGraphqlInterfaces":
+      return { ...state, includeGraphqlInterfaces: action.value };
+    default:
+      return state;
+  }
+};
+
 const DEFAULT_JSON = `{
   "sample": "data",
   "items": [1, 2, 3]
@@ -83,6 +176,7 @@ const getDownloadDataProps = (
   return { [`${format}Data`]: value };
 };
 
+// oxlint-disable-next-line react-doctor/no-giant-component -- This page composes shared editor panels and delegates conversion work to hooks/workers.
 export default function BidirectionalConverterPage({
   primaryFormat = "json",
   secondaryFormat,
@@ -90,60 +184,62 @@ export default function BidirectionalConverterPage({
 }: BidirectionalConverterPageProps) {
   const { t } = useTranslation();
   const supportsReverse = supportsReverseConversion(secondaryFormat);
-  
-  // State for direction: "forward" (JSON -> Format) | "reverse" (Format -> JSON)
-  const [direction, setDirection] = useState<"forward" | "reverse">(initialDirection);
+  const [converterState, dispatchConverter] = useReducer(converterReducer, {
+    direction: initialDirection,
+    primaryInput: DEFAULT_JSON,
+    secondaryInput: getDefaultContent(secondaryFormat),
+    primaryOutput: "",
+    secondaryOutput: "",
+    errors: [],
+  });
 
-  // Synchronise direction and reset inputs if format changes
-  useEffect(() => {
-    setDirection(initialDirection);
-    // When format changes (e.g. navigation), we should reset to default content
-    setSecondaryInput(getDefaultContent(secondaryFormat));
-    setErrors([]);
-  }, [initialDirection, secondaryFormat]);
+  const {
+    direction,
+    primaryInput,
+    secondaryInput,
+    primaryOutput,
+    secondaryOutput,
+    errors,
+  } = converterState;
 
-  // Input states
-  const [primaryInput, setPrimaryInput] = useState(DEFAULT_JSON);
-  const [secondaryInput, setSecondaryInput] = useState(() => getDefaultContent(secondaryFormat));
-  
-  // Output states
-  const [primaryOutput, setPrimaryOutput] = useState(""); // output for reverse (raw JSON)
-  const [secondaryOutput, setSecondaryOutput] = useState(""); // output for forward
-
-  // Auto-beautify the reverse-direction JSON output using the same logic as BeautifyJsonPage
   const { formattedOutput: beautifiedPrimaryOutput } = useJsonBeautifier(primaryOutput);
 
-  // Error state
-  const [errors, setErrors] = useState<ValidationError[]>([]);
-
-  // CSV Specific Options (Only shown when secondaryFormat is CSV)
-  const [separator, setSeparator] = useState<"," | ";" | "\t">(",");
-  const [includeHeader, setIncludeHeader] = useState(true);
-  const [trimEmptyColumns, setTrimEmptyColumns] = useState(false);
-  const [pascalCaseHeaders, setPascalCaseHeaders] = useState(false);
-  const [markdownOutputFormat, setMarkdownOutputFormat] =
-    useState<JsonTableOutputFormat>("markdown");
-  const [graphqlRootTypeName, setGraphqlRootTypeName] = useState("Root");
-  const [includeGraphqlInputs, setIncludeGraphqlInputs] = useState(true);
-  const [includeGraphqlInterfaces, setIncludeGraphqlInterfaces] = useState(true);
+  const [formatOptions, dispatchFormatOptions] = useReducer(formatOptionsReducer, {
+    separator: ",",
+    includeHeader: true,
+    trimEmptyColumns: false,
+    pascalCaseHeaders: false,
+    markdownOutputFormat: "markdown",
+    graphqlRootTypeName: "Root",
+    includeGraphqlInputs: true,
+    includeGraphqlInterfaces: true,
+  });
+  const {
+    separator,
+    includeHeader,
+    trimEmptyColumns,
+    pascalCaseHeaders,
+    markdownOutputFormat,
+    graphqlRootTypeName,
+    includeGraphqlInputs,
+    includeGraphqlInterfaces,
+  } = formatOptions;
 
   const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
   const { convert, isProcessing } = useConverter();
 
-  // Auto-beautify the JSON input (forward direction) when valid JSON is entered/pasted.
-  // A ref tracks the last value we formatted so we never re-format our own output,
-  // preventing an infinite render loop while still reacting to every user change.
-  const lastFormattedInputRef = useRef<string>("");
-  useEffect(() => {
-    if (direction !== "forward" || isBlankInput(primaryInput)) return;
-    if (primaryInput === lastFormattedInputRef.current) return;
+  const handlePrimaryInputChange = useCallback(
+    (nextValue: string) => {
+      if (direction !== "forward" || isBlankInput(nextValue)) {
+        dispatchConverter({ type: "setPrimaryInput", value: nextValue });
+        return;
+      }
 
-    const result = formatJson(primaryInput, { indent: 2 });
-    if (result.ok && result.output !== primaryInput) {
-      lastFormattedInputRef.current = result.output;
-      setPrimaryInput(result.output);
-    }
-  }, [primaryInput, direction]);
+      const result = formatJson(nextValue, { indent: 2 });
+      dispatchConverter({ type: "setPrimaryInput", value: result.ok ? result.output : nextValue });
+    },
+    [direction],
+  );
 
   // Active inputs
   const activeInput = direction === "forward" ? primaryInput : secondaryInput;
@@ -151,9 +247,7 @@ export default function BidirectionalConverterPage({
 
   useEffect(() => {
     if (isBlankInput(activeInput)) {
-      setErrors([]);
-      if (direction === "forward") setSecondaryOutput("");
-      else setPrimaryOutput("");
+      dispatchConverter({ type: "clearActiveOutput", direction });
       return;
     }
 
@@ -167,8 +261,12 @@ export default function BidirectionalConverterPage({
         const parseResult = parseJson(activeInput);
         if (!parseResult.success) {
           if (!isCancelled) {
-            setErrors([{ message: parseResult.error || "Invalid JSON", line: parseResult.line }]);
-            setSecondaryOutput("");
+            dispatchConverter({
+              type: "setConversionResult",
+              direction,
+              output: "",
+              errors: [{ message: parseResult.error || "Invalid JSON", line: parseResult.line }],
+            });
           }
           return;
         }
@@ -179,8 +277,12 @@ export default function BidirectionalConverterPage({
           const normalizeResult = normalizeData(parseResult.data);
           if (!normalizeResult.success) {
             if (!isCancelled) {
-               setErrors([{ message: normalizeResult.error || "Invalid format for CSV" }]);
-               setSecondaryOutput("");
+              dispatchConverter({
+                type: "setConversionResult",
+                direction,
+                output: "",
+                errors: [{ message: normalizeResult.error || "Invalid format for CSV" }],
+              });
             }
             return;
           }
@@ -209,16 +311,14 @@ export default function BidirectionalConverterPage({
       if (isCancelled) return;
 
       if (result.ok) {
-        if (direction === "forward") {
-          setSecondaryOutput(result.output);
-        } else {
-          setPrimaryOutput(result.output);
-        }
-        setErrors([]);
+        dispatchConverter({ type: "setConversionResult", direction, output: result.output, errors: [] });
       } else {
-        if (direction === "forward") setSecondaryOutput("");
-        else setPrimaryOutput("");
-        setErrors([{ message: result.error }]);
+        dispatchConverter({
+          type: "setConversionResult",
+          direction,
+          output: "",
+          errors: [{ message: result.error }],
+        });
       }
     };
 
@@ -248,7 +348,10 @@ export default function BidirectionalConverterPage({
   const leftLabel = direction === "forward" ? primaryLabel : secondaryLabel;
   const leftValue = direction === "forward" ? primaryInput : secondaryInput;
   const leftLanguage = direction === "forward" ? primaryFormat : secondaryFormat;
-  const setLeftValue = direction === "forward" ? setPrimaryInput : setSecondaryInput;
+  const setLeftValue =
+    direction === "forward"
+      ? handlePrimaryInputChange
+      : (value: string) => dispatchConverter({ type: "setSecondaryInput", value });
 
   const rightLabel =
     direction === "forward" && secondaryFormat === "markdown"
@@ -270,13 +373,12 @@ export default function BidirectionalConverterPage({
     
     // Transfer current output to new input for continuity
     if (newDirection === "reverse" && secondaryOutput) {
-      setSecondaryInput(secondaryOutput);
+      dispatchConverter({ type: "setSecondaryInput", value: secondaryOutput });
     } else if (newDirection === "forward" && primaryOutput) {
-      setPrimaryInput(primaryOutput);
+      dispatchConverter({ type: "setPrimaryInput", value: primaryOutput });
     }
 
-    setDirection(newDirection);
-    setErrors([]);
+    dispatchConverter({ type: "setDirection", direction: newDirection });
   };
 
   return (
@@ -310,7 +412,7 @@ export default function BidirectionalConverterPage({
               <Box sx={{ mb: 2 }}>
                 <LinearProgress />
                 <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
-                  Processing...
+                  Processing…
                 </Typography>
               </Box>
             )}
@@ -333,10 +435,16 @@ export default function BidirectionalConverterPage({
                 includeHeader={includeHeader}
                 trimEmptyColumns={trimEmptyColumns}
                 pascalCaseHeaders={pascalCaseHeaders}
-                onSeparatorChange={setSeparator}
-                onIncludeHeaderChange={setIncludeHeader}
-                onTrimEmptyColumnsChange={setTrimEmptyColumns}
-                onPascalCaseHeadersChange={setPascalCaseHeaders}
+                onSeparatorChange={(value) => dispatchFormatOptions({ type: "setSeparator", value })}
+                onIncludeHeaderChange={(value) =>
+                  dispatchFormatOptions({ type: "setIncludeHeader", value })
+                }
+                onTrimEmptyColumnsChange={(value) =>
+                  dispatchFormatOptions({ type: "setTrimEmptyColumns", value })
+                }
+                onPascalCaseHeadersChange={(value) =>
+                  dispatchFormatOptions({ type: "setPascalCaseHeaders", value })
+                }
               />
             )}
 
@@ -361,7 +469,10 @@ export default function BidirectionalConverterPage({
                     value={markdownOutputFormat}
                     label={t("options.tableOutputFormat")}
                     onChange={(event: SelectChangeEvent) =>
-                      setMarkdownOutputFormat(event.target.value as JsonTableOutputFormat)
+                      dispatchFormatOptions({
+                        type: "setMarkdownOutputFormat",
+                        value: event.target.value as JsonTableOutputFormat,
+                      })
                     }
                   >
                     <MenuItem value="markdown">{t("options.markdownTable")}</MenuItem>
@@ -388,14 +499,24 @@ export default function BidirectionalConverterPage({
                     size="small"
                     label={t("options.graphqlRootType")}
                     value={graphqlRootTypeName}
-                    onChange={(event) => setGraphqlRootTypeName(event.target.value)}
+                    onChange={(event) =>
+                      dispatchFormatOptions({
+                        type: "setGraphqlRootTypeName",
+                        value: event.target.value,
+                      })
+                    }
                     sx={{ minWidth: 180 }}
                   />
                   <FormControlLabel
                     control={
                       <Switch
                         checked={includeGraphqlInputs}
-                        onChange={(event) => setIncludeGraphqlInputs(event.target.checked)}
+                        onChange={(event) =>
+                          dispatchFormatOptions({
+                            type: "setIncludeGraphqlInputs",
+                            value: event.target.checked,
+                          })
+                        }
                       />
                     }
                     label={t("options.includeGraphqlInputs")}
@@ -404,7 +525,12 @@ export default function BidirectionalConverterPage({
                     control={
                       <Switch
                         checked={includeGraphqlInterfaces}
-                        onChange={(event) => setIncludeGraphqlInterfaces(event.target.checked)}
+                        onChange={(event) =>
+                          dispatchFormatOptions({
+                            type: "setIncludeGraphqlInterfaces",
+                            value: event.target.checked,
+                          })
+                        }
                       />
                     }
                     label={t("options.includeGraphqlInterfaces")}
