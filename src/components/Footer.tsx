@@ -5,6 +5,8 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
+const CURRENT_YEAR = 2026;
+
 export default function Footer() {
   const userName = "pratiksinghlad";
   const { t } = useTranslation();
@@ -68,7 +70,7 @@ export default function Footer() {
           </Stack>
           
           <Typography variant="body2" color="text.secondary" align="center">
-            {t('footer.copyright', { year: new Date().getFullYear() })}
+            {t('footer.copyright', { year: CURRENT_YEAR })}
           </Typography>
         </Stack>
       </Container>

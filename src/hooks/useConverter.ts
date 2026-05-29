@@ -82,17 +82,25 @@ export function useConverter(config?: ConversionServiceConfig): UseConverterRetu
   // Stable service reference — recreated only when config changes
   const serviceRef   = useRef<ConversionService | null>(null);
   const cancelRef    = useRef<(() => void) | null>(null);
+  const workerThreshold = config?.workerThreshold;
+  const wasmThreshold = config?.wasmThreshold;
 
   // Initialise (or re-initialise) the service when config changes
   useEffect(() => {
-    serviceRef.current = new ConversionService(DEFAULT_STRATEGIES, config);
+    const serviceConfig: ConversionServiceConfig | undefined =
+      workerThreshold !== undefined || wasmThreshold !== undefined
+        ? {
+            workerThreshold,
+            wasmThreshold,
+          }
+        : undefined;
+
+    serviceRef.current = new ConversionService(DEFAULT_STRATEGIES, serviceConfig);
     return () => {
       serviceRef.current?.terminate();
       serviceRef.current = null;
     };
-  // We intentionally stringify config for stable comparison
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config?.workerThreshold, config?.wasmThreshold]);
+  }, [workerThreshold, wasmThreshold]);
 
   const cancel = useCallback(() => {
     cancelRef.current?.();

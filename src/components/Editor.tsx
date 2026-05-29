@@ -1,5 +1,5 @@
 import { Box, Paper, Typography, Alert } from "@mui/material";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import Editor from "react-simple-code-editor";
 import { highlightJson } from "../utils/highlight";
 import { useTranslation } from "react-i18next";
@@ -34,51 +34,11 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
   const lineNumbersScrollableRef = useRef<HTMLDivElement>(null);
   const editorContainerRef = useRef<HTMLDivElement>(null);
 
-  // Standard multiplier for readable line spacing when deriving line-height from font-size.
-  // This follows CSS defaults for most browsers (font-size * 1.2 to 1.5 is typical).
-  const LINE_HEIGHT_MULTIPLIER = 1.4;
-
-  // Measure line height and vertical padding from the rendered textarea to avoid magic numbers.
-  // We fall back to reasonable defaults while the measurement runs in the browser.
-  const [lineHeightPx, setLineHeightPx] = useState<number>(21);
-  const [verticalPaddingPx, setVerticalPaddingPx] = useState<number>(32);
+  const lineHeightPx = 21;
+  const verticalPaddingPx = 32;
 
   // Compute the height for the line numbers column based on measured values
   const lineNumbersHeight = lineCount * lineHeightPx + verticalPaddingPx;
-
-  // Measure actual CSS values from the editor textarea (client-only). We use the
-  // textarea id 'json-editor' that is assigned to the react-simple-code-editor.
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const measure = () => {
-      const textarea = document.getElementById("json-editor");
-      if (!textarea) return;
-      const cs = getComputedStyle(textarea as Element);
-      // Parse line-height; if not available, derive from font-size using a standard multiplier
-      const parsedLineHeight = parseFloat(cs.lineHeight || "");
-      let measuredLineHeight =
-        Number.isFinite(parsedLineHeight) && parsedLineHeight > 0 ? parsedLineHeight : NaN;
-      if (Number.isNaN(measuredLineHeight)) {
-        const parsedFontSize = parseFloat(cs.fontSize || "");
-        measuredLineHeight =
-          Number.isFinite(parsedFontSize) && parsedFontSize > 0
-            ? parsedFontSize * LINE_HEIGHT_MULTIPLIER
-            : 21;
-      }
-
-      const paddingTop = parseFloat(cs.paddingTop || "") || 16;
-      const paddingBottom = parseFloat(cs.paddingBottom || "") || 16;
-
-      setLineHeightPx(measuredLineHeight);
-      setVerticalPaddingPx(paddingTop + paddingBottom);
-    };
-
-    // Measure immediately and also after a short delay in case styles are applied later
-    measure();
-    const id = window.setTimeout(measure, 50);
-    return () => window.clearTimeout(id);
-  }, [value]);
 
   useEffect(() => {
     const editorContainer = editorContainerRef.current;
@@ -90,7 +50,7 @@ export default function JsonEditor({ value, onChange, error }: JsonEditorProps) 
       lineNumbersScrollable.scrollTop = editorContainer.scrollTop;
     };
 
-    editorContainer.addEventListener("scroll", handleScroll);
+    editorContainer.addEventListener("scroll", handleScroll, { passive: true });
     return () => editorContainer.removeEventListener("scroll", handleScroll);
   }, []);
 

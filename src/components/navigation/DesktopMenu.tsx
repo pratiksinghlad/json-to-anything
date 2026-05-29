@@ -32,6 +32,7 @@ const DesktopMenu = ({ vertical = false }: DesktopMenuProps) => {
           const isActive = location.pathname === item.path;
           return (
             <button
+              type="button"
               key={item.key}
               onClick={() => handleNavigation(item.path)}
               onKeyDown={(e) => handleKeyDown(e, item.path)}

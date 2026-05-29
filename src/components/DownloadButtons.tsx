@@ -23,7 +23,7 @@ interface DownloadButtonsProps {
   disabled?: boolean;
 }
 
-
+// oxlint-disable-next-line react-doctor/no-giant-component -- Format actions stay co-located so each button uses the same download and snackbar flow.
 export default function DownloadButtons({
   csvData,
   jsonData,

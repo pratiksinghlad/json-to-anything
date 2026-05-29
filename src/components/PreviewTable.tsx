@@ -78,11 +78,12 @@ export default function PreviewTable({
               </TableRow>
             </TableHead>
             <TableBody>
-              {displayData.map((row, index) => {
+              {displayData.map((row) => {
                 const flattened = flattenObject(row);
+                const rowKey = columns.map((column) => String(flattened[column] ?? "")).join("|");
                 return (
                   <TableRow
-                    key={index}
+                    key={rowKey}
                     hover
                     sx={{
                       "&:hover": {

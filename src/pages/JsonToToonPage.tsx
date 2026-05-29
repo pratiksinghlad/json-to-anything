@@ -1,11 +1,10 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Box,
   Paper,
   Typography,
   Chip,
-  LinearProgress,
   Button,
   Snackbar,
   Alert,
@@ -25,7 +24,6 @@ import { parseJson } from "../utils/parseJson";
 import { jsonToToon } from "../utils/jsonToToon";
 import { countTokens, calculateSavings, formatNumber } from "../utils/tokenizer";
 import { isBlankInput } from "../utils/isBlankInput";
-import type { ValidationError } from "../types/validationTypes";
 import { useJsonEditorAccessibility } from "../hooks/useJsonEditorAccessibility";
 
 const DEFAULT_JSON = `[
@@ -55,18 +53,109 @@ const DEFAULT_JSON = `[
   }
 ]`;
 
+interface TokenStatsCardProps {
+  jsonTokens: number;
+  toonTokens: number;
+  savedPercentage: number;
+  savedTokens: number;
+}
+
+const TokenStatsCard = ({
+  jsonTokens,
+  toonTokens,
+  savedPercentage,
+  savedTokens,
+}: TokenStatsCardProps) => {
+  const { t } = useTranslation();
+
+  return (
+    <Paper
+      elevation={0}
+      sx={{
+        p: 2,
+        background: "linear-gradient(135deg, #1e293b 0%, #334155 100%)",
+        borderRadius: 2,
+        color: "#fff",
+      }}
+    >
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+        <TokenIcon sx={{ fontSize: 20 }} />
+        <Typography variant="subtitle2" fontWeight="bold">
+          {t("pages.jsonToToon.tokenStats")}
+        </Typography>
+      </Box>
+
+      <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap", mb: 2 }}>
+        <Box sx={{ minWidth: 120 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mb: 0.5 }}>
+            <DataObjectIcon sx={{ fontSize: 16, color: "#94a3b8" }} />
+            <Typography variant="caption" sx={{ color: "#94a3b8" }}>
+              {t("pages.jsonToToon.jsonTokens")}
+            </Typography>
+          </Box>
+          <Typography variant="h5" fontWeight="bold" sx={{ color: "#f8fafc" }}>
+            {formatNumber(jsonTokens)}
+          </Typography>
+        </Box>
+
+        <Box sx={{ minWidth: 120 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mb: 0.5 }}>
+            <VerifiedIcon sx={{ fontSize: 16, color: "#94a3b8" }} />
+            <Typography variant="caption" sx={{ color: "#94a3b8" }}>
+              {t("pages.jsonToToon.toonTokens")}
+            </Typography>
+          </Box>
+          <Typography variant="h5" fontWeight="bold" sx={{ color: "#22c55e" }}>
+            {formatNumber(toonTokens)}
+          </Typography>
+        </Box>
+
+        <Box sx={{ minWidth: 140 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mb: 0.5 }}>
+            <SavingsIcon sx={{ fontSize: 16, color: "#94a3b8" }} />
+            <Typography variant="caption" sx={{ color: "#94a3b8" }}>
+              {t("pages.jsonToToon.saved")}
+            </Typography>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "baseline", gap: 1 }}>
+            <Typography variant="h5" fontWeight="bold" sx={{ color: "#22c55e" }}>
+              {savedPercentage}%
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#94a3b8" }}>
+              ({formatNumber(savedTokens)} {t("pages.jsonToToon.tokens")})
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Chip
+          label="Saved:@.github"
+          size="small"
+          sx={{
+            backgroundColor: "rgba(34, 197, 94, 0.2)",
+            color: "#22c55e",
+            fontFamily: "monospace",
+            fontSize: "0.75rem",
+            height: 24,
+            "& .MuiChip-label": {
+              px: 1,
+            },
+          }}
+        />
+        <Typography variant="caption" sx={{ color: "#64748b", fontStyle: "italic" }}>
+          {t("pages.jsonToToon.privacyNote")}
+        </Typography>
+      </Box>
+    </Paper>
+  );
+};
+
 const JsonToToonPage = () => {
   const { t } = useTranslation();
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
-  const [toonOutput, setToonOutput] = useState("");
-  const [errors, setErrors] = useState<ValidationError[]>([]);
-  const [isProcessing, setIsProcessing] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-
-  // Token counts
-  const [jsonTokens, setJsonTokens] = useState(0);
-  const [toonTokens, setToonTokens] = useState(0);
 
   const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
 
@@ -79,6 +168,46 @@ const JsonToToonPage = () => {
     }),
     [],
   );
+
+  const conversion = useMemo(() => {
+    if (isBlankInput(jsonInput)) {
+      return { toonOutput: "", errors: [], jsonTokens: 0, toonTokens: 0 };
+    }
+
+    const parseResult = parseJson(jsonInput);
+    if (!parseResult.success) {
+      return {
+        toonOutput: "",
+        errors: [{ message: parseResult.error || t("errors.invalidJson"), line: parseResult.line }],
+        jsonTokens: 0,
+        toonTokens: 0,
+      };
+    }
+
+    try {
+      const result = jsonToToon(parseResult.data, toonOptions);
+      if (!result.success) {
+        return { toonOutput: "", errors: [{ message: result.error }], jsonTokens: 0, toonTokens: 0 };
+      }
+
+      return {
+        toonOutput: result.output,
+        errors: [],
+        jsonTokens: countTokens(jsonInput).tokenCount,
+        toonTokens: countTokens(result.output).tokenCount,
+      };
+    } catch (e) {
+      return {
+        toonOutput: "",
+        errors: [{ message: e instanceof Error ? e.message : "Conversion error" }],
+        jsonTokens: 0,
+        toonTokens: 0,
+      };
+    }
+  }, [jsonInput, toonOptions, t]);
+
+  const { toonOutput, errors, jsonTokens, toonTokens } = conversion;
+  const savings = useMemo(() => calculateSavings(jsonTokens, toonTokens), [jsonTokens, toonTokens]);
 
   // Download TOON file
   const handleDownloadToon = useCallback(() => {
@@ -101,172 +230,6 @@ const JsonToToonPage = () => {
     setSnackbarMessage(t("snackbar.toonDownloaded"));
     setSnackbarOpen(true);
   }, [toonOutput, t]);
-
-  // Convert JSON to TOON and calculate tokens
-  const processConversion = useCallback(() => {
-    if (isBlankInput(jsonInput)) {
-      setErrors([]);
-      setToonOutput("");
-      setJsonTokens(0);
-      setToonTokens(0);
-      setIsProcessing(false);
-      return;
-    }
-
-    // Validate JSON first
-    const parseResult = parseJson(jsonInput);
-    if (!parseResult.success) {
-      setErrors([
-        {
-          message: parseResult.error || t("errors.invalidJson"),
-          line: parseResult.line,
-        },
-      ]);
-      setToonOutput("");
-      setJsonTokens(0);
-      setToonTokens(0);
-      return;
-    }
-
-    // Check if input is large (> 1MB)
-    const isLarge = jsonInput.length > 1024 * 1024;
-    if (isLarge) {
-      setIsProcessing(true);
-    }
-
-    // Use setTimeout to allow UI to update for large inputs
-    const doConversion = () => {
-      try {
-        // Convert to TOON
-        const result = jsonToToon(parseResult.data, toonOptions);
-
-        if (!result.success) {
-          setErrors([{ message: result.error }]);
-          setToonOutput("");
-          setJsonTokens(0);
-          setToonTokens(0);
-        } else {
-          setErrors([]);
-          setToonOutput(result.output);
-
-          // Count tokens for both formats
-          const jsonTokenResult = countTokens(jsonInput);
-          const toonTokenResult = countTokens(result.output);
-
-          setJsonTokens(jsonTokenResult.tokenCount);
-          setToonTokens(toonTokenResult.tokenCount);
-        }
-      } catch (e) {
-        setErrors([{ message: e instanceof Error ? e.message : "Conversion error" }]);
-        setToonOutput("");
-      } finally {
-        setIsProcessing(false);
-      }
-    };
-
-    if (isLarge) {
-      setTimeout(doConversion, 10);
-    } else {
-      doConversion();
-    }
-  }, [jsonInput, toonOptions, t]);
-
-  // Effect to run conversion when input changes
-  useEffect(() => {
-    processConversion();
-  }, [processConversion]);
-
-  // Calculate savings
-  const savings = useMemo(() => {
-    return calculateSavings(jsonTokens, toonTokens);
-  }, [jsonTokens, toonTokens]);
-
-  // Token stats card component
-  const TokenStatsCard = () => (
-    <Paper
-      elevation={0}
-      sx={{
-        p: 2,
-        background: "linear-gradient(135deg, #1e293b 0%, #334155 100%)",
-        borderRadius: 2,
-        color: "#fff",
-      }}
-    >
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-        <TokenIcon sx={{ fontSize: 20 }} />
-        <Typography variant="subtitle2" fontWeight="bold">
-          {t("pages.jsonToToon.tokenStats")}
-        </Typography>
-      </Box>
-
-      <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap", mb: 2 }}>
-        {/* JSON Tokens */}
-        <Box sx={{ minWidth: 120 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mb: 0.5 }}>
-            <DataObjectIcon sx={{ fontSize: 16, color: "#94a3b8" }} />
-            <Typography variant="caption" sx={{ color: "#94a3b8" }}>
-              {t("pages.jsonToToon.jsonTokens")}
-            </Typography>
-          </Box>
-          <Typography variant="h5" fontWeight="bold" sx={{ color: "#f8fafc" }}>
-            {formatNumber(jsonTokens)}
-          </Typography>
-        </Box>
-
-        {/* TOON Tokens */}
-        <Box sx={{ minWidth: 120 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mb: 0.5 }}>
-            <VerifiedIcon sx={{ fontSize: 16, color: "#94a3b8" }} />
-            <Typography variant="caption" sx={{ color: "#94a3b8" }}>
-              {t("pages.jsonToToon.toonTokens")}
-            </Typography>
-          </Box>
-          <Typography variant="h5" fontWeight="bold" sx={{ color: "#22c55e" }}>
-            {formatNumber(toonTokens)}
-          </Typography>
-        </Box>
-
-        {/* Savings */}
-        <Box sx={{ minWidth: 140 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mb: 0.5 }}>
-            <SavingsIcon sx={{ fontSize: 16, color: "#94a3b8" }} />
-            <Typography variant="caption" sx={{ color: "#94a3b8" }}>
-              {t("pages.jsonToToon.saved")}
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "baseline", gap: 1 }}>
-            <Typography variant="h5" fontWeight="bold" sx={{ color: "#22c55e" }}>
-              {savings.savedPercentage}%
-            </Typography>
-            <Typography variant="body2" sx={{ color: "#94a3b8" }}>
-              ({formatNumber(savings.savedTokens)} {t("pages.jsonToToon.tokens")})
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
-
-      {/* Saved:@.github badge */}
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Chip
-          label="Saved:@.github"
-          size="small"
-          sx={{
-            backgroundColor: "rgba(34, 197, 94, 0.2)",
-            color: "#22c55e",
-            fontFamily: "monospace",
-            fontSize: "0.75rem",
-            height: 24,
-            "& .MuiChip-label": {
-              px: 1,
-            },
-          }}
-        />
-        <Typography variant="caption" sx={{ color: "#64748b", fontStyle: "italic" }}>
-          {t("pages.jsonToToon.privacyNote")}
-        </Typography>
-      </Box>
-    </Paper>
-  );
 
   return (
     <>
@@ -293,20 +256,18 @@ const JsonToToonPage = () => {
         bottomPanel={
           <Box sx={{ p: 2 }}>
             {/* Progress indicator for large files */}
-            {isProcessing && (
-              <Box sx={{ mb: 2 }}>
-                <LinearProgress />
-                <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
-                  {t("pages.jsonToToon.processing")}
-                </Typography>
-              </Box>
-            )}
-
             {/* Validation error display */}
             <ValidationResults errors={errors} />
 
             {/* Token Stats Card */}
-            {errors.length === 0 && <TokenStatsCard />}
+            {errors.length === 0 && (
+              <TokenStatsCard
+                jsonTokens={jsonTokens}
+                toonTokens={toonTokens}
+                savedPercentage={savings.savedPercentage}
+                savedTokens={savings.savedTokens}
+              />
+            )}
 
             {/* Action buttons */}
             <Box sx={{ mt: 2, display: "flex", gap: 2, alignItems: "center", flexWrap: "wrap" }}>

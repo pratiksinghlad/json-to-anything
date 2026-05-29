@@ -19,9 +19,9 @@ interface KeyboardShortcutsDialogProps {
 const ShortcutItem = ({ keys, description }: { keys: string[]; description: string }) => (
   <Grid container spacing={2} sx={{ mb: 1.5, alignItems: "center" }}>
     <Grid size={{ xs: 5 }} sx={{ display: "flex", gap: 0.5, justifyContent: "flex-end" }}>
-      {keys.map((key, index) => (
+      {keys.map((key) => (
         <Box
-          key={index}
+          key={key}
           component="kbd"
           sx={{
             px: 1,
@@ -83,14 +83,14 @@ const KeyboardShortcutsDialog = ({ open, onClose }: KeyboardShortcutsDialogProps
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle sx={{ pb: 1 }}>{t("common.keyboardShortcuts") || "Keyboard Shortcuts"}</DialogTitle>
       <DialogContent>
-        {shortcuts.map((section, idx) => (
-          <Box key={idx} sx={{ mb: 3 }}>
+        {shortcuts.map((section) => (
+          <Box key={section.section} sx={{ mb: 3 }}>
             <Typography variant="overline" sx={{ fontWeight: "bold", color: "primary.main", mb: 1, display: "block" }}>
               {section.section}
             </Typography>
             <Divider sx={{ mb: 2 }} />
-            {section.items.map((item, i) => (
-              <ShortcutItem key={i} keys={item.keys} description={item.description} />
+            {section.items.map((item) => (
+              <ShortcutItem key={`${section.section}-${item.keys.join("-")}`} keys={item.keys} description={item.description} />
             ))}
           </Box>
         ))}
