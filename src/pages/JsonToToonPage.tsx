@@ -241,6 +241,7 @@ const JsonToToonPage = () => {
             value={jsonInput}
             onChange={setJsonInput}
             language="json"
+            showMarkdownCopy={true}
           />
         }
         centerPanel={<CenterPanel />}
@@ -251,6 +252,7 @@ const JsonToToonPage = () => {
             value={toonOutput}
             language="plaintext"
             readOnly={true}
+            showMarkdownCopy={true}
           />
         }
         bottomPanel={

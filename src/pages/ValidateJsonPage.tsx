@@ -96,6 +96,7 @@ const ValidateJsonPage = () => {
           value={jsonInput}
           onChange={setJsonInput}
           language="json"
+          showMarkdownCopy={true}
         />
       }
       centerPanel={<CenterPanel />}
@@ -106,6 +107,7 @@ const ValidateJsonPage = () => {
           value={schemaInput}
           onChange={setSchemaInput}
           language="json"
+          showMarkdownCopy={true}
         />
       }
       bottomPanel={

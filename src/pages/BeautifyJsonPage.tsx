@@ -47,6 +47,7 @@ const BeautifyJsonPage = () => {
             value={jsonInput}
             onChange={setJsonInput}
             language="json"
+            showMarkdownCopy={true}
           />
         }
         centerPanel={<CenterPanel />}
@@ -57,6 +58,7 @@ const BeautifyJsonPage = () => {
             value={formattedOutput}
             language="json"
             readOnly={true}
+            showMarkdownCopy={true}
           />
         }
         bottomPanel={

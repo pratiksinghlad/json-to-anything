@@ -393,6 +393,7 @@ export default function BidirectionalConverterPage({
             value={leftValue}
             onChange={setLeftValue}
             language={leftLanguage}
+            showMarkdownCopy={true}
           />
         }
         centerPanel={<CenterPanel onSwap={supportsReverse ? handleToggleDirection : undefined} />}
@@ -404,6 +405,7 @@ export default function BidirectionalConverterPage({
             value={rightValue}
             language={rightLanguage}
             readOnly={true}
+            showMarkdownCopy={true}
           />
         }
         bottomPanel={
