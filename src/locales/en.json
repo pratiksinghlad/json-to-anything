@@ -191,6 +191,8 @@
     "tablePreview": "Table Preview",
     "copyToClipboard": "Copy to clipboard",
     "copied": "Copied!",
+    "copyAsMarkdown": "Copy as Markdown",
+    "copiedAsMarkdown": "Copied as Markdown!",
     "clear": "Clear",
     "cleared": "Cleared!",
     "keyboardShortcuts": "Keyboard Shortcuts"

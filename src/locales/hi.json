@@ -187,6 +187,8 @@
     "tablePreview": "टेबल प्रीव्यू",
     "copyToClipboard": "क्लिपबोर्ड पर कॉपी करें",
     "copied": "कॉपी हो गया!",
+    "copyAsMarkdown": "Markdown के रूप में कॉपी करें",
+    "copiedAsMarkdown": "Markdown के रूप में कॉपी हो गई!",
     "clear": "साफ़ करें",
     "cleared": "साफ़ हो गया!",
     "keyboardShortcuts": "कीबोर्ड शॉर्टकट्स"
