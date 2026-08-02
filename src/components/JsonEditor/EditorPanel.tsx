@@ -18,6 +18,7 @@ import {
 import Editor from "react-simple-code-editor";
 import { highlight } from "../../utils/highlight";
 import CopyButton from "../CopyButton";
+import CopyMarkdownButton from "../CopyMarkdownButton";
 import ClearButton from "../ClearButton";
 import LineNumberGutter, { EDITOR_FONT_SIZE, EDITOR_LINE_HEIGHT, EDITOR_PADDING } from "./LineNumberGutter";
 import { csvToJson } from "../../utils/csvToJson";
@@ -48,6 +49,8 @@ export interface EditorPanelProps {
   language?: string; // e.g., "json", "csv", "xml"
   readOnly?: boolean;
   formatLabel?: string;
+  /** When true, renders a "Copy as Markdown" button (fenced code block) before the plain copy button. */
+  showMarkdownCopy?: boolean;
 }
 
 export interface EditorPanelHandle {
@@ -70,6 +73,7 @@ const EditorPanel = ({
   language = "json",
   readOnly = false,
   formatLabel,
+  showMarkdownCopy = false,
 }: EditorPanelProps) => {
   const { t } = useTranslation();
   const [internalCode, setInternalCode] = useState(initialValue);
@@ -414,10 +418,13 @@ const EditorPanel = ({
         )}
 
         <Box sx={{ flexGrow: 1 }} />
-        <ClearButton 
-          onClear={() => updateCode("")} 
-          disabled={!currentCode || currentCode.trim() === ""} 
+        <ClearButton
+          onClear={() => updateCode("")}
+          disabled={!currentCode || currentCode.trim() === ""}
         />
+        {showMarkdownCopy && (
+          <CopyMarkdownButton value={currentCode} language={language} />
+        )}
         <CopyButton value={currentCode} />
       </Box>
 
