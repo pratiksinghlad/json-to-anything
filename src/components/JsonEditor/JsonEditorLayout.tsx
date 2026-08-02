@@ -8,6 +8,8 @@ interface JsonEditorLayoutProps {
   rightPanel?: React.ReactNode;
   centerPanel?: React.ReactNode;
   bottomPanel?: React.ReactNode;
+  /** Height percentage of the upper panel (e.g., 80 for 80%). Defaults to 80. */
+  upperRatio?: number;
 }
 
 const JsonEditorLayout: React.FC<JsonEditorLayoutProps> = ({
@@ -15,7 +17,11 @@ const JsonEditorLayout: React.FC<JsonEditorLayoutProps> = ({
   rightPanel = <EditorPanel title="Right" initialValue="" />,
   centerPanel = <CenterPanel />,
   bottomPanel,
+  upperRatio = 80,
 }) => {
+  const upperHeight = bottomPanel ? `${upperRatio}%` : "100%";
+  const bottomHeight = bottomPanel ? `${100 - upperRatio}%` : "0%";
+
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", height: "100vh", backgroundColor: "#fff" }}
@@ -52,7 +58,16 @@ const JsonEditorLayout: React.FC<JsonEditorLayoutProps> = ({
         sx={{ display: "flex", flexGrow: 1, overflow: "hidden", flexDirection: "column" }}
       >
         {/* Split Pane Area */}
-        <Box sx={{ display: "flex", flexGrow: 1, overflow: "hidden", minHeight: 0 }}>
+        <Box 
+          sx={{ 
+            display: "flex", 
+            height: upperHeight,
+            minHeight: upperHeight,
+            maxHeight: upperHeight,
+            overflow: "hidden",
+            borderBottom: bottomPanel ? "1px solid #ddd" : "none",
+          }}
+        >
           {/* Left Panel */}
           <Box
             component="section"
@@ -92,7 +107,13 @@ const JsonEditorLayout: React.FC<JsonEditorLayoutProps> = ({
           <Box 
             component="section"
             aria-label="Preview and Results"
-            sx={{ borderTop: "1px solid #ddd", maxHeight: "40vh", overflow: "auto" }}
+            sx={{ 
+              height: bottomHeight,
+              minHeight: bottomHeight,
+              maxHeight: bottomHeight,
+              overflow: "auto",
+              backgroundColor: "#fafafa",
+            }}
           >
             {bottomPanel}
           </Box>
