@@ -56,7 +56,9 @@
       "additions": "जोड़े गए",
       "deletions": "हटाए गए",
       "noChanges": "कोई अंतर नहीं मिला।",
-      "comparing": "तुलना हो रही है..."
+      "comparing": "तुलना हो रही है...",
+      "hideWhitespace": "व्हाइटस्पेस परिवर्तन छुपाएं",
+      "disableLineWrap": "लाइन रैप अक्षम करें"
     },
     "about": {
       "title": "JSON to Anything के बारे में",
