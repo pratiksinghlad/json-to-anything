@@ -73,6 +73,7 @@ const EditorPanel = ({
   language = "json",
   readOnly = false,
   formatLabel,
+  showMarkdownCopy = false,
 }: EditorPanelProps) => {
   const { t } = useTranslation();
   const [internalCode, setInternalCode] = useState(initialValue);

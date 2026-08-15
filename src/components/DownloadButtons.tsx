@@ -6,9 +6,7 @@ import {
   primaryOutlinedButtonSx,
   textAccentButtonSx,
 } from '../theme/uiSx';
-import DownloadIcon from '@mui/icons-material/Download';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { Download as DownloadIcon, ContentCopy as ContentCopyIcon, OpenInNew as OpenInNewIcon } from '@mui/icons-material';
 
 interface DownloadButtonsProps {
   csvData?: string;

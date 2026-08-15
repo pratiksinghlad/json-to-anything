@@ -1,5 +1,5 @@
 import { Box, IconButton, Tooltip } from "@mui/material";
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
+import { SwapHoriz as SwapHorizIcon } from "@mui/icons-material";
 
 interface CenterPanelProps {
   onSwap?: () => void;

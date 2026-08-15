@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { IconButton, Tooltip, Zoom } from "@mui/material";
-import CodeIcon from "@mui/icons-material/Code";
-import CheckIcon from "@mui/icons-material/Check";
+import { Code as CodeIcon, Check as CheckIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { wrapInMarkdownFence } from "../utils/copyAsMarkdown";
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { IconButton, Tooltip, Zoom } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Delete as DeleteIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 
 interface ClearButtonProps {

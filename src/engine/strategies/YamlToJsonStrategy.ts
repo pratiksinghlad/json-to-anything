@@ -1,6 +1,6 @@
 import type { ConversionStrategy } from "../ConversionStrategy";
 import type { YamlToJsonOptions, ConversionResult } from "../types";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 
 export class YamlToJsonStrategy implements ConversionStrategy<YamlToJsonOptions> {
   readonly format = "yaml-to-json" as const;
