@@ -21,10 +21,12 @@ import {
   MenuItem,
   Divider,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import {
+  Menu as MenuIcon,
+  Close as CloseIcon,
+  HelpOutline as HelpOutlineIcon,
+  KeyboardArrowDown as KeyboardArrowDownIcon,
+} from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { headerMenuItems, moreMenuItems } from "../../menuData";

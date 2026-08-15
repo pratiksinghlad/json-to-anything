@@ -1,6 +1,6 @@
 import type { ConversionStrategy } from "../ConversionStrategy";
 import type { ConversionResult } from "../types";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 
 export class YamlStrategy implements ConversionStrategy {
   readonly format = "yaml";

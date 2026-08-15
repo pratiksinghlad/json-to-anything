@@ -56,7 +56,9 @@
       "additions": "adiciones",
       "deletions": "eliminaciones",
       "noChanges": "No se encontraron diferencias.",
-      "comparing": "Comparando..."
+      "comparing": "Comparando...",
+      "hideWhitespace": "Ocultar cambios de espacios en blanco",
+      "disableLineWrap": "Desactivar ajuste de línea"
     },
     "about": {
       "title": "Acerca de JSON to Anything",

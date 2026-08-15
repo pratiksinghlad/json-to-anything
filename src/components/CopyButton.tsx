@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { IconButton, Tooltip, Zoom } from "@mui/material";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import CheckIcon from "@mui/icons-material/Check";
+import { ContentCopy as ContentCopyIcon, Check as CheckIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 
 interface CopyButtonProps {

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Box, Typography, Chip, List, ListItem, ListItemText } from "@mui/material";
-import ErrorIcon from "@mui/icons-material/Error";
+import { Error as ErrorIcon } from "@mui/icons-material";
 import type { ValidationError } from "../types/validationTypes";
 
 interface ValidationResultsProps {

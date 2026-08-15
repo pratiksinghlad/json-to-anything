@@ -1,9 +1,7 @@
 import { Box, Container, Typography, Link, Stack, IconButton } from '@mui/material';
 import { interactiveHoverSx } from '../theme/uiSx';
 import { useTranslation } from 'react-i18next';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import { GitHub as GitHubIcon, Twitter as TwitterIcon, LinkedIn as LinkedInIcon } from '@mui/icons-material';
 
 const CURRENT_YEAR = 2026;
 

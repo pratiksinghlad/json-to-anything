@@ -9,11 +9,13 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import SavingsIcon from "@mui/icons-material/Savings";
-import TokenIcon from "@mui/icons-material/Token";
-import DataObjectIcon from "@mui/icons-material/DataObject";
-import VerifiedIcon from "@mui/icons-material/Verified";
-import DownloadIcon from "@mui/icons-material/Download";
+import {
+  Savings as SavingsIcon,
+  Token as TokenIcon,
+  DataObject as DataObjectIcon,
+  Verified as VerifiedIcon,
+  Download as DownloadIcon,
+} from "@mui/icons-material";
 
 import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
 import EditorPanel from "../components/JsonEditor/EditorPanel";

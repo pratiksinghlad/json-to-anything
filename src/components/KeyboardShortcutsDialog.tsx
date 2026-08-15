@@ -18,7 +18,7 @@ interface KeyboardShortcutsDialogProps {
 
 const ShortcutItem = ({ keys, description }: { keys: string[]; description: string }) => (
   <Grid container spacing={2} sx={{ mb: 1.5, alignItems: "center" }}>
-    <Grid size={{ xs: 5 }} sx={{ display: "flex", gap: 0.5, justifyContent: "flex-end" }}>
+    <Grid item xs={5} sx={{ display: "flex", gap: 0.5, justifyContent: "flex-end" }}>
       {keys.map((key) => (
         <Box
           key={key}
@@ -42,7 +42,7 @@ const ShortcutItem = ({ keys, description }: { keys: string[]; description: stri
         </Box>
       ))}
     </Grid>
-    <Grid size={{ xs: 7 }}>
+    <Grid item xs={7}>
       <Typography variant="body2" color="text.secondary">
         {description}
       </Typography>

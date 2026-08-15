@@ -1,12 +1,39 @@
 /**
  * @file diffTypes.ts
- * Core types for the side-by-side diff computation using Web Workers.
- * These types govern the contract between the main thread and the diff.worker.ts.
+ * Core types for side-by-side diff computation with character-level highlighting.
+ * These types govern the contract between the main thread and the diff worker.
  */
 
 // ---------------------------------------------------------------------------
-// Diff Line structure
+// Character-level Part & Side structures
 // ---------------------------------------------------------------------------
+
+export type DiffPartType = "equal" | "added" | "removed";
+
+export interface DiffPart {
+  type: DiffPartType;
+  value: string;
+}
+
+export type DiffSideType = "equal" | "added" | "removed" | "empty";
+
+export interface DiffSide {
+  lineNumber: number | null;
+  content: string;
+  type: DiffSideType;
+  parts?: DiffPart[];
+}
+
+export interface DiffRow {
+  id: string;
+  left: DiffSide;
+  right: DiffSide;
+}
+
+// ---------------------------------------------------------------------------
+// Diff Line structure (for compatibility / line-based consumers)
+// ---------------------------------------------------------------------------
+
 export type DiffLineType = "equal" | "added" | "removed";
 
 export interface DiffLine {
@@ -17,9 +44,17 @@ export interface DiffLine {
   leftLineNumber: number | null;
   /** 1-based index in the modified text. Null if this line was removed or if it represents a blank placeholder. */
   rightLineNumber: number | null;
+  /** Optional character-level segments for fine-grained highlighting */
+  parts?: DiffPart[];
+}
+
+export interface DiffOptions {
+  /** If true, ignore whitespace differences */
+  ignoreWhitespace?: boolean;
 }
 
 export interface DiffResult {
+  rows: DiffRow[];
   lines: DiffLine[];
   additions: number;
   deletions: number;
@@ -39,12 +74,15 @@ export interface DiffWorkerRequest {
   originalBuffer: ArrayBuffer;
   /** Modified text encoded as UTF-8 ArrayBuffer */
   modifiedBuffer: ArrayBuffer;
+  /** Diff computation options */
+  options?: DiffOptions;
 }
 
 /** Worker → main thread: diff completed successfully. */
 export interface DiffWorkerResultResponse {
   type: "result";
   id: string;
+  rows: DiffRow[];
   lines: DiffLine[];
   additions: number;
   deletions: number;
