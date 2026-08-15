@@ -189,6 +189,8 @@
     "tablePreview": "Vista previa de la tabla",
     "copyToClipboard": "Copiar al portapapeles",
     "copied": "¡Copiado!",
+    "copyAsMarkdown": "Copiar como Markdown",
+    "copiedAsMarkdown": "¡Copiado como Markdown!",
     "clear": "Limpiar",
     "cleared": "¡Limpiado!",
     "keyboardShortcuts": "Atajos de Teclado"

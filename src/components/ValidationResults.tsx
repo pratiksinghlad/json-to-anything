@@ -5,13 +5,14 @@ import type { ValidationError } from "../types/validationTypes";
 
 interface ValidationResultsProps {
   errors: ValidationError[];
+  hideTitle?: boolean;
 }
 
 /**
  * Displays validation errors in a styled panel matching the ValidateJsonPage design.
  * Renders nothing when the errors array is empty.
  */
-const ValidationResults = ({ errors }: ValidationResultsProps) => {
+const ValidationResults = ({ errors, hideTitle = false }: ValidationResultsProps) => {
   const { t } = useTranslation();
 
   if (errors.length === 0) {
@@ -20,9 +21,11 @@ const ValidationResults = ({ errors }: ValidationResultsProps) => {
 
   return (
     <Box sx={{ mt: 2 }}>
-      <Typography variant="h6" sx={{ mb: 2 }}>
-        {t("pages.validate.results")}
-      </Typography>
+      {!hideTitle && (
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          {t("pages.validate.results")}
+        </Typography>
+      )}
 
       <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
         <Chip

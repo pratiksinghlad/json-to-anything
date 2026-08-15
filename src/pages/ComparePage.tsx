@@ -89,6 +89,7 @@ const ComparePage = () => {
               value={originalCode}
               onChange={setOriginalCode}
               language="json"
+              showMarkdownCopy={true}
             />
           }
           centerPanel={centerPanel}
@@ -99,6 +100,7 @@ const ComparePage = () => {
               value={modifiedCode}
               onChange={setModifiedCode}
               language="json"
+              showMarkdownCopy={true}
             />
           }
         />

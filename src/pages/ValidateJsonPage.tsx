@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, Typography, Chip } from "@mui/material";
+import { Box, Typography, Chip, Button, Switch, FormControlLabel } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import JsonEditorLayout from "../components/JsonEditor/JsonEditorLayout";
 import EditorPanel from "../components/JsonEditor/EditorPanel";
@@ -9,6 +9,7 @@ import ValidationResults from "../components/ValidationResults";
 import { validateJson } from "../utils/validateJson";
 import { parseJson } from "../utils/parseJson";
 import { isBlankInput } from "../utils/isBlankInput";
+import { generateSchemaFromJson } from "../utils/generateSchema";
 import type { ValidationError } from "../types/validationTypes";
 import { useJsonEditorAccessibility } from "../hooks/useJsonEditorAccessibility";
 
@@ -45,11 +46,31 @@ const ValidateJsonPage = () => {
   const { t } = useTranslation();
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
   const [schemaInput, setSchemaInput] = useState(DEFAULT_SCHEMA);
+  const [autoSyncSchema, setAutoSyncSchema] = useState(true);
   const { leftPanelRef, rightPanelRef } = useJsonEditorAccessibility();
 
-  const { isValid, errors } = useMemo(() => {
-    if (isBlankInput(jsonInput) || isBlankInput(schemaInput)) {
-      return { isValid: false, errors: [] };
+  // Auto-generate and sync schema when JSON input changes and autoSync is enabled
+  useEffect(() => {
+    if (!autoSyncSchema) return;
+    const jsonParseResult = parseJson(jsonInput);
+    if (jsonParseResult.success) {
+      const generated = generateSchemaFromJson(jsonParseResult.data);
+      const generatedStr = JSON.stringify(generated, null, 2);
+      if (generatedStr !== schemaInput) {
+        setSchemaInput(generatedStr);
+      }
+    }
+  }, [jsonInput, autoSyncSchema, schemaInput]);
+
+  const { isValid, errors, validationType, isJsonSyntaxValid } = useMemo(() => {
+    const isJsonBlank = isBlankInput(jsonInput);
+    if (isJsonBlank) {
+      return {
+        isValid: false,
+        errors: [],
+        validationType: "syntax" as const,
+        isJsonSyntaxValid: false,
+      };
     }
 
     const jsonParseResult = parseJson(jsonInput);
@@ -63,6 +84,18 @@ const ValidateJsonPage = () => {
             line: jsonParseResult.line,
           },
         ] satisfies ValidationError[],
+        validationType: "syntax" as const,
+        isJsonSyntaxValid: false,
+      };
+    }
+
+    const isSchemaBlank = isBlankInput(schemaInput);
+    if (isSchemaBlank) {
+      return {
+        isValid: true,
+        errors: [],
+        validationType: "syntax" as const,
+        isJsonSyntaxValid: true,
       };
     }
 
@@ -77,6 +110,8 @@ const ValidateJsonPage = () => {
             line: schemaParseResult.line,
           },
         ] satisfies ValidationError[],
+        validationType: "schema" as const,
+        isJsonSyntaxValid: true,
       };
     }
 
@@ -84,8 +119,26 @@ const ValidateJsonPage = () => {
       jsonString: jsonInput,
     });
 
-    return { isValid: result.valid, errors: result.errors ?? [] };
+    return {
+      isValid: result.valid,
+      errors: result.errors ?? [],
+      validationType: "schema" as const,
+      isJsonSyntaxValid: true,
+    };
   }, [jsonInput, schemaInput, t]);
+
+  const handleGenerateSchema = () => {
+    const jsonParseResult = parseJson(jsonInput);
+    if (jsonParseResult.success) {
+      const generated = generateSchemaFromJson(jsonParseResult.data);
+      setSchemaInput(JSON.stringify(generated, null, 2));
+    }
+  };
+
+  const handleSchemaChange = (value: string) => {
+    setSchemaInput(value);
+    setAutoSyncSchema(false); // Stop auto-sync once the user manually edits the schema
+  };
 
   return (
     <JsonEditorLayout
@@ -96,6 +149,7 @@ const ValidateJsonPage = () => {
           value={jsonInput}
           onChange={setJsonInput}
           language="json"
+          showMarkdownCopy={true}
         />
       }
       centerPanel={<CenterPanel />}
@@ -104,8 +158,9 @@ const ValidateJsonPage = () => {
           ref={rightPanelRef}
           title={t("pages.validate.jsonSchema")}
           value={schemaInput}
-          onChange={setSchemaInput}
+          onChange={handleSchemaChange}
           language="json"
+          showMarkdownCopy={true}
         />
       }
       bottomPanel={
@@ -114,18 +169,51 @@ const ValidateJsonPage = () => {
             {t("pages.validate.results")}
           </Typography>
 
-          {isValid && errors.length === 0 && (
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+          <Box sx={{ display: "flex", gap: 3, alignItems: "center", mb: 2, flexWrap: "wrap" }}>
+            {isValid && errors.length === 0 && (
               <Chip
                 icon={<CheckCircleIcon />}
-                label={t("pages.validate.valid")}
+                label={
+                  validationType === "syntax"
+                    ? t("pages.validate.validSyntax", "Valid JSON Syntax")
+                    : t("pages.validate.validSchemaMatch", "Valid against Schema")
+                }
                 color="success"
                 variant="filled"
               />
-            </Box>
-          )}
+            )}
 
-          <ValidationResults errors={errors} />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={autoSyncSchema}
+                  onChange={(e) => setAutoSyncSchema(e.target.checked)}
+                  color="primary"
+                  size="small"
+                />
+              }
+              label={
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                  {t("pages.validate.autoSyncSchema", "Auto-generate Schema")}
+                </Typography>
+              }
+            />
+
+            {!autoSyncSchema && (
+              <Button
+                variant="outlined"
+                color="primary"
+                size="small"
+                onClick={handleGenerateSchema}
+                disabled={!isJsonSyntaxValid}
+                sx={{ textTransform: "none" }}
+              >
+                {t("pages.validate.generateSchema", "Generate Schema")}
+              </Button>
+            )}
+          </Box>
+
+          <ValidationResults errors={errors} hideTitle={true} />
         </Box>
       }
     />
